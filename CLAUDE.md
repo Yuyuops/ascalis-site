@@ -22,7 +22,7 @@ ascalis-site.html       ← Point d'entrée public (site vitrine)
 
 | Fichier | Type | Statut |
 |---------|------|--------|
-| `ascalis-site.html` | Site vitrine | ✅ OK |
+| `index.html` | Site vitrine | ✅ OK |
 | `dashboard.html` | Espace Pro avec auth | ✅ OK |
 | `abaque-outils.html` | Navigation 99 outils | ✅ OK |
 | `dmaic-navigator.html` | DMAIC 5 phases + stats | ✅ OK |
