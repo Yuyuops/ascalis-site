@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrice de Priorisation — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--night:#0F1A2E;--copper:#B07642;--copper-light:#D4956A;--cream:#FAF9F6;--white:#fff;--text:#2C3E50;--text-light:#5A6B7A;--text-muted:#8A95A0;--green:#0F6E56;--blue:#185FA5;--amber:#854F0B;--red:#993C1D;--border:rgba(0,0,0,.06);--font:'DM Sans',sans-serif;--display:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--cream);color:var(--text)}
+.header{background:var(--white);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between}
+.header svg{height:22px}
+.header a{font-size:13px;color:var(--copper);text-decoration:none;font-weight:500}
+.hero-bar{background:var(--night);padding:40px 32px;text-align:center}
+.hero-bar h1{font-family:var(--display);font-size:clamp(24px,4vw,36px);font-weight:400;color:var(--cream);margin-bottom:8px}
+.hero-bar p{font-size:15px;color:rgba(232,230,223,.5);max-width:600px;margin:0 auto}
+.container{max-width:1000px;margin:0 auto;padding:40px 24px}
+.input-section{background:var(--white);border-radius:12px;padding:28px;border:1px solid var(--border);margin-bottom:32px}
+.section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--copper);margin-bottom:16px}
+.problem-row{display:grid;grid-template-columns:1fr 120px 120px 40px;gap:10px;align-items:center;margin-bottom:10px}
+.problem-row input[type=text]{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:13px;background:var(--cream);outline:none}
+.problem-row input[type=text]:focus{border-color:var(--copper)}
+.problem-row select{padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;background:var(--cream);outline:none;color:var(--text)}
+.remove-btn{width:32px;height:32px;border:none;background:none;color:var(--text-muted);font-size:16px;cursor:pointer;border-radius:6px;transition:all .15s}
+.remove-btn:hover{background:#FCEBEB;color:var(--red)}
+.add-btn{padding:8px 20px;border:1px dashed var(--border);background:none;border-radius:6px;font-family:var(--font);font-size:13px;color:var(--text-muted);cursor:pointer;transition:all .2s;width:100%;margin-top:4px}
+.add-btn:hover{border-color:var(--copper);color:var(--copper)}
+.labels-row{display:grid;grid-template-columns:1fr 120px 120px 40px;gap:10px;margin-bottom:8px;font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}
+.matrix-section{margin-top:32px}
+.matrix{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;border-radius:12px;overflow:hidden;min-height:400px;border:1px solid var(--border)}
+.quadrant{padding:24px;min-height:200px;position:relative}
+.q-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.q-desc{font-size:11px;color:var(--text-muted);margin-bottom:16px}
+.q1{background:#E1F5EE}.q1 .q-title{color:var(--green)}
+.q2{background:#E6F1FB}.q2 .q-title{color:var(--blue)}
+.q3{background:#FAEEDA}.q3 .q-title{color:var(--amber)}
+.q4{background:var(--white)}.q4 .q-title{color:var(--text-muted)}
+.matrix-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--text-muted)}
+.matrix-y-label{writing-mode:vertical-lr;transform:rotate(180deg);font-size:11px;color:var(--text-muted);position:absolute;left:-24px;top:50%;transform-origin:center}
+.chip{display:inline-block;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:500;margin:0 6px 6px 0;border:1px solid rgba(0,0,0,.08)}
+.chip-q1{background:#fff;color:var(--green);border-color:rgba(15,110,86,.2)}
+.chip-q2{background:#fff;color:var(--blue);border-color:rgba(24,95,165,.2)}
+.chip-q3{background:#fff;color:var(--amber);border-color:rgba(133,79,11,.2)}
+.chip-q4{background:#fff;color:var(--text-muted);border-color:var(--border)}
+.axis-label{text-align:center;font-size:12px;color:var(--text-muted);margin-top:12px}
+.cta-box{margin-top:32px;padding:28px;background:var(--white);border-radius:12px;border:1px solid var(--border);text-align:center}
+.cta-box h3{font-family:var(--display);font-size:22px;margin-bottom:8px}
+.cta-box p{font-size:14px;color:var(--text-light);margin-bottom:16px;line-height:1.6}
+.cta-box a{display:inline-block;padding:12px 28px;background:var(--night);color:var(--cream);border-radius:8px;text-decoration:none;font-size:14px;font-weight:500}
+.summary{background:var(--white);border-radius:12px;padding:24px;border:1px solid var(--border);margin-top:24px}
+.summary-item{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px}
+.summary-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+@media(max-width:700px){.problem-row,.labels-row{grid-template-columns:1fr;gap:6px}.matrix{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'DM Sans',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <a href="ascalis-site.html">← Retour au site</a>
+</div>
+<div class="hero-bar">
+  <h1>Matrice de priorisation qualité</h1>
+  <p>Listez vos problèmes, évaluez impact et effort — la matrice vous montre par où commencer.</p>
+</div>
+<div class="container">
+  <div class="input-section">
+    <div class="section-title">Vos chantiers qualité</div>
+    <div class="labels-row"><span>Problème / chantier</span><span>Impact business</span><span>Effort requis</span><span></span></div>
+    <div id="problems"></div>
+    <button class="add-btn" onclick="addProblem()">+ Ajouter un chantier</button>
+  </div>
+  <div class="matrix-section">
+    <div class="section-title">Votre matrice impact / effort</div>
+    <div style="display:flex;gap:12px;align-items:stretch">
+      <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding-right:8px"><span style="writing-mode:vertical-lr;transform:rotate(180deg);font-size:11px;color:var(--text-muted);letter-spacing:1px">← IMPACT FAIBLE — IMPACT FORT →</span></div>
+      <div style="flex:1">
+        <div class="matrix">
+          <div class="quadrant q1"><div class="q-title">Quick wins</div><div class="q-desc">Impact fort, effort faible — commencez ici</div><div id="q1-chips"></div></div>
+          <div class="quadrant q2"><div class="q-title">Projets stratégiques</div><div class="q-desc">Impact fort, effort fort — à planifier</div><div id="q2-chips"></div></div>
+          <div class="quadrant q3"><div class="q-title">Gains faciles</div><div class="q-desc">Impact faible, effort faible — si le temps le permet</div><div id="q3-chips"></div></div>
+          <div class="quadrant q4"><div class="q-title">À reconsidérer</div><div class="q-desc">Impact faible, effort fort — évitez</div><div id="q4-chips"></div></div>
+        </div>
+        <div class="axis-label">← EFFORT FAIBLE — EFFORT FORT →</div>
+      </div>
+    </div>
+  </div>
+  <div class="summary" id="summary"></div>
+  <div class="cta-box">
+    <h3>Besoin d'aide pour prioriser ?</h3>
+    <p>Le Diagnostic Flash ou le Diagnostic Performance vous donne une priorisation basée sur des données terrain, pas sur du déclaratif.</p>
+    <a href="ascalis-site.html#contact">Parlons-en →</a>
+  </div>
+</div>
+<script>
+let problems=[
+  {name:'NC récurrentes ligne peinture',impact:'high',effort:'medium'},
+  {name:'Gammes opératoires obsolètes',impact:'high',effort:'low'},
+  {name:'Pas de tableau de bord qualité',impact:'medium',effort:'low'},
+  {name:'Qualification procédés spéciaux',impact:'high',effort:'high'},
+  {name:'',impact:'medium',effort:'medium'}
+];
+function addProblem(){problems.push({name:'',impact:'medium',effort:'medium'});render()}
+function removeProblem(i){problems.splice(i,1);render()}
+function updateProblem(i,field,val){problems[i][field]=val;renderMatrix()}
+function render(){
+  const c=document.getElementById('problems');
+  c.innerHTML=problems.map((p,i)=>`<div class="problem-row"><input type="text" value="${p.name}" placeholder="Ex: NC récurrentes..." oninput="updateProblem(${i},'name',this.value)"><select onchange="updateProblem(${i},'impact',this.value)"><option value="high"${p.impact==='high'?' selected':''}>Fort</option><option value="medium"${p.impact==='medium'?' selected':''}>Moyen</option><option value="low"${p.impact==='low'?' selected':''}>Faible</option></select><select onchange="updateProblem(${i},'effort',this.value)"><option value="low"${p.effort==='low'?' selected':''}>Faible</option><option value="medium"${p.effort==='medium'?' selected':''}>Moyen</option><option value="high"${p.effort==='high'?' selected':''}>Fort</option></select><button class="remove-btn" onclick="removeProblem(${i})">×</button></div>`).join('');
+  renderMatrix();
+}
+function getQuadrant(p){
+  const hi=p.impact==='high',mi=p.impact==='medium',he=p.effort==='high',le=p.effort==='low';
+  if((hi||mi)&&!he)return 1;
+  if(hi&&he)return 2;
+  if(!hi&&le)return 3;
+  return 4;
+}
+function renderMatrix(){
+  const qs={1:[],2:[],3:[],4:[]};
+  const active=problems.filter(p=>p.name.trim());
+  active.forEach(p=>{const q=getQuadrant(p);qs[q].push(p)});
+  [1,2,3,4].forEach(q=>{
+    document.getElementById('q'+q+'-chips').innerHTML=qs[q].map(p=>`<span class="chip chip-q${q}">${p.name}</span>`).join('');
+  });
+  let summaryHtml='<div class="section-title">Recommandation</div>';
+  if(qs[1].length)summaryHtml+=`<div class="summary-item"><span class="summary-dot" style="background:var(--green)"></span><strong>Commencez par :</strong> ${qs[1].map(p=>p.name).join(', ')}</div>`;
+  if(qs[2].length)summaryHtml+=`<div class="summary-item"><span class="summary-dot" style="background:var(--blue)"></span><strong>Planifiez :</strong> ${qs[2].map(p=>p.name).join(', ')}</div>`;
+  if(qs[3].length)summaryHtml+=`<div class="summary-item"><span class="summary-dot" style="background:var(--amber)"></span><strong>Si le temps le permet :</strong> ${qs[3].map(p=>p.name).join(', ')}</div>`;
+  if(qs[4].length)summaryHtml+=`<div class="summary-item"><span class="summary-dot" style="background:var(--text-muted)"></span><strong>À reconsidérer :</strong> ${qs[4].map(p=>p.name).join(', ')}</div>`;
+  if(!active.length)summaryHtml+='<p style="font-size:13px;color:var(--text-muted)">Renseignez vos chantiers ci-dessus pour voir les recommandations.</p>';
+  document.getElementById('summary').innerHTML=summaryHtml;
+}
+render();
+</script>
+</body>
+</html>

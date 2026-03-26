@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCALIS — Espace Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#0F1A2E;--primary-light:#1B3A4B;--accent:#B07642;--accent-light:#D4956A;--accent-bg:rgba(176,118,66,.08);--surface:#FFFFFF;--surface-alt:#F8FAFC;--warm:#FAF9F6;--on-surface:#020617;--on-2:#475569;--on-3:#94A3B8;--border:#E2E8F0;--border-light:#F1F5F9;--success:#059669;--success-bg:#ECFDF5;--warning:#D97706;--warning-bg:#FFFBEB;--error:#DC2626;--info:#2563EB;--info-bg:#EFF6FF;--shadow-sm:0 2px 4px rgba(0,0,0,.05);--shadow-md:0 4px 12px rgba(0,0,0,.06);--shadow-lg:0 8px 24px rgba(0,0,0,.06);--radius-sm:6px;--radius-md:8px;--radius-lg:12px;--radius-xl:16px;--radius-full:9999px;--ease:cubic-bezier(.16,1,.3,1);--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif;--sidebar-w:260px;--nav-h:56px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--fb);background:var(--warm);color:var(--on-surface);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+
+/* ═══ LOGIN SCREEN ═══ */
+.login-screen{min-height:100dvh;display:flex;align-items:center;justify-content:center;background:var(--primary);padding:24px}
+.login-card{background:var(--surface);border-radius:var(--radius-xl);padding:48px 40px;width:100%;max-width:400px;text-align:center}
+.login-logo svg{height:28px;margin-bottom:32px}
+.login-card h1{font-family:var(--fd);font-size:24px;font-weight:400;margin-bottom:8px}
+.login-card .sub{font-size:14px;color:var(--on-2);margin-bottom:32px}
+.login-field{text-align:left;margin-bottom:16px}
+.login-field label{font-family:var(--fh);font-size:12px;font-weight:500;color:var(--on-3);display:block;margin-bottom:4px}
+.login-field input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:15px;outline:none;transition:border-color .15s}
+.login-field input:focus{border-color:var(--accent)}
+.login-error{font-size:13px;color:var(--error);margin-bottom:12px;min-height:20px}
+.login-btn{width:100%;padding:12px;background:var(--primary);color:var(--surface-alt);border:none;border-radius:var(--radius-md);font-family:var(--fh);font-size:15px;font-weight:500;min-height:48px;transition:background .15s}
+.login-btn:hover{background:var(--primary-light)}
+.login-hint{font-size:11px;color:var(--on-3);margin-top:24px;line-height:1.6}
+.login-site-link{display:inline-block;margin-top:16px;font-family:var(--fh);font-size:13px;color:var(--accent-light)}
+
+/* ═══ APP SHELL ═══ */
+.app{display:none;min-height:100dvh}
+.app.active{display:flex}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--primary);color:var(--surface-alt);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:40;transition:transform .3s var(--ease)}
+.sb-logo{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-logo svg{height:22px}
+.sb-user{padding:16px 24px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px}
+.sb-avatar{width:36px;height:36px;border-radius:var(--radius-full);background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:13px;font-weight:600;color:#fff;flex-shrink:0}
+.sb-name{font-family:var(--fh);font-size:13px;font-weight:500}
+.sb-role{font-size:11px;color:rgba(248,250,252,.4)}
+.sb-nav{flex:1;padding:16px 0;overflow-y:auto}
+.sb-section{font-family:var(--fh);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(248,250,252,.25);padding:8px 24px 4px}
+.sb-link{display:flex;align-items:center;gap:10px;padding:10px 24px;font-size:13px;color:rgba(248,250,252,.5);transition:all .15s;cursor:pointer;min-height:44px;border:none;background:none;width:100%;text-align:left;font-family:var(--fb)}
+.sb-link:hover{color:var(--surface-alt);background:rgba(255,255,255,.04)}
+.sb-link.active{color:var(--surface-alt);background:rgba(255,255,255,.06);border-right:2px solid var(--accent)}
+.sb-link svg{width:18px;height:18px;flex-shrink:0;opacity:.5}
+.sb-link.active svg{opacity:1}
+.sb-badge{margin-left:auto;font-family:var(--fh);font-size:10px;background:var(--accent);color:#fff;padding:1px 7px;border-radius:var(--radius-full)}
+.sb-footer{padding:16px 24px;border-top:1px solid rgba(255,255,255,.06)}
+.sb-logout{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(248,250,252,.35);border:none;background:none;cursor:pointer;font-family:var(--fb);min-height:44px;width:100%;padding:0}
+.sb-logout:hover{color:var(--surface-alt)}
+
+/* MAIN AREA */
+.main{margin-left:var(--sidebar-w);flex:1;min-height:100dvh}
+.topbar{height:var(--nav-h);background:var(--surface);border-bottom:1px solid var(--border-light);display:flex;align-items:center;padding:0 32px;justify-content:space-between;position:sticky;top:0;z-index:30;backdrop-filter:blur(12px)}
+.topbar-title{font-family:var(--fh);font-size:16px;font-weight:600}
+.topbar-actions{display:flex;gap:8px;align-items:center}
+.topbar-btn{padding:7px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);font-family:var(--fh);font-size:12px;color:var(--on-2);min-height:36px;transition:all .15s}
+.topbar-btn:hover{border-color:var(--accent);color:var(--accent)}
+.content{padding:32px}
+
+/* ═══ DASHBOARD PAGE ═══ */
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.dash-stat{background:var(--surface);border-radius:var(--radius-lg);padding:24px;border:1px solid var(--border-light)}
+.ds-val{font-family:var(--fd);font-size:32px;line-height:1}
+.ds-label{font-size:12px;color:var(--on-3);margin-top:4px}
+.ds-trend{font-family:var(--fh);font-size:11px;margin-top:8px;display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:var(--radius-full)}
+.ds-up{background:var(--success-bg);color:var(--success)}
+.ds-warn{background:var(--warning-bg);color:var(--warning)}
+
+.dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:24px}
+.dash-card{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border-light);padding:24px}
+.dc-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.dc-title .count{font-size:11px;color:var(--on-3);font-weight:400}
+
+/* TOOLS GRID */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.tg-card{padding:16px;border-radius:var(--radius-md);border:1px solid var(--border-light);background:var(--surface-alt);transition:all .2s var(--ease);display:flex;gap:12px;align-items:flex-start;min-height:44px}
+.tg-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.tg-card.locked{opacity:.45;pointer-events:none}
+.tg-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.tg-icon.green{background:var(--success-bg);color:var(--success)}
+.tg-icon.amber{background:var(--warning-bg);color:var(--warning)}
+.tg-icon.blue{background:var(--info-bg);color:var(--info)}
+.tg-icon.copper{background:var(--accent-bg);color:var(--accent)}
+.tg-info h4{font-family:var(--fh);font-size:13px;font-weight:500;margin-bottom:2px}
+.tg-info p{font-size:11px;color:var(--on-3);line-height:1.4}
+.tg-badge{font-family:var(--fh);font-size:9px;padding:2px 6px;border-radius:var(--radius-full);margin-top:4px;display:inline-block}
+.tgb-built{background:var(--success-bg);color:var(--success)}
+.tgb-soon{background:var(--warning-bg);color:var(--warning)}
+.tgb-planned{background:var(--surface-alt);color:var(--on-3);border:1px solid var(--border)}
+
+/* ACTIVITY */
+.activity-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-light)}
+.activity-item:last-child{border:none}
+.act-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.act-text{font-size:13px;color:var(--on-2);line-height:1.5}
+.act-time{font-size:11px;color:var(--on-3);margin-top:2px}
+
+/* ═══ ABAQUE EMBED ═══ */
+.abaque-frame{width:100%;border:none;border-radius:var(--radius-lg);min-height:calc(100dvh - var(--nav-h) - 96px)}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .dash-stats{grid-template-columns:repeat(2,1fr)}
+  .dash-grid{grid-template-columns:1fr}
+  .content{padding:20px}
+  .topbar{padding:0 16px}
+  .hamburger{display:flex!important}
+}
+.hamburger{display:none;align-items:center;justify-content:center;width:36px;height:36px;border:none;background:none;cursor:pointer;color:var(--on-surface)}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><svg viewBox="0 0 240 40" height="28" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg></div>
+    <h1>Espace Pro</h1>
+    <p class="sub">Accédez à vos outils consultant et à l'abaque complet.</p>
+    <div class="login-field"><label for="login-email">Email</label><input type="email" id="login-email" placeholder="votre@email.com" autocomplete="email"></div>
+    <div class="login-field"><label for="login-pass">Mot de passe</label><input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"></div>
+    <div class="login-error" id="login-error"></div>
+    <button class="login-btn" onclick="doLogin()">Se connecter</button>
+    <p class="login-hint">Comptes de démonstration :<br><strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fa9b9e979394ba9b89999b969389d49c88">[email&#160;protected]</a></strong> / ascalis2026 (admin)<br><strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b3d0dfdad6ddc7f3d7d6dedc9dd5c1">[email&#160;protected]</a></strong> / demo2026 (client)</p>
+    <a href="ascalis-site.html" class="login-site-link">&larr; Retour au site</a>
+  </div>
+</div>
+
+<!-- ═══ APP SHELL ═══ -->
+<div class="app" id="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-logo"><svg viewBox="0 0 240 40" height="22" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#D4956A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="rgba(248,250,252,.6)" letter-spacing="4.5">SCALIS</text></svg></div>
+    <div class="sb-user"><div class="sb-avatar" id="sb-avatar">A</div><div><div class="sb-name" id="sb-name">Admin</div><div class="sb-role" id="sb-role">Consultant</div></div></div>
+    <nav class="sb-nav" id="sb-nav"></nav>
+    <div class="sb-footer">
+      <button class="sb-logout" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Déconnexion</button>
+    </div>
+  </aside>
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <div class="topbar-title" id="topbar-title">Tableau de bord</div>
+      <div class="topbar-actions"><a href="ascalis-site.html" class="topbar-btn">Voir le site</a></div>
+    </header>
+    <div class="content" id="page-content"></div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ═══ AUTH SYSTEM ═══ */
+const USERS=[
+  {email:'admin@ascalis.fr',pass:'ascalis2026',name:'Consultant ASCALIS',role:'admin',initials:'CA'},
+  {email:'client@demo.fr',pass:'demo2026',name:'Jean Dupont',role:'client',initials:'JD',company:'PME Aéro Demo',sector:'Aéronautique',offers:['1','3','5']}
+];
+
+let currentUser=null;
+
+function doLogin(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase();
+  const pass=document.getElementById('login-pass').value;
+  const user=USERS.find(u=>u.email===email&&u.pass===pass);
+  if(!user){document.getElementById('login-error').textContent='Email ou mot de passe incorrect.';return}
+  currentUser=user;
+  localStorage.setItem('ascalis_user',JSON.stringify(user));
+  showApp();
+}
+
+function doLogout(){
+  currentUser=null;
+  localStorage.removeItem('ascalis_user');
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-email').value='';
+  document.getElementById('login-pass').value='';
+  document.getElementById('login-error').textContent='';
+}
+
+function checkAuth(){
+  const stored=localStorage.getItem('ascalis_user');
+  if(stored){currentUser=JSON.parse(stored);showApp()}
+}
+
+function showApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').classList.add('active');
+  document.getElementById('sb-name').textContent=currentUser.name;
+  document.getElementById('sb-role').textContent=currentUser.role==='admin'?'Consultant — Admin':'Client';
+  document.getElementById('sb-avatar').textContent=currentUser.initials;
+  buildNav();
+  navigate('dashboard');
+}
+
+/* ═══ NAVIGATION ═══ */
+const NAV_ADMIN=[
+  {section:'Principal'},
+  {id:'dashboard',label:'Tableau de bord',icon:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>'},
+  {id:'abaque',label:'Abaque des outils',icon:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',badge:'99'},
+  {section:'Outils Pro'},
+  {id:'tool-diag',label:'Diagnostic terrain',icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',link:'diagnostic-terrain.html'},
+  {id:'tool-8d',label:'Fiche 8D',icon:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',link:'fiche-8d.html'},
+  {id:'tool-audit',label:'Grille d\'audit',icon:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',link:'grille-audit.html'},
+  {id:'tool-ctrl',label:'Plan de contrôle',icon:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/>',link:'plan-controle.html'},
+  {id:'tool-dmaic',label:'DMAIC Navigator',icon:'<path d="M2 17l10-10 4 4 6-6"/><path d="M17 5h5v5"/>',link:'dmaic-navigator.html',badge:'NEW'},
+  {section:'Outils Gratuits'},
+  {id:'tool-cnq',label:'Calculateur CNQ',icon:'<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',link:'calculateur-cnq.html'},
+  {id:'tool-check',label:'Checklist pré-audit',icon:'<path d="M9 11l3 3L22 4"/>',link:'checklist-audit.html'},
+  {id:'tool-prio',label:'Matrice priorisation',icon:'<circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/>',link:'matrice-priorisation.html'},
+  {id:'tool-doc',label:'Score documentaire',icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/>',link:'score-documentaire.html'},
+  {id:'tool-roi',label:'Simulateur ROI',icon:'<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',link:'simulateur-roi.html'},
+];
+
+const NAV_CLIENT=[
+  {section:'Mon espace'},
+  {id:'dashboard',label:'Tableau de bord',icon:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>'},
+  {section:'Outils de ma mission'},
+  {id:'tool-diag',label:'Diagnostic terrain',icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',link:'diagnostic-terrain.html'},
+  {id:'tool-8d',label:'Fiche 8D',icon:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',link:'fiche-8d.html'},
+  {section:'Outils gratuits'},
+  {id:'tool-cnq',label:'Calculateur CNQ',icon:'<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',link:'calculateur-cnq.html'},
+  {id:'tool-check',label:'Checklist pré-audit',icon:'<path d="M9 11l3 3L22 4"/>',link:'checklist-audit.html'},
+  {id:'tool-prio',label:'Matrice priorisation',icon:'<circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/>',link:'matrice-priorisation.html'},
+];
+
+function buildNav(){
+  const items=currentUser.role==='admin'?NAV_ADMIN:NAV_CLIENT;
+  let html='';
+  items.forEach(item=>{
+    if(item.section){html+=`<div class="sb-section">${item.section}</div>`;return}
+    const badge=item.badge?`<span class="sb-badge">${item.badge}</span>`:'';
+    if(item.link){
+      html+=`<a href="${item.link}" class="sb-link" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">${item.icon}</svg>${item.label}${badge}</a>`;
+    }else{
+      html+=`<button class="sb-link" data-page="${item.id}" onclick="navigate('${item.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">${item.icon}</svg>${item.label}${badge}</button>`;
+    }
+  });
+  document.getElementById('sb-nav').innerHTML=html;
+}
+
+function navigate(pageId){
+  document.querySelectorAll('.sb-link[data-page]').forEach(l=>l.classList.remove('active'));
+  const activeLink=document.querySelector(`.sb-link[data-page="${pageId}"]`);
+  if(activeLink)activeLink.classList.add('active');
+
+  if(pageId==='dashboard'){renderDashboard()}
+  else if(pageId==='abaque'){renderAbaque()}
+
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+/* ═══ DASHBOARD PAGE ═══ */
+function renderDashboard(){
+  document.getElementById('topbar-title').textContent='Tableau de bord';
+  const isAdmin=currentUser.role==='admin';
+
+  const TOOLS_PRO=[
+    {name:'Diagnostic terrain',desc:'Grille 8 domaines + radar',status:'built',icon:'green',link:'diagnostic-terrain.html'},
+    {name:'Fiche 8D',desc:'Résolution de problème 8 disciplines',status:'built',icon:'green',link:'fiche-8d.html'},
+    {name:'Grille d\'audit à blanc',desc:'ISO 9001 / EN 9100',status:'built',icon:'green',link:'grille-audit.html',admin:true},
+    {name:'Plan de contrôle',desc:'Tableau éditable + export CSV',status:'built',icon:'green',link:'plan-controle.html',admin:true},
+    {name:'Pareto interactif',desc:'Analyse fréquence / impact',status:'soon',icon:'amber'},
+    {name:'VSM — Cartographie',desc:'Chaîne de valeur interactive',status:'soon',icon:'amber'},
+    {name:'SIPOC',desc:'Vue macro processus',status:'soon',icon:'amber'},
+    {name:'Ishikawa interactif',desc:'5M+1 standalone',status:'soon',icon:'amber'},
+    {name:'SPC / Cartes de contrôle',desc:'Contrôle statistique',status:'soon',icon:'amber'},
+  ];
+
+  const TOOLS_FREE=[
+    {name:'Calculateur CNQ',desc:'Coûts de non-qualité',status:'built',icon:'copper',link:'calculateur-cnq.html'},
+    {name:'Checklist pré-audit',desc:'ISO 9001 / EN 9100',status:'built',icon:'copper',link:'checklist-audit.html'},
+    {name:'Matrice priorisation',desc:'Impact vs. Effort',status:'built',icon:'copper',link:'matrice-priorisation.html'},
+    {name:'Score documentaire',desc:'Maturité documentaire',status:'built',icon:'copper',link:'score-documentaire.html'},
+    {name:'Simulateur ROI',desc:'ROI automatisation qualité',status:'built',icon:'copper',link:'simulateur-roi.html'},
+    {name:'Seuil de rentabilité',desc:'Point mort & volume min',status:'soon',icon:'blue'},
+    {name:'Simulateur prix',desc:'Prix de vente optimal',status:'soon',icon:'blue'},
+    {name:'Diagnostic dirigeant',desc:'Radar de profil',status:'soon',icon:'blue'},
+    {name:'Dashboard dirigeant',desc:'KPI essentiels PME',status:'soon',icon:'blue'},
+  ];
+
+  const filteredPro=isAdmin?TOOLS_PRO:TOOLS_PRO.filter(t=>!t.admin);
+
+  let html=`
+    <div class="dash-stats">
+      <div class="dash-stat"><div class="ds-val" style="color:var(--primary)">${isAdmin?99:filteredPro.length+TOOLS_FREE.length}</div><div class="ds-label">${isAdmin?'Outils dans l\'abaque':'Outils disponibles'}</div><span class="ds-trend ds-up">${isAdmin?'12 catégories':'Pro + Gratuits'}</span></div>
+      <div class="dash-stat"><div class="ds-val" style="color:var(--success)">${isAdmin?10:filteredPro.filter(t=>t.status==='built').length+TOOLS_FREE.filter(t=>t.status==='built').length}</div><div class="ds-label">Digitalisés</div><span class="ds-trend ds-up">Prêts à l'emploi</span></div>
+      <div class="dash-stat"><div class="ds-val" style="color:var(--warning)">${isAdmin?8:filteredPro.filter(t=>t.status==='soon').length+TOOLS_FREE.filter(t=>t.status==='soon').length}</div><div class="ds-label">Prioritaires</div><span class="ds-trend ds-warn">En développement</span></div>
+      <div class="dash-stat"><div class="ds-val" style="color:var(--accent)">8</div><div class="ds-label">Offres actives</div><span class="ds-trend ds-up">Modulables</span></div>
+    </div>
+    <div class="dash-grid">
+      <div>
+        <div class="dash-card"><div class="dc-title">Outils Pro <span class="count">${filteredPro.length} outils</span></div>
+          <div class="tool-grid">${filteredPro.map(t=>{
+            const badge=t.status==='built'?'<span class="tg-badge tgb-built">Disponible</span>':t.status==='soon'?'<span class="tg-badge tgb-soon">Bientôt</span>':'<span class="tg-badge tgb-planned">Planifié</span>';
+            const tag=t.link?`<a href="${t.link}" target="_blank" style="display:contents">`:'';
+            const tagEnd=t.link?'</a>':'';
+            return`${tag}<div class="tg-card ${t.status!=='built'?'locked':''}"><div class="tg-icon ${t.icon}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div><div class="tg-info"><h4>${t.name}</h4><p>${t.desc}</p>${badge}</div></div>${tagEnd}`;
+          }).join('')}</div>
+        </div>
+        <div class="dash-card" style="margin-top:24px"><div class="dc-title">Outils Gratuits <span class="count">${TOOLS_FREE.length} outils</span></div>
+          <div class="tool-grid">${TOOLS_FREE.map(t=>{
+            const badge=t.status==='built'?'<span class="tg-badge tgb-built">Disponible</span>':'<span class="tg-badge tgb-soon">Bientôt</span>';
+            const tag=t.link?`<a href="${t.link}" target="_blank" style="display:contents">`:'';
+            const tagEnd=t.link?'</a>':'';
+            return`${tag}<div class="tg-card ${t.status!=='built'?'locked':''}"><div class="tg-icon ${t.icon}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><circle cx="12" cy="12" r="10"/></svg></div><div class="tg-info"><h4>${t.name}</h4><p>${t.desc}</p>${badge}</div></div>${tagEnd}`;
+          }).join('')}</div>
+        </div>
+      </div>
+      <div>
+        <div class="dash-card"><div class="dc-title">Activité récente</div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--success)"></div><div><div class="act-text">Plan de contrôle digitalisé et livré</div><div class="act-time">Aujourd'hui</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--success)"></div><div><div class="act-text">Grille d'audit à blanc ISO/EN complétée</div><div class="act-time">Aujourd'hui</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--success)"></div><div><div class="act-text">Fiche 8D interactive livrée</div><div class="act-time">Aujourd'hui</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--accent)"></div><div><div class="act-text">Offre 8 "Structuration PME" formalisée</div><div class="act-time">Aujourd'hui</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--info)"></div><div><div class="act-text">Abaque élargi à 99 outils (12 catégories)</div><div class="act-time">Aujourd'hui</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--warning)"></div><div><div class="act-text">5 outils prioritaires identifiés (Pareto, VSM, SIPOC, Ishikawa, SPC)</div><div class="act-time">En attente</div></div></div>
+        </div>
+        ${isAdmin?`<div class="dash-card" style="margin-top:16px"><div class="dc-title">Accès rapide admin</div>
+          <a href="abaque-outils.html" target="_blank" class="tg-card" style="margin-bottom:8px"><div class="tg-icon copper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="tg-info"><h4>Abaque complet</h4><p>99 outils — vue détaillée avec filtres</p></div></a>
+          <a href="ascalis-site.html" target="_blank" class="tg-card"><div class="tg-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="tg-info"><h4>Site vitrine public</h4><p>Vue prospect / découverte</p></div></a>
+        </div>`:''}
+      </div>
+    </div>`;
+  document.getElementById('page-content').innerHTML=html;
+}
+
+/* ═══ ABAQUE PAGE (admin only) ═══ */
+function renderAbaque(){
+  if(currentUser.role!=='admin'){navigate('dashboard');return}
+  document.getElementById('topbar-title').textContent='Abaque des outils';
+  document.getElementById('page-content').innerHTML=`<iframe src="abaque-outils.html" class="abaque-frame" title="Abaque des outils ASCALIS"></iframe>`;
+}
+
+/* ═�

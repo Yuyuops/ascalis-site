@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DMAIC Navigator — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--pl:#1B3A4B;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--warnbg:#FFFBEB;--err:#DC2626;--errbg:#FEF2F2;--info:#2563EB;--infobg:#EFF6FF;--shsm:0 2px 4px rgba(0,0,0,.05);--shmd:0 4px 12px rgba(0,0,0,.06);--shlg:0 8px 24px rgba(0,0,0,.06);--rsm:6px;--rmd:8px;--rlg:12px;--rxl:16px;--rf:9999px;--ease:cubic-bezier(.16,1,.3,1);--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased;overflow-x:hidden}a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:inherit}
+
+/* LAYOUT */
+.app{display:flex;min-height:100dvh}
+.sidebar{width:280px;background:var(--p);color:var(--sa);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:40}
+.sb-hd{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-hd svg{height:22px}
+.sb-hd h2{font-family:var(--fd);font-size:18px;font-weight:400;margin-top:12px;color:var(--al)}
+.sb-hd p{font-size:11px;color:rgba(248,250,252,.3);margin-top:2px}
+.phases{flex:1;padding:12px 0;overflow-y:auto}
+.phase-btn{display:flex;align-items:center;gap:12px;padding:12px 24px;width:100%;border:none;background:none;color:rgba(248,250,252,.45);font-family:var(--fb);font-size:13px;cursor:pointer;transition:all .15s;text-align:left;min-height:48px;position:relative}
+.phase-btn:hover{color:var(--sa);background:rgba(255,255,255,.03)}
+.phase-btn.active{color:var(--sa);background:rgba(255,255,255,.06)}
+.phase-btn.active::after{content:'';position:absolute;right:0;top:12px;bottom:12px;width:3px;background:var(--a);border-radius:2px}
+.phase-num{width:32px;height:32px;border-radius:var(--rf);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:11px;font-weight:600;flex-shrink:0;border:2px solid currentColor;transition:all .15s}
+.phase-btn.active .phase-num{background:var(--a);border-color:var(--a);color:#fff}
+.phase-btn.done .phase-num{background:var(--ok);border-color:var(--ok);color:#fff}
+.phase-label{font-family:var(--fh);font-weight:500}
+.phase-sub{font-size:11px;color:rgba(248,250,252,.25);margin-top:1px}
+.sb-ft{padding:16px 24px;border-top:1px solid rgba(255,255,255,.06)}
+.sb-ft a{font-size:12px;color:rgba(248,250,252,.3)}
+.sb-ft a:hover{color:var(--sa)}
+
+/* MAIN */
+.main{margin-left:280px;flex:1}
+.topbar{height:56px;background:var(--s);border-bottom:1px solid var(--bl);display:flex;align-items:center;padding:0 32px;justify-content:space-between;position:sticky;top:0;z-index:30}
+.topbar-title{font-family:var(--fh);font-size:15px;font-weight:600}
+.topbar-phase{font-size:12px;color:var(--a);background:var(--abg);padding:4px 12px;border-radius:var(--rf);font-family:var(--fh);font-weight:500}
+.content{padding:32px;max-width:960px}
+
+/* CARDS */
+.card{background:var(--s);border-radius:var(--rlg);border:1px solid var(--bl);padding:24px;margin-bottom:20px}
+.card-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title .tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:var(--rf)}
+
+/* FORMS */
+.field{margin-bottom:16px}
+.field label{font-family:var(--fh);font-size:12px;font-weight:500;color:var(--t3);display:block;margin-bottom:4px}
+.field input,.field textarea,.field select{width:100%;padding:10px 14px;border:1px solid var(--bd);border-radius:var(--rsm);font-size:14px;outline:none;background:var(--sa);transition:border-color .15s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--a)}
+.field textarea{resize:vertical;min-height:60px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* BUTTONS */
+.btn{padding:10px 24px;border-radius:var(--rmd);font-family:var(--fh);font-size:13px;font-weight:500;border:none;cursor:pointer;min-height:44px;transition:all .2s var(--ease)}
+.btn-p{background:var(--p);color:var(--sa)}.btn-p:hover{background:var(--pl)}
+.btn-a{background:var(--a);color:#fff}.btn-a:hover{background:var(--al)}
+.btn-o{background:var(--s);color:var(--t2);border:1px solid var(--bd)}.btn-o:hover{border-color:var(--a);color:var(--a)}
+.btn-sm{padding:6px 14px;font-size:12px;min-height:32px}
+
+/* RESULTS */
+.result-box{background:var(--sa);border-radius:var(--rlg);padding:20px;border:1px solid var(--bl);margin-top:16px}
+.result-title{font-family:var(--fh);font-size:12px;font-weight:600;color:var(--a);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.result-item{text-align:center;padding:12px;background:var(--s);border-radius:var(--rmd);border:1px solid var(--bl)}
+.ri-val{font-family:var(--fd);font-size:24px;line-height:1}
+.ri-label{font-size:11px;color:var(--t3);margin-top:4px}
+.ri-ok{color:var(--ok)}.ri-warn{color:var(--warn)}.ri-err{color:var(--err)}.ri-info{color:var(--info)}
+
+/* CHART */
+.chart-container{position:relative;background:var(--s);border-radius:var(--rlg);border:1px solid var(--bl);padding:16px;margin-top:16px}
+canvas{width:100%!important;height:auto!important}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+.data-table th{background:var(--sa);padding:8px 10px;text-align:left;font-family:var(--fh);font-size:11px;font-weight:500;color:var(--t3);border-bottom:1px solid var(--bd)}
+.data-table td{padding:8px 10px;border-bottom:1px solid var(--bl)}
+
+/* SIPOC */
+.sipoc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.sipoc-col{background:var(--sa);border-radius:var(--rmd);padding:12px}
+.sipoc-col h4{font-family:var(--fh);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;text-align:center;padding-bottom:6px;border-bottom:2px solid}
+.sipoc-col textarea{width:100%;min-height:80px;border:1px solid var(--bd);border-radius:var(--rsm);padding:6px;font-size:12px;resize:vertical;outline:none;background:var(--s)}
+
+/* GUIDANCE */
+.guide{background:var(--infobg);border:1px solid #BFDBFE;border-radius:var(--rmd);padding:14px 16px;margin-bottom:16px;font-size:13px;color:#1E40AF;line-height:1.6}
+.guide strong{font-family:var(--fh)}
+.guide-warn{background:var(--warnbg);border-color:#FDE68A;color:#92400E}
+.guide-ok{background:var(--okbg);border-color:#A7F3D0;color:#065F46}
+
+/* STATUS */
+.status-badge{display:inline-flex;align-items:center;gap:4px;font-family:var(--fh);font-size:11px;padding:3px 10px;border-radius:var(--rf);font-weight:500}
+.sb-ok{background:var(--okbg);color:var(--ok)}.sb-warn{background:var(--warnbg);color:var(--warn)}.sb-err{background:var(--errbg);color:var(--err)}
+
+/* IMPORT */
+.import-zone{border:2px dashed var(--bd);border-radius:var(--rlg);padding:24px;text-align:center;cursor:pointer;transition:border-color .2s;margin:16px 0}
+.import-zone:hover{border-color:var(--a)}
+.import-zone p{font-size:13px;color:var(--t3)}
+.import-zone input{display:none}
+
+/* NAV BUTTONS */
+.nav-btns{display:flex;justify-content:space-between;margin-top:32px;padding-top:20px;border-top:1px solid var(--bl)}
+
+@media(max-width:900px){
+  .sidebar{display:none}
+  .main{margin-left:0}
+  .content{padding:16px}
+  .row,.row-3,.sipoc-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sb-hd">
+      <svg viewBox="0 0 240 40" height="22" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#D4956A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="rgba(248,250,252,.6)" letter-spacing="4.5">SCALIS</text></svg>
+      <h2>DMAIC Navigator</h2>
+      <p>Chantier d'amélioration Six Sigma</p>
+    </div>
+    <div class="phases" id="phases-nav"></div>
+    <div class="sb-ft">
+      <a href="dashboard.html">&larr; Retour au dashboard</a>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-title" id="topbar-title">Define</div>
+      <div class="topbar-phase" id="topbar-phase">Phase 1/5</div>
+    </header>
+    <div class="content" id="page"></div>
+  </div>
+</div>
+
+<script>
+
+/* ═══════════════════════════════════════
+   STATISTICS ENGINE (pure JS, no deps)
+   ═══════════════════════════════════════ */
+const S={
+  mean(d){return d.reduce((a,b)=>a+b,0)/d.length},
+  variance(d,sample=true){const m=S.mean(d);const ss=d.reduce((a,v)=>a+(v-m)**2,0);return ss/(d.length-(sample?1:0))},
+  stdev(d,sample=true){return Math.sqrt(S.variance(d,sample))},
+  median(d){const s=[...d].sort((a,b)=>a-b);const n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2},
+  min(d){return Math.min(...d)},
+  max(d){return Math.max(...d)},
+  range(d){return S.max(d)-S.min(d)},
+  sum(d){return d.reduce((a,b)=>a+b,0)},
+  // Normal distribution CDF (approximation)
+  normCDF(x){const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;const s=x<0?-1:1;x=Math.abs(x)/Math.sqrt(2);const t=1/(1+p*x);const y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);return 0.5*(1+s*y)},
+  // Inverse normal (approximation Beasley-Springer-Moro)
+  normInv(p){if(p<=0)return-Infinity;if(p>=1)return Infinity;if(p===0.5)return 0;const a=[0,-3.969683028665376e1,2.209460984245205e2,-2.759285104469687e2,1.383577518672690e2,-3.066479806614716e1,2.506628277459239e0];const b=[0,-5.447609879822406e1,1.615858368580409e2,-1.556989798598866e2,6.680131188771972e1,-1.328068155288572e1];const c=[0,-7.784894002430293e-3,-3.223964580411365e-1,-2.400758277161838e0,-2.549732539343734e0,4.374664141464968e0,2.938163982698783e0];const d=[0,7.784695709041462e-3,3.224671290700398e-1,2.445134137142996e0,3.754408661907416e0];const pLow=0.02425,pHigh=1-pLow;let q,r;if(p<pLow){q=Math.sqrt(-2*Math.log(p));return(((((c[1]*q+c[2])*q+c[3])*q+c[4])*q+c[5])*q+c[6])/((((d[1]*q+d[2])*q+d[3])*q+d[4])*q+1)}if(p<=pHigh){q=p-0.5;r=q*q;return(((((a[1]*r+a[2])*r+a[3])*r+a[4])*r+a[5])*r+a[6])*q/(((((b[1]*r+b[2])*r+b[3])*r+b[4])*r+b[5])*r+1)}q=Math.sqrt(-2*Math.log(1-p));return-(((((c[1]*q+c[2])*q+c[3])*q+c[4])*q+c[5])*q+c[6])/((((d[1]*q+d[2])*q+d[3])*q+d[4])*q+1)},
+  // Anderson-Darling normality test
+  andersonDarling(d){const n=d.length;const sorted=[...d].sort((a,b)=>a-b);const m=S.mean(d);const s=S.stdev(d);if(s===0)return{stat:Infinity,normal:false};const z=sorted.map(x=>(x-m)/s);const p=z.map(x=>S.normCDF(x));let ad=0;for(let i=0;i<n;i++){const pi=Math.max(1e-10,Math.min(1-1e-10,p[i]));const pn=Math.max(1e-10,Math.min(1-1e-10,p[n-1-i]));ad+=(2*(i+1)-1)*(Math.log(pi)+Math.log(1-pn))}ad=-n-ad/n;ad*=(1+0.75/n+2.25/(n*n));return{stat:Math.round(ad*1000)/1000,normal:ad<0.752,pApprox:ad<0.2?'>0.25':ad<0.34?'~0.10':ad<0.752?'~0.05':'<0.05'}},
+  // Capability indices
+  capability(d,lsl,usl){const m=S.mean(d);const s=S.stdev(d);const sP=S.stdev(d,false);if(s===0)return{cp:Infinity,cpk:Infinity,pp:Infinity,ppk:Infinity,sigma:6,dpmo:0};const cp=(usl-lsl)/(6*s);const cpk=Math.min((usl-m)/(3*s),(m-lsl)/(3*s));const pp=(usl-lsl)/(6*sP);const ppk=Math.min((usl-m)/(3*sP),(m-lsl)/(3*sP));const sigma=Math.min((usl-m)/s,(m-lsl)/s);const dpmo=Math.round((1-S.normCDF(sigma))*2*1e6);return{cp:Math.round(cp*100)/100,cpk:Math.round(cpk*100)/100,pp:Math.round(pp*100)/100,ppk:Math.round(ppk*100)/100,sigma:Math.round(sigma*100)/100,dpmo,mean:Math.round(m*1000)/1000,stdev:Math.round(s*1000)/1000}},
+  // One-sample t-test
+  tTest1(d,mu0=0){const n=d.length;const m=S.mean(d);const se=S.stdev(d)/Math.sqrt(n);const t=(m-mu0)/se;const df=n-1;const p=2*(1-S.tCDF(Math.abs(t),df));return{t:Math.round(t*1000)/1000,df,pValue:Math.round(p*10000)/10000,mean:Math.round(m*1000)/1000,significant:p<0.05}},
+  // Two-sample t-test (Welch)
+  tTest2(d1,d2){const n1=d1.length,n2=d2.length;const m1=S.mean(d1),m2=S.mean(d2);const v1=S.variance(d1),v2=S.variance(d2);const se=Math.sqrt(v1/n1+v2/n2);const t=(m1-m2)/se;const df=Math.floor((v1/n1+v2/n2)**2/((v1/n1)**2/(n1-1)+(v2/n2)**2/(n2-1)));const p=2*(1-S.tCDF(Math.abs(t),df));return{t:Math.round(t*1000)/1000,df,pValue:Math.round(p*10000)/10000,mean1:Math.round(m1*1000)/1000,mean2:Math.round(m2*1000)/1000,diff:Math.round((m1-m2)*1000)/1000,significant:p<0.05}},
+  // t-distribution CDF (approximation using normal for large df)
+  tCDF(t,df){if(df>=30)return S.normCDF(t);const x=df/(df+t*t);return 1-0.5*S.betaInc(df/2,0.5,x)},
+  // Incomplete beta (rough approximation)
+  betaInc(a,b,x){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(S.lnGamma(a+b)-S.lnGamma(a)-S.lnGamma(b)+a*Math.log(x)+b*Math.log(1-x));if(x<(a+1)/(a+b+2))return bt*S.betaCF(a,b,x)/a;return 1-bt*S.betaCF(b,a,1-x)/b},
+  betaCF(a,b,x){const maxIter=200;let m2,aa,c=1,d=1-((a+b)*x/(a+1));if(Math.abs(d)<1e-30)d=1e-30;d=1/d;let h=d;for(let m=1;m<=maxIter;m++){m2=2*m;aa=m*(b-m)*x/((a-1+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;h*=d*c;aa=-(a+m)*(a+b+m)*x/((a+m2)*(a+1+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-7)break}return h},
+  lnGamma(z){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.001208650973866179,-5.395239384953e-6];let y=z;let tmp=z+5.5;tmp-=(z+0.5)*Math.log(tmp);let ser=1.000000000190015;for(let j=0;j<6;j++)ser+=c[j]/++y;return-tmp+Math.log(2.5066282746310005*ser/z)},
+  // One-way ANOVA
+  anova(groups){const k=groups.length;const N=groups.reduce((a,g)=>a+g.length,0);const grandMean=S.mean(groups.flat());let ssBetween=0,ssWithin=0;groups.forEach(g=>{const gm=S.mean(g);ssBetween+=g.length*(gm-grandMean)**2;g.forEach(v=>ssWithin+=(v-gm)**2)});const dfB=k-1,dfW=N-k;const msB=ssBetween/dfB,msW=ssWithin/dfW;const F=msB/msW;const p=1-S.fCDF(F,dfB,dfW);return{F:Math.round(F*1000)/1000,dfBetween:dfB,dfWithin:dfW,pValue:Math.round(p*10000)/10000,significant:p<0.05}},
+  // F-distribution CDF (approximation)
+  fCDF(x,d1,d2){const v=d1*x/(d1*x+d2);return S.betaInc(d1/2,d2/2,v)},
+  // Chi-square test (contingency table)
+  chiSquare(observed){const rows=observed.length,cols=observed[0].length;const rowTotals=observed.map(r=>S.sum(r));const colTotals=observed[0].map((_,j)=>S.sum(observed.map(r=>r[j])));const total=S.sum(rowTotals);let chi2=0;for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){const expected=rowTotals[i]*colTotals[j]/total;if(expected>0)chi2+=(observed[i][j]-expected)**2/expected}const df=(rows-1)*(cols-1);const p=1-S.chi2CDF(chi2,df);return{chi2:Math.round(chi2*1000)/1000,df,pValue:Math.round(p*10000)/10000,significant:p<0.05}},
+  chi2CDF(x,k){if(x<=0)return 0;return S.betaInc(k/2,0.5,1)*0+S.gammaCDF(x,k/2,0.5)},
+  gammaCDF(x,a,b){return S.betaInc(a,0,1)-S.betaInc(a,0,1)+S.lowerGammaP(a,x*b)},
+  // Lower incomplete gamma (regularized)
+  lowerGammaP(a,x){if(x<=0)return 0;if(x<a+1){let sum=1/a,term=1/a;for(let n=1;n<200;n++){term*=x/(a+n);sum+=term;if(Math.abs(term)<Math.abs(sum)*1e-10)break}return sum*Math.exp(-x+a*Math.log(x)-S.lnGamma(a))}let b2=x+1-a,c=1/1e-30,d2=1/b2,h=d2;for(let i=1;i<200;i++){const an2=-i*(i-a);b2+=2;d2=an2*d2+b2;if(Math.abs(d2)<1e-30)d2=1e-30;c=b2+an2/c;if(Math.abs(c)<1e-30)c=1e-30;d2=1/d2;const del=d2*c;h*=del;if(Math.abs(del-1)<1e-10)break}return 1-Math.exp(-x+a*Math.log(x)-S.lnGamma(a))*h},
+  // Simple linear regression
+  regression(x,y){const n=x.length;const mx=S.mean(x),my=S.mean(y);let ssxy=0,ssxx=0,ssyy=0;for(let i=0;i<n;i++){ssxy+=(x[i]-mx)*(y[i]-my);ssxx+=(x[i]-mx)**2;ssyy+=(y[i]-my)**2}const b1=ssxy/ssxx;const b0=my-b1*mx;const r=ssxy/Math.sqrt(ssxx*ssyy);const r2=r*r;const predicted=x.map(xi=>b0+b1*xi);const residuals=y.map((yi,i)=>yi-predicted[i]);const ssRes=residuals.reduce((a,r)=>a+r*r,0);const se=Math.sqrt(ssRes/(n-2));const tStat=b1/(se/Math.sqrt(ssxx));const pValue=2*(1-S.tCDF(Math.abs(tStat),n-2));return{b0:Math.round(b0*1000)/1000,b1:Math.round(b1*1000)/1000,r:Math.round(r*1000)/1000,r2:Math.round(r2*1000)/1000,pValue:Math.round(pValue*10000)/10000,equation:`Y = ${b0.toFixed(3)} + ${b1.toFixed(3)} × X`,predicted,residuals,significant:pValue<0.05}},
+  // Control chart limits (I-MR)
+  imr(d){const n=d.length;const mr=[];for(let i=1;i<n;i++)mr.push(Math.abs(d[i]-d[i-1]));const xBar=S.mean(d);const mrBar=S.mean(mr);const d2=1.128;const uclX=xBar+3*(mrBar/d2);const lclX=xBar-3*(mrBar/d2);const uclMR=3.267*mrBar;return{xBar:Math.round(xBar*1000)/1000,uclX:Math.round(uclX*1000)/1000,lclX:Math.round(lclX*1000)/1000,mrBar:Math.round(mrBar*1000)/1000,uclMR:Math.round(uclMR*1000)/1000,mr,ooc:d.filter(v=>v>uclX||v<lclX).length}},
+  // X-bar R chart
+  xbarR(subgroups){const k=subgroups.length;const n=subgroups[0].length;const means=subgroups.map(sg=>S.mean(sg));const ranges=subgroups.map(sg=>S.range(sg));const xBarBar=S.mean(means);const rBar=S.mean(ranges);const A2=[0,0,1.880,1.023,0.729,0.577,0.483,0.419];const D3=[0,0,0,0,0,0,0,0.076];const D4=[0,0,3.267,2.575,2.282,2.115,2.004,1.924];const a2=n<=7?A2[n]:0.5;const d3=n<=7?D3[n]:0;const d4=n<=7?D4[n]:2;const uclX=xBarBar+a2*rBar;const lclX=xBarBar-a2*rBar;const uclR=d4*rBar;const lclR=d3*rBar;return{means,ranges,xBarBar:Math.round(xBarBar*1000)/1000,rBar:Math.round(rBar*1000)/1000,uclX:Math.round(uclX*1000)/1000,lclX:Math.round(lclX*1000)/1000,uclR:Math.round(uclR*1000)/1000,lclR:Math.round(lclR*1000)/1000}},
+  // Gage R&R (crossed, ANOVA method simplified)
+  gageRR(data){
+    // data = [{part,operator,value},...] 
+    const parts=[...new Set(data.map(d=>d.part))];
+    const ops=[...new Set(data.map(d=>d.operator))];
+    const nParts=parts.length,nOps=ops.length;
+    const trials=data.length/(nParts*nOps);
+    const grandMean=S.mean(data.map(d=>d.value));
+    // Part averages
+    const partMeans={};parts.forEach(p=>{partMeans[p]=S.mean(data.filter(d=>d.part===p).map(d=>d.value))});
+    // Operator averages
+    const opMeans={};ops.forEach(o=>{opMeans[o]=S.mean(data.filter(d=>d.operator===o).map(d=>d.value))});
+    // SS calculations
+    let ssPart=0;parts.forEach(p=>ssPart+=nOps*trials*(partMeans[p]-grandMean)**2);
+    let ssOp=0;ops.forEach(o=>ssOp+=nParts*trials*(opMeans[o]-grandMean)**2);
+    // Repeatability (within)
+    let ssRepeat=0;
+    data.forEach(d=>{ 
+      const cellData=data.filter(x=>x.part===d.part&&x.operator===d.operator);
+      const cellMean=S.mean(cellData.map(x=>x.value));
+      ssRepeat+=(d.value-cellMean)**2;
+    });
+    // Interaction
+    let ssInter=0;
+    parts.forEach(p=>{ops.forEach(o=>{
+      const cell=data.filter(d=>d.part===p&&d.operator===o);
+      if(cell.length>0){const cm=S.mean(cell.map(d=>d.value));ssInter+=cell.length*(cm-partMeans[p]-opMeans[o]+grandMean)**2}
+    })});
+    const ssTotal=ssPart+ssOp+ssInter+ssRepeat;
+    // Variance components
+    const msRepeat=ssRepeat/(nParts*nOps*(trials-1)||1);
+    const msInter=ssInter/((nParts-1)*(nOps-1)||1);
+    const msOp=ssOp/(nOps-1||1);
+    const msPart=ssPart/(nParts-1||1);
+    const varRepeat=msRepeat;
+    const varInter=Math.max(0,(msInter-msRepeat)/trials);
+    const varOp=Math.max(0,(msOp-msInter)/(nParts*trials));
+    const varPart=Math.max(0,(msPart-msInter)/(nOps*trials));
+    const varRR=varRepeat+varInter+varOp;
+    const varTotal=varRR+varPart;
+    const pctRR=varTotal>0?Math.round(varRR/varTotal*10000)/100:0;
+    const pctRepeat=varTotal>0?Math.round(varRepeat/varTotal*10000)/100:0;
+    const pctReprod=varTotal>0?Math.round((varOp+varInter)/varTotal*10000)/100:0;
+    const pctPart=varTotal>0?Math.round(varPart/varTotal*10000)/100:0;
+    const ndc=Math.floor(1.41*Math.sqrt(varPart/varRR));
+    return{pctGRR:pctRR,pctRepeat,pctReprod,pctPart,ndc:Math.max(ndc,0),acceptable:pctRR<10,marginal:pctRR>=10&&pctRR<=30,nParts,nOps,trials,n:data.length}
+  },
+};
+
+/* ═══════════════════════════════════════
+   SVG CHART ENGINE
+   ═══════════════════════════════════════ */
+const Chart={
+  histogram(data,lsl,usl,width=700,height=280){
+    const pad={t:20,r:20,b:40,l:50};const w=width-pad.l-pad.r,h=height-pad.t-pad.b;
+    const mn=S.min(data),mx=S.max(data);
+    const nBins=Math.min(Math.ceil(Math.sqrt(data.length)),25);
+    const binW=(mx-mn)/nBins||1;
+    const bins=Array(nBins).fill(0);
+    data.forEach(v=>{let bi=Math.floor((v-mn)/binW);if(bi>=nBins)bi=nBins-1;if(bi<0)bi=0;bins[bi]++});
+    const maxBin=Math.max(...bins);
+    const scX=v=>(v-mn)/(mx-mn)*w;
+    const scY=v=>h-v/maxBin*h;
+    let svg=`<svg viewBox="0 0 ${width} ${height}" width="100%" style="display:block">`;
+    // Grid lines
+    for(let i=0;i<=4;i++){const y=pad.t+h*i/4;svg+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+w}" y2="${y}" stroke="var(--bl)" stroke-width="1"/><text x="${pad.l-8}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--t3)">${Math.round(maxBin*(1-i/4))}</text>`}
+    // Bars
+    bins.forEach((c,i)=>{
+      const x=pad.l+i/nBins*w;const bw=w/nBins-1;
+      const y=pad.t+scY(c);const bh=h-scY(c);
+      svg+=`<rect x="${x}" y="${y}" width="${bw}" height="${bh}" fill="var(--a)" opacity="0.7" rx="1"/>`;
+    });
+    // Normal curve overlay
+    if(data.length>5){
+      const m=S.mean(data),s=S.stdev(data);
+      const totalArea=data.length*binW;
+      let path='M';
+      for(let px=0;px<=w;px+=2){
+        const xVal=mn+px/w*(mx-mn);
+        const zz=(xVal-m)/s;
+        const pdf=Math.exp(-0.5*zz*zz)/(s*Math.sqrt(2*Math.PI));
+        const y=pad.t+h-pdf*totalArea/maxBin*h;
+        path+=(px===0?'':' L')+` ${pad.l+px} ${y}`;
+      }
+      svg+=`<path d="${path}" fill="none" stroke="var(--info)" stroke-width="2" opacity="0.8"/>`;
+    }
+    // LSL/USL lines
+    if(lsl!==null&&lsl>=mn&&lsl<=mx){const x=pad.l+scX(lsl);svg+=`<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${pad.t+h}" stroke="var(--err)" stroke-width="1.5" stroke-dasharray="4,3"/><text x="${x}" y="${pad.t+h+14}" text-anchor="middle" font-size="10" fill="var(--err)">LSL</text>`}
+    if(usl!==null&&usl>=mn&&usl<=mx){const x=pad.l+scX(usl);svg+=`<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${pad.t+h}" stroke="var(--err)" stroke-width="1.5" stroke-dasharray="4,3"/><text x="${x}" y="${pad.t+h+14}" text-anchor="middle" font-size="10" fill="var(--err)">USL</text>`}
+    // X axis labels
+    for(let i=0;i<=5;i++){const v=mn+i/5*(mx-mn);const x=pad.l+i/5*w;svg+=`<text x="${x}" y="${pad.t+h+28}" text-anchor="middle" font-size="10" fill="var(--t3)">${v.toFixed(2)}</text>`}
+    svg+=`</svg>`;return svg;
+  },
+
+  scatter(xData,yData,reg,width=700,height=320){
+    const pad={t:20,r:20,b:40,l:55};const w=width-pad.l-pad.r,h=height-pad.t-pad.b;
+    const xMin=S.min(xData),xMax=S.max(xData),yMin=S.min(yData),yMax=S.max(yData);
+    const xRange=xMax-xMin||1,yRange=yMax-yMin||1;
+    const scX=v=>pad.l+(v-xMin)/xRange*w;
+    const scY=v=>pad.t+h-(v-yMin)/yRange*h;
+    let svg=`<svg viewBox="0 0 ${width} ${height}" width="100%" style="display:block">`;
+    // Grid
+    for(let i=0;i<=4;i++){const y=pad.t+h*i/4;const yv=yMax-(yMax-yMin)*i/4;svg+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+w}" y2="${y}" stroke="var(--bl)" stroke-width="1"/><text x="${pad.l-8}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--t3)">${yv.toFixed(1)}</text>`}
+    for(let i=0;i<=5;i++){const x=pad.l+w*i/5;const xv=xMin+xRange*i/5;svg+=`<text x="${x}" y="${pad.t+h+28}" text-anchor="middle" font-size="10" fill="var(--t3)">${xv.toFixed(1)}</text>`}
+    // Regression line
+    if(reg){
+      const x1=xMin-xRange*.05,x2=xMax+xRange*.05;
+      const y1=reg.b0+reg.b1*x1,y2=reg.b0+reg.b1*x2;
+      svg+=`<line x1="${scX(x1)}" y1="${scY(y1)}" x2="${scX(x2)}" y2="${scY(y2)}" stroke="var(--a)" stroke-width="2" opacity="0.7"/>`;
+    }
+    // Points
+    xData.forEach((x,i)=>{svg+=`<circle cx="${scX(x)}" cy="${scY(yData[i])}" r="4" fill="var(--info)" opacity="0.7"/>`});
+    svg+=`</svg>`;return svg;
+  },
+
+  controlChart(data,center,ucl,lcl,label,width=700,height=240){
+    const pad={t:20,r:40,b:30,l:55};const w=width-pad.l-pad.r,h=height-pad.t-pad.b;
+    const allVals=[...data,ucl,lcl];
+    const yMin=Math.min(...allVals)-Math.abs(ucl-lcl)*.1;
+    const yMax=Math.max(...allVals)+Math.abs(ucl-lcl)*.1;
+    const yRange=yMax-yMin||1;
+    const scX=i=>pad.l+i/(data.length-1)*w;
+    const scY=v=>pad.t+h-(v-yMin)/yRange*h;
+    let svg=`<svg viewBox="0 0 ${width} ${height}" width="100%" style="display:block">`;
+    // UCL/LCL/Center
+    svg+=`<line x1="${pad.l}" y1="${scY(ucl)}" x2="${pad.l+w}" y2="${scY(ucl)}" stroke="var(--err)" stroke-width="1" stroke-dasharray="6,3"/>`;
+    svg+=`<text x="${pad.l+w+4}" y="${scY(ucl)+4}" font-size="9" fill="var(--err)">UCL</text>`;
+    svg+=`<line x1="${pad.l}" y1="${scY(lcl)}" x2="${pad.l+w}" y2="${scY(lcl)}" stroke="var(--err)" stroke-width="1" stroke-dasharray="6,3"/>`;
+    svg+=`<text x="${pad.l+w+4}" y="${scY(lcl)+4}" font-size="9" fill="var(--err)">LCL</text>`;
+    svg+=`<line x1="${pad.l}" y1="${scY(center)}" x2="${pad.l+w}" y2="${scY(center)}" stroke="var(--ok)" stroke-width="1.5"/>`;
+    svg+=`<text x="${pad.l+w+4}" y="${scY(center)+4}" font-size="9" fill="var(--ok)">${label||'CL'}</text>`;
+    // Data line
+    let path='M';
+    data.forEach((v,i)=>{path+=(i===0?'':' L')+` ${scX(i)} ${scY(v)}`});
+    svg+=`<path d="${path}" fill="none" stroke="var(--p)" stroke-width="1.5"/>`;
+    // Points (color-coded OOC)
+    data.forEach((v,i)=>{
+      const ooc=v>ucl||v<lcl;
+      svg+=`<circle cx="${scX(i)}" cy="${scY(v)}" r="${ooc?5:3}" fill="${ooc?'var(--err)':'var(--info)'}" stroke="${ooc?'var(--err)':'none'}" stroke-width="${ooc?2:0}"/>`;
+    });
+    // Y axis
+    for(let i=0;i<=4;i++){const y=pad.t+h*i/4;const yv=yMax-(yMax-yMin)*i/4;svg+=`<text x="${pad.l-8}" y="${y+4}" text-anchor="end" font-size="9" fill="var(--t3)">${yv.toFixed(2)}</text>`}
+    // X axis
+    const step=Math.max(1,Math.floor(data.length/10));
+    for(let i=0;i<data.length;i+=step){svg+=`<text x="${scX(i)}" y="${pad.t+h+18}" text-anchor="middle" font-size="9" fill="var(--t3)">${i+1}</text>`}
+    svg+=`</svg>`;return svg;
+  }
+};
+
+/* ═══════════════════════════════════════
+/* ═══════════════════════════════════════
+   APP STATE
+   ═══════════════════════════════════════ */
+const STATE={phase:0,define:{},measure:{data:[],lsl:null,usl:null},analyze:{},improve:{},control:{}};
+
+const PHASES=[
+  {id:'define',label:'Define',sub:'Cadrer le problème',color:'#2563EB'},
+  {id:'measure',label:'Measure',sub:'Mesurer & qualifier',color:'#7C3AED'},
+  {id:'analyze',label:'Analyze',sub:'Prouver les causes',color:'#059669'},
+  {id:'improve',label:'Improve',sub:'Optimiser le process',color:'#D97706'},
+  {id:'control',label:'Control',sub:'Pérenniser les gains',color:'#DC2626'}
+];
+
+function buildNav(){
+  document.getElementById('phases-nav').innerHTML=PHASES.map((p,i)=>`
+    <button class="phase-btn ${i===STATE.phase?'active':''}" onclick="goPhase(${i})">
+      <span class="phase-num" style="color:${p.color}">${i+1}</span>
+      <div><div class="phase-label">${p.label}</div><div class="phase-sub">${p.sub}</div></div>
+    </button>`).join('');
+}
+function goPhase(i){STATE.phase=i;buildNav();document.getElementById('topbar-title').textContent=PHASES[i].label+' — '+PHASES[i].sub;document.getElementById('topbar-phase').textContent=`Phase ${i+1}/5`;render()}
+function render(){[renderDefine,renderMeasure,renderAnalyze,renderImprove,renderControl][STATE.phase]()}
+function parseNums(id){return(document.getElementById(id)?.value||'').split(/[\n,;\t]+/).map(s=>parseFloat(s.trim())).filter(n=>!isNaN(n))}
+function V(id){return document.getElementById(id)?.value||''}
+
+/* ═══════════════════════════════════════
+   PHASE 1: DEFINE
+   Big Picture: Business Case → High-Level Process Map → Project Focus (Pareto) → 
+   Charter (Problem, Objective, Y, y's) → COPQ → Team → VOC/CTQ → SIPOC → 
+   Elements of waste (TIMWOOD) → 5S assessment → Ready for Measure
+   ═══════════════════════════════════════ */
+function renderDefine(){
+  const d=STATE.define;
+  const P=document.getElementById('page');
+  P.innerHTML=`
+  <div class="guide"><strong>Phase Define — Comprendre le problème</strong><br>
+  Objectif : cadrer le projet, estimer les enjeux (COPQ), constituer l'équipe, cartographier le processus (SIPOC), traduire la voix du client en caractéristiques mesurables (VOC → CTQ), et identifier les gaspillages.</div>
+
+  <div class="card"><div class="card-title">1.1 — Business Case & Sélection du projet <span class="tag">Étape 1</span></div>
+    <div class="guide">Le champion identifie un problème. On détermine le focus du projet (Pareto, désirabilité) et on justifie l'investissement.</div>
+    <div class="row"><div class="field"><label>Problème identifié par le champion</label><textarea id="d-champion-pb" rows="2" placeholder="Quel problème a été remonté ? Par qui ? Quel est l'impact business ?">${d.championPb||''}</textarea></div>
+    <div class="field"><label>Justification du projet</label><textarea id="d-justif" rows="2" placeholder="Pourquoi ce projet maintenant ? Lien avec la stratégie, urgence client, coût...">${d.justif||''}</textarea></div></div>
+    <div class="row-3">
+      <div class="field"><label>COPQ estimé (€/an)</label><input id="d-copq" type="number" value="${d.copq||''}" placeholder="Coût de non-qualité annuel"></div>
+      <div class="field"><label>Bénéfice attendu (€/an)</label><input id="d-benefit" type="number" value="${d.benefit||''}" placeholder="Gain visé après amélioration"></div>
+      <div class="field"><label>Catégorie de bénéfice</label><select id="d-bencat"><option value="hard" ${d.bencat==='hard'?'selected':''}>Hard savings (cash)</option><option value="soft" ${d.bencat==='soft'?'selected':''}>Soft savings (productivité)</option><option value="avoid" ${d.bencat==='avoid'?'selected':''}>Cost avoidance</option><option value="revenue" ${d.bencat==='revenue'?'selected':''}>Revenue increase</option></select></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title">1.2 — Project Charter <span class="tag">Étape 2</span></div>
+    <div class="guide">Formalisez le projet avec un énoncé SMART. Définissez la métrique primaire Y et les métriques secondaires y's. Le charter est approuvé par le champion avant de passer en Measure.</div>
+    <div class="field"><label>Problem Statement (énoncé du problème — factuel, mesurable)</label><textarea id="d-problem" rows="3" placeholder="Quoi : quel défaut/problème ? Où : quel processus/site ? Quand : depuis quand ? Combien : quelle ampleur ? Impact : quel coût/risque ?">${d.problem||''}</textarea></div>
+    <div class="field"><label>Objective Statement (objectif — SMART)</label><textarea id="d-objective" rows="2" placeholder="Réduire [quoi] de [combien] d'ici [quand] en agissant sur [périmètre]">${d.objective||''}</textarea></div>
+    <div class="row">
+      <div class="field"><label>Métrique primaire Y</label><input id="d-primaryY" value="${d.primaryY||''}" placeholder="Ex: Taux de NC (%), Cpk, temps de cycle (min)..."></div>
+      <div class="field"><label>Valeur actuelle de Y</label><input id="d-yBaseline" value="${d.yBaseline||''}" placeholder="Ex: 4.2%, 0.85, 45 min"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Objectif pour Y</label><input id="d-yTarget" value="${d.yTarget||''}" placeholder="Ex: <1.5%, >1.33, <30 min"></div>
+      <div class="field"><label>Métriques secondaires (y's)</label><input id="d-secondaryY" value="${d.secondaryY||''}" placeholder="Ex: Coût rebuts, taux retouche, OTD..."></div>
+    </div>
+    <div class="field"><label>Périmètre (In scope / Out of scope)</label><div class="row"><textarea id="d-inscope" rows="2" placeholder="In scope : lignes, produits, étapes concernés...">${d.inscope||''}</textarea><textarea id="d-outscope" rows="2" placeholder="Out of scope : ce qui n'est PAS dans le périmètre...">${d.outscope||''}</textarea></div></div>
+    <div class="row">
+      <div class="field"><label>Date de début</label><input type="date" id="d-start" value="${d.start||''}"></div>
+      <div class="field"><label>Date de fin prévue</label><input type="date" id="d-end" value="${d.end||''}"></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title">1.3 — Équipe projet <span class="tag">Étape 3</span></div>
+    <div class="guide">Constituez l'équipe DMAIC. Le Champion sponsorise, le Belt pilote, les membres apportent leur expertise terrain.</div>
+    <div class="field"><label>Champion / Sponsor</label><input id="d-champion" value="${d.champion||''}" placeholder="Nom et fonction"></div>
+    <div class="row"><div class="field"><label>Belt pilote (Green/Black Belt)</label><input id="d-belt" value="${d.belt||''}" placeholder="Nom"></div>
+    <div class="field"><label>Process Owner</label><input id="d-owner" value="${d.owner||''}" placeholder="Responsable du processus"></div></div>
+    <div class="field"><label>Membres de l'équipe</label><textarea id="d-members" rows="2" placeholder="Nom — Fonction — Rôle dans le projet (un par ligne)">${d.members||''}</textarea></div>
+  </div>
+
+  <div class="card"><div class="card-title">1.4 — SIPOC <span class="tag">Cartographie macro du processus</span></div>
+    <div class="guide">Cartographiez le processus en 5-7 étapes macro. Le SIPOC permet de comprendre le périmètre et d'identifier les entrées/sorties clés.</div>
+    <div class="sipoc-grid">
+      <div class="sipoc-col"><h4 style="border-color:#2563EB;color:#2563EB">Suppliers</h4><textarea id="d-sipoc-s" placeholder="Fournisseurs des entrées">${d.sipocS||''}</textarea></div>
+      <div class="sipoc-col"><h4 style="border-color:#7C3AED;color:#7C3AED">Inputs</h4><textarea id="d-sipoc-i" placeholder="Matières, données, infos">${d.sipocI||''}</textarea></div>
+      <div class="sipoc-col"><h4 style="border-color:#059669;color:#059669">Process</h4><textarea id="d-sipoc-p" placeholder="5-7 étapes macro">${d.sipocP||''}</textarea></div>
+      <div class="sipoc-col"><h4 style="border-color:#D97706;color:#D97706">Outputs</h4><textarea id="d-sipoc-o" placeholder="Produits, livrables, données">${d.sipocO||''}</textarea></div>
+      <div class="sipoc-col"><h4 style="border-color:#DC2626;color:#DC2626">Customers</h4><textarea id="d-sipoc-c" placeholder="Clients internes/externes">${d.sipocC||''}</textarea></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title">1.5 — VOC → CTQ <span class="tag">Voix du client → Caractéristiques critiques</span></div>
+    <div class="guide">Traduisez ce que le client dit (VOC) en caractéristiques mesurables (CTQ) avec des limites de spécification. C'est le lien entre l'attente client et la métrique Y.</div>
+    <div class="field"><label>Voix du client (VOC) — Verbatims, réclamations, attentes</label><textarea id="d-voc" rows="3" placeholder="&quot;Les pièces arrivent toujours en retard&quot;, &quot;On a trop de rebuts&quot;, &quot;La doc n'est jamais à jour&quot;...">${d.voc||''}</textarea></div>
+    <div class="field"><label>CTQ — Caractéristiques mesurables avec spécifications</label><textarea id="d-ctq" rows="3" placeholder="VOC: &quot;pièces en retard&quot; → CTQ: Délai de livraison ≤ 5 jours ouvrés\nVOC: &quot;trop de rebuts&quot; → CTQ: Taux de rebut < 2%\nVOC: &quot;doc pas à jour&quot; → CTQ: 100% des gammes révisées < 6 mois">${d.ctq||''}</textarea></div>
+  </div>
+
+  <div class="card"><div class="card-title">1.6 — Métriques process <span class="tag">RTY, DPU, COPQ détaillé</span></div>
+    <div class="guide">Calculs préliminaires : RTY (Rolled Throughput Yield) = e^(-DPU), et décomposition du COPQ en 4 catégories.</div>
+    <div class="row-3">
+      <div class="field"><label>Nombre d'unités inspectées</label><input type="number" id="d-units" value="${d.units||''}" placeholder="Ex: 1000"></div>
+      <div class="field"><label>Nombre total de défauts</label><input type="number" id="d-defects" value="${d.defects||''}" placeholder="Ex: 47"></div>
+      <div class="field"><label>Nb d'opportunités par unité</label><input type="number" id="d-opps" value="${d.opps||''}" placeholder="Ex: 5"></div>
+    </div>
+    <button class="btn btn-o btn-sm" onclick="calcDPU()">Calculer DPU / RTY / DPMO</button>
+    <div id="d-dpu-result"></div>
+    <div style="margin-top:16px"><div class="result-title">COPQ — Décomposition</div>
+    <div class="row">
+      <div class="field"><label>Coûts de défaillance interne (rebuts, retouches, tri)</label><input type="number" id="d-copq-int" value="${d.copqInt||''}" placeholder="€/an"></div>
+      <div class="field"><label>Coûts de défaillance externe (réclamations, retours, garantie)</label><input type="number" id="d-copq-ext" value="${d.copqExt||''}" placeholder="€/an"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Coûts de contrôle (inspection, métrologie)</label><input type="number" id="d-copq-ctrl" value="${d.copqCtrl||''}" placeholder="€/an"></div>
+      <div class="field"><label>Coûts de prévention (formation, procédures)</label><input type="number" id="d-copq-prev" value="${d.copqPrev||''}" placeholder="€/an"></div>
+    </div></div>
+  </div>
+
+  <div class="card"><div class="card-title">1.7 — Éléments de gaspillage (TIMWOOD) <span class="tag">Lean</span></div>
+    <div class="guide">Identifiez les 7 gaspillages présents dans le processus. Cochez ceux observés et décrivez les constats terrain.</div>
+    <div id="d-timwood">${['Transport','Inventory (stocks)','Motion (opérateur)','Waiting (attente)','Over-production','Over-processing','Defects (défauts)'].map((w,i)=>`
+      <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;padding:8px;background:var(--sa);border-radius:var(--rsm)">
+        <input type="checkbox" id="d-tim${i}" style="margin-top:4px;min-width:18px;min-height:18px" ${d['tim'+i]?'checked':''}>
+        <div style="flex:1"><label for="d-tim${i}" style="font-family:var(--fh);font-size:13px;font-weight:500">${w}</label>
+        <input id="d-timd${i}" value="${d['timd'+i]||''}" placeholder="Constat terrain..." style="width:100%;padding:4px 8px;border:1px solid var(--bd);border-radius:4px;font-size:12px;margin-top:4px;background:var(--s)"></div>
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title">1.8 — Gate Review Define → Measure <span class="tag">Validation</span></div>
+    <div class="guide guide-warn">Avant de passer en Measure, vérifiez avec le champion : le charter est-il approuvé ? Le périmètre est-il validé ? L'équipe est-elle constituée ? Le COPQ justifie-t-il le projet ?</div>
+    <div class="field"><label>Statut d'approbation</label><select id="d-gate"><option value="">En attente</option><option value="approved" ${d.gate==='approved'?'selected':''}>Approuvé par le champion</option><option value="rework" ${d.gate==='rework'?'selected':''}>À retravailler</option></select></div>
+    <div class="field"><label>Commentaires du champion</label><textarea id="d-gate-comments" rows="2" placeholder="Notes de la revue...">${d.gateComments||''}</textarea></div>
+  </div>
+
+  <div class="nav-btns"><div></div><button class="btn btn-a" onclick="saveDefine();goPhase(1)">Passer à Measure →</button></div>`;
+}
+
+function calcDPU(){
+  const units=parseFloat(V('d-units')),defects=parseFloat(V('d-defects')),opps=parseFloat(V('d-opps'));
+  if(!units||!defects)return;
+  const dpu=defects/units;
+  const rty=Math.exp(-dpu);
+  const dpmo=opps?(defects/(units*opps))*1e6:0;
+  const sigma=dpmo>0?S.normInv(1-dpmo/1e6)+1.5:6;
+  document.getElementById('d-dpu-result').innerHTML=`<div class="result-box"><div class="result-grid">
+    <div class="result-item"><div class="ri-val ri-info">${dpu.toFixed(3)}</div><div class="ri-label">DPU</div></div>
+    <div class="result-item"><div class="ri-val ${rty>=0.95?'ri-ok':'ri-warn'}">${(rty*100).toFixed(1)}%</div><div class="ri-label">RTY (e⁻ᴰᴾᵁ)</div></div>
+    ${opps?`<div class="result-item"><div class="ri-val">${Math.round(dpmo).toLocaleString()}</div><div class="ri-label">DPMO</div></div>
+    <div class="result-item"><div class="ri-val ${sigma>=3?'ri-ok':'ri-err'}">${sigma.toFixed(2)}σ</div><div class="ri-label">Niveau Sigma</div></div>`:''}
+  </div></div>`;
+}
+
+function saveDefine(){
+  const d=STATE.define;
+  ['championPb','justif','copq','benefit','bencat','problem','objective','primaryY','yBaseline','yTarget','secondaryY','inscope','outscope','start','end','champion','belt','owner','members','voc','ctq','units','defects','opps','copqInt','copqExt','copqCtrl','copqPrev','gate','gateComments'].forEach(k=>{
+    const el=document.getElementById('d-'+k.replace(/([A-Z])/g,'-$1').toLowerCase());
+    if(el)d[k]=el.type==='checkbox'?el.checked:el.value;
+  });
+  // Simpler approach: save what we can
+  d.championPb=V('d-champion-pb');d.justif=V('d-justif');d.copq=V('d-copq');d.benefit=V('d-benefit');d.bencat=V('d-bencat');
+  d.problem=V('d-problem');d.objective=V('d-objective');d.primaryY=V('d-primaryY');d.yBaseline=V('d-yBaseline');d.yTarget=V('d-yTarget');d.secondaryY=V('d-secondaryY');
+  d.inscope=V('d-inscope');d.outscope=V('d-outscope');d.start=V('d-start');d.end=V('d-end');
+  d.champion=V('d-champion');d.belt=V('d-belt');d.owner=V('d-owner');d.members=V('d-members');
+  d.sipocS=V('d-sipoc-s');d.sipocI=V('d-sipoc-i');d.sipocP=V('d-sipoc-p');d.sipocO=V('d-sipoc-o');d.sipocC=V('d-sipoc-c');
+  d.voc=V('d-voc');d.ctq=V('d-ctq');d.units=V('d-units');d.defects=V('d-defects');d.opps=V('d-opps');
+  d.copqInt=V('d-copq-int');d.copqExt=V('d-copq-ext');d.copqCtrl=V('d-copq-ctrl');d.copqPrev=V('d-copq-prev');
+  d.gate=V('d-gate');d.gateComments=V('d-gate-comments');
+  for(let i=0;i<7;i++){d['tim'+i]=document.getElementById('d-tim'+i)?.checked;d['timd'+i]=V('d-timd'+i)}
+}
+
+/* ═══════════════════════════════════════
+   PHASE 2: MEASURE
+   Big Picture: Detailed Problem Statement → Detailed Process Mapping → 
+   Identify All X's (Fishbone, Process Map) → Select Vital Few X's (X-Y Matrix, FMEA) →
+   Assess Measurement System (Gage R&R) → Assess Stability (Control Charts) →
+   Assess Capability (Cp/Cpk/Pp/Ppk) → Estimate Process Sigma → Review with Champion
+   ═══════════════════════════════════════ */
+function renderMeasure(){
+  const m=STATE.measure;
+  let resultsHTML='';
+
+  if(m.data.length>0){
+    const ad=S.andersonDarling(m.data);
+    const normalBadge=ad.normal?'<span class="status-badge sb-ok">Normales (AD='+ad.stat+')</span>':'<span class="status-badge sb-warn">Non-normales (AD='+ad.stat+')</span>';
+    resultsHTML+=`<div class="result-box"><div class="result-title">Statistiques descriptives (n=${m.data.length}) ${normalBadge}</div>
+      <div class="result-grid">
+        <div class="result-item"><div class="ri-val">${S.mean(m.data).toFixed(3)}</div><div class="ri-label">Moyenne (X̄)</div></div>
+        <div class="result-item"><div class="ri-val">${S.median(m.data).toFixed(3)}</div><div class="ri-label">Médiane</div></div>
+        <div class="result-item"><div class="ri-val">${S.stdev(m.data).toFixed(4)}</div><div class="ri-label">Écart-type (s)</div></div>
+        <div class="result-item"><div class="ri-val">${S.min(m.data).toFixed(3)}</div><div class="ri-label">Min</div></div>
+        <div class="result-item"><div class="ri-val">${S.max(m.data).toFixed(3)}</div><div class="ri-label">Max</div></div>
+        <div class="result-item"><div class="ri-val">${S.range(m.data).toFixed(3)}</div><div class="ri-label">Étendue (R)</div></div>
+      </div>
+      <div class="guide ${ad.normal?'guide-ok':''}" style="margin-top:12px">${ad.normal?'Données normales (Anderson-Darling : p '+ad.pApprox+'). → Tests paramétriques applicables en phase Analyze (t-test, ANOVA). Capabilité standard Cp/Cpk valide.':'Données non-normales (AD='+ad.stat+', p '+ad.pApprox+'). → Utilisez des tests non-paramétriques en Analyze (Mann-Whitney, Kruskal-Wallis). Pour la capabilité, envisagez une transformation (Box-Cox) ou une distribution non-normale.'}</div>
+    </div>`;
+
+    if(m.lsl!==null&&m.usl!==null){
+      const cap=S.capability(m.data,m.lsl,m.usl);
+      const cpkC=cap.cpk>=1.33?'ri-ok':cap.cpk>=1?'ri-warn':'ri-err';
+      const sigC=cap.sigma>=4?'ri-ok':cap.sigma>=3?'ri-warn':'ri-err';
+      resultsHTML+=`<div class="result-box"><div class="result-title">Capabilité du processus (LSL=${m.lsl} / USL=${m.usl})</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="ri-val ri-info">${cap.cp}</div><div class="ri-label">Cp (potentiel)</div></div>
+          <div class="result-item"><div class="ri-val ${cpkC}">${cap.cpk}</div><div class="ri-label">Cpk (réel)</div></div>
+          <div class="result-item"><div class="ri-val ri-info">${cap.pp}</div><div class="ri-label">Pp (LT potentiel)</div></div>
+          <div class="result-item"><div class="ri-val ${cpkC}">${cap.ppk}</div><div class="ri-label">Ppk (LT réel)</div></div>
+          <div class="result-item"><div class="ri-val ${sigC}">${cap.sigma}σ</div><div class="ri-label">Z.bench (σ level)</div></div>
+          <div class="result-item"><div class="ri-val ${cap.dpmo<3400?'ri-ok':'ri-err'}">${cap.dpmo.toLocaleString()}</div><div class="ri-label">DPMO</div></div>
+          <div class="result-item"><div class="ri-val">${((1-cap.dpmo/1e6)*100).toFixed(2)}%</div><div class="ri-label">Yield (%)</div></div>
+          <div class="result-item"><div class="ri-val">${(cap.dpmo/10000).toFixed(1)}%</div><div class="ri-label">PPM (% défauts)</div></div>
+        </div>
+        <div class="guide ${cap.cpk>=1.33?'guide-ok':cap.cpk>=1?'':'guide-warn'}" style="margin-top:12px">${cap.cpk>=1.33?'Processus capable (Cpk ≥ 1.33). Le Cp vs Cpk : '+(cap.cp-cap.cpk>0.3?'L\'écart Cp-Cpk indique un problème de centrage — le process peut être recentré sans réduire la variabilité.':'Cp ≈ Cpk, le processus est bien centré.'):cap.cpk>=1?'Processus limite (1 ≤ Cpk < 1.33). Améliorations nécessaires. '+(cap.cp>cap.cpk+0.2?'Problème de centrage détecté (Cp > Cpk) — recentrer d\'abord.':'Problème de dispersion — réduire la variabilité.'):'Processus non capable (Cpk < 1). PPM = '+(cap.dpmo/10000).toFixed(1)+'%. → Phase Analyze nécessaire pour identifier les causes.'}</div>
+      </div>`;
+    }
+    resultsHTML+=`<div class="result-box"><div class="result-title">Histogramme</div>${Chart.histogram(m.data,m.lsl,m.usl)}</div>`;
+  }
+
+  document.getElementById('page').innerHTML=`
+  <div class="guide"><strong>Phase Measure — Trouver tous les X du système</strong><br>
+  Objectif : cartographier le processus en détail, identifier tous les X potentiels (Ishikawa, process map), qualifier le système de mesure (Gage R&R), évaluer la stabilité et la capabilité du processus, estimer le niveau sigma.</div>
+
+  <div class="card"><div class="card-title">2.1 — Process Mapping détaillé <span class="tag">Étape 1</span></div>
+    <div class="guide">Créez une carte de processus détaillée (swim lane) pour identifier toutes les étapes, les décisions, et les boucles. À chaque étape, notez les X potentiels (entrées qui influencent la sortie Y).</div>
+    <div class="field"><label>Description détaillée du processus (étapes, acteurs, flux)</label><textarea id="m-process" rows="4" placeholder="Étape 1: Réception matière (Opérateur réception) → Contrôle visuel + dimensionnel → Si OK: stockage, Si NOK: quarantaine\nÉtape 2: Lancement OF (Resp. production) → ...">${STATE.measure.process||''}</textarea></div>
+    <div class="field"><label>VA / NVA — Identifiez les étapes à valeur ajoutée (VA) et sans valeur ajoutée (NVA)</label><textarea id="m-vanva" rows="2" placeholder="VA: usinage, assemblage, contrôle final\nNVA: attente entre postes, double saisie, transport inter-bâtiments">${STATE.measure.vanva||''}</textarea></div>
+  </div>
+
+  <div class="card"><div class="card-title">2.2 — Identification des X (Ishikawa + X-Y Matrix) <span class="tag">Étape 2</span></div>
+    <div class="guide">Listez tous les X potentiels qui influencent Y. Utilisez l'Ishikawa (Y = f(x1, x2, ...)) puis priorisez avec la matrice X-Y et la FMEA pour sélectionner les "Vital Few".</div>
+    <div class="field"><label>Y = f(X) — Listez tous les X identifiés par le fishbone</label><textarea id="m-allx" rows="4" placeholder="Milieu: température atelier, humidité, éclairage\nMatière: lot fournisseur, épaisseur matière, dureté\nMéthode: gamme opératoire, paramètres machine, séquence\nMachine: usure outil, jeu broche, vibrations\nMain d'œuvre: expérience opérateur, formation, fatigue\nMesure: calibration pied à coulisse, fréquence contrôle">${STATE.measure.allx||''}</textarea></div>
+    <div class="field"><label>Vital Few X's (après X-Y Matrix / FMEA) — Les X prioritaires à investiguer</label><textarea id="m-vitalx" rows="2" placeholder="X1: Lot fournisseur (RPN=180)\nX2: Usure outil (RPN=160)\nX3: Paramètre vitesse (RPN=140)">${STATE.measure.vitalx||''}</textarea></div>
+  </div>
+
+  <div class="card"><div class="card-title">2.3 — Système de mesure (Gage R&R) <span class="tag">Étape 3</span></div>
+    <div class="guide">Avant d'analyser les données, vérifiez que votre système de mesure est fiable. Repeatable & Reproducible ? Si %GRR > 30%, améliorez le système avant de continuer.</div>
+    <div class="field"><label>Données Gage R&R (pièce, opérateur, mesure — une par ligne)</label><textarea id="m-grr" rows="5" placeholder="P1, OpA, 25.02\nP1, OpA, 25.01\nP1, OpB, 25.03\nP1, OpB, 25.02\nP2, OpA, 24.98\nP2, OpA, 24.99\nP2, OpB, 24.97\nP2, OpB, 24.98">${STATE.measure.grrData||''}</textarea></div>
+    <button class="btn btn-o btn-sm" onclick="runGRR()">Calculer le Gage R&R</button>
+    <div id="m-grr-result"></div>
+  </div>
+
+  <div class="card"><div class="card-title">2.4 — Collecte de données Y <span class="tag">Étape 4</span></div>
+    <div class="guide">Importez ou saisissez les données de mesure du processus. L'outil vérifie automatiquement la normalité (Anderson-Darling) et calcule les statistiques descriptives.</div>
+    <div class="import-zone" onclick="document.getElementById('m-csv').click()">
+      <p>${m.data.length>0?'✓ '+m.data.length+' observations chargées — cliquez pour remplacer':'Cliquez pour charger un fichier CSV (une colonne de valeurs numériques)'}</p>
+      <input type="file" id="m-csv" accept=".csv,.txt" onchange="loadMeasureData(event)">
+    </div>
+    <div class="field" style="margin-top:8px"><label>Ou saisie manuelle (virgules, points-virgules, ou retours à la ligne)</label><textarea id="m-manual" rows="2" placeholder="25.02, 24.98, 25.01, 25.05, 24.97, 25.03..."></textarea></div>
+    <button class="btn btn-o btn-sm" onclick="loadManualData()">Charger</button>
+  </div>
+
+  <div class="card"><div class="card-title">2.5 — Stabilité & Capabilité <span class="tag">Étape 5</span></div>
+    <div class="guide">Renseignez les limites de spécification pour calculer Cp, Cpk (short-term), Pp, Ppk (long-term), Z-score, DPMO et Yield.</div>
+    <div class="row-3">
+      <div class="field"><label>LSL (Limite basse)</label><input type="number" id="m-lsl" step="any" value="${m.lsl!==null?m.lsl:''}" placeholder="24.98" onchange="updateSpecs()"></div>
+      <div class="field"><label>USL (Limite haute)</label><input type="number" id="m-usl" step="any" value="${m.usl!==null?m.usl:''}" placeholder="25.02" onchange="updateSpecs()"></div>
+      <div class="field"><label>Cible (nominal)</label><input type="number" id="m-target" step="any" value="${m.target||''}" placeholder="25.00"></div>
+    </div>
+  </div>
+
+  ${resultsHTML}
+
+  <div class="card"><div class="card-title">2.6 — Gate Review Measure → Analyze <span class="tag">Validation</span></div>
+    <div class="guide guide-warn">Revue avec le champion : le système de mesure est-il acceptable ? La capabilité est-elle établie ? Les Vital Few X's sont-ils identifiés ? Le niveau sigma baseline est-il documenté ?</div>
+  </div>
+
+  <div class="nav-btns"><button class="btn btn-o" onclick="saveM();goPhase(0)">← Define</button><button class="btn btn-a" onclick="saveM();goPhase(2)">Passer à Analyze →</button></div>`;
+}
+
+function saveM(){STATE.measure.process=V('m-process');STATE.measure.vanva=V('m-vanva');STATE.measure.allx=V('m-allx');STATE.measure.vitalx=V('m-vitalx');STATE.measure.grrData=V('m-grr');STATE.measure.target=V('m-target')}
+function loadMeasureData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{STATE.measure.data=ev.target.result.split(/[\n,;\t]+/).map(s=>parseFloat(s.trim())).filter(n=>!isNaN(n));renderMeasure()};r.readAsText(f,'UTF-8')}
+function loadManualData(){const n=parseNums('m-manual');if(n.length>0){STATE.measure.data=n;renderMeasure()}}
+function updateSpecs(){const l=parseFloat(V('m-lsl')),u=parseFloat(V('m-usl'));STATE.measure.lsl=isNaN(l)?null:l;STATE.measure.usl=isNaN(u)?null:u;if(STATE.measure.data.length>0)renderMeasure()}
+function runGRR(){const raw=V('m-grr');const lines=raw.split('\n').filter(l=>l.trim());const data=lines.map(l=>{const p=l.split(',').map(s=>s.trim());if(p.length>=3)return{part:p[0],operator:p[1],value:parseFloat(p[2])};return null}).filter(d=>d&&!isNaN(d.value));if(data.length<8){document.getElementById('m-grr-result').innerHTML='<div class="guide guide-warn">Minimum 8 mesures.</div>';return}const r=S.gageRR(data);const c=r.acceptable?'ri-ok':r.marginal?'ri-warn':'ri-err';const b=r.acceptable?'<span class="status-badge sb-ok">Acceptable</span>':r.marginal?'<span class="status-badge sb-warn">Marginal</span>':'<span class="status-badge sb-err">Inacceptable</span>';document.getElementById('m-grr-result').innerHTML=`<div class="result-box"><div class="result-title">Gage R&R ${b}</div><div class="result-grid"><div class="result-item"><div class="ri-val ${c}">${r.pctGRR}%</div><div class="ri-label">%GRR</div></div><div class="result-item"><div class="ri-val">${r.pctRepeat}%</div><div class="ri-label">Répétabilité</div></div><div class="result-item"><div class="ri-val">${r.pctReprod}%</div><div class="ri-label">Reproductibilité</div></div><div class="result-item"><div class="ri-val ri-info">${r.pctPart}%</div><div class="ri-label">Part-to-Part</div></div><div class="result-item"><div class="ri-val">${r.ndc}</div><div class="ri-label">NDC</div></div></div><div class="guide ${r.acceptable?'guide-ok':''}" style="margin-top:12px">${r.acceptable?'Système de mesure acceptable (%GRR < 10%). NDC ≥ 5 : le système discrimine bien les pièces.':r.marginal?'Système marginal (10-30%). Peut convenir selon l\'application mais à améliorer. NDC devrait être ≥ 5.':'Système inacceptable (%GRR > 30%). Améliorez le moyen/méthode de mesure AVANT de poursuivre.'}</div></div>`}
+
+/* ═══════════════════════════════════════
+   PHASE 3: ANALYZE
+   Big Picture: Multi-vari analysis → State Practical Theories →
+   Translate to Hypotheses → Select Analysis Tools → Collect Data →
+   Perform Statistical Tests → State Conclusion →
+   Statistically significant? → Practically significant? → Root Cause?
+   ═══════════════════════════════════════ */
+function renderAnalyze(){
+  document.getElementById('page').innerHTML=`
+  <div class="guide"><strong>Phase Analyze — Vérifier l'impact des X sur le système</strong><br>
+  Objectif : prouver statistiquement que les Vital Few X's identifiés en Measure ont un impact réel sur Y. Logique : H₀ (pas d'effet) vs H₁ (effet). Si p-value < α (0.05), on rejette H₀ → le X a un impact significatif.</div>
+
+  <div class="card"><div class="card-title">3.1 — Hypothèses pratiques <span class="tag">Étape 1</span></div>
+    <div class="guide">Pour chaque Vital Few X, formulez une théorie pratique de son impact sur Y, puis traduisez-la en hypothèse statistique testable.</div>
+    <div class="field"><label>Théories pratiques des X vitaux</label><textarea id="a-theories" rows="4" placeholder="X1 (Lot fournisseur): Je pense que les lots du fournisseur B génèrent plus de NC que ceux du fournisseur A\n→ H₀: μ_A = μ_B  |  H₁: μ_A ≠ μ_B  |  Test: t-test 2 échantillons\n\nX2 (Usure outil): Je pense que l'usure outil augmente la variabilité dimensionnelle\n→ H₀: σ_neuf = σ_usé  |  H₁: σ_neuf ≠ σ_usé  |  Test: F-test\n\nX3 (Vitesse): Je pense que la vitesse impacte la cote\n→ Test: ANOVA ou régression">${STATE.analyze.theories||''}</textarea></div>
+  </div>
+
+  <div class="card"><div class="card-title">3.2 — Arbre de décision des tests statistiques <span class="tag">Référence</span></div>
+    <div class="guide">L'arbre de décision ci-dessous vous guide vers le bon test selon votre type de données :</div>
+    <div style="background:var(--sa);border-radius:var(--rlg);padding:16px;font-size:12px;line-height:1.8;font-family:var(--fh)">
+      <strong>Données CONTINUES :</strong><br>
+      &nbsp;&nbsp;→ Normales ?<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Oui → 1 échantillon vs cible : <strong>t-test 1 sample</strong><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Oui → 2 échantillons : test d'égalité des variances → si égales : <strong>2-sample t</strong>, si inégales : <strong>2-sample t (Welch)</strong><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Oui → 3+ échantillons : <strong>ANOVA (One-Way)</strong><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Non → 1 échantillon : <strong>1-sample Sign</strong> ou <strong>Wilcoxon</strong><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Non → 2 échantillons : <strong>Mann-Whitney</strong><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Non → 3+ échantillons : <strong>Kruskal-Wallis</strong> ou <strong>Mood's Median</strong><br><br>
+      <strong>Données ATTRIBUTAIRES :</strong><br>
+      &nbsp;&nbsp;→ 1 facteur : <strong>1-sample proportion</strong> ou <strong>2-sample proportion</strong><br>
+      &nbsp;&nbsp;→ 2 facteurs : <strong>Chi² (table de contingence)</strong><br><br>
+      <strong>Règle :</strong> Si p-value < α (0.05) → H₀ rejetée → le X a un impact sur Y<br>
+      <strong>Attention :</strong> Significatif statistiquement ≠ significatif pratiquement. Vérifiez toujours la taille de l'effet.
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title">3.3 — Exécution des tests <span class="tag">Étape 2</span></div>
+    <div class="field"><label>Type de test</label><select id="a-test" onchange="renderATest()">
+      <option value="ttest1">t-test 1 échantillon (Y vs cible μ₀)</option>
+      <option value="ttest2">t-test 2 échantillons (2 groupes de Y)</option>
+      <option value="paired">t-test pairé (avant/après sur mêmes unités)</option>
+      <option value="anova">ANOVA One-Way (3+ groupes)</option>
+      <option value="chi2">Chi² (données attributaires)</option>
+      <option value="prop1">Test de proportion (1 échantillon)</option>
+      <option value="prop2">Test de proportions (2 échantillons)</option>
+    </select></div>
+    <div id="a-test-area"></div>
+  </div>
+
+  <div class="card"><div class="card-title">3.4 — Conclusion & Root Cause <span class="tag">Étape 3</span></div>
+    <div class="guide">Pour chaque X testé, documentez la conclusion. Si statistiquement ET pratiquement significatif → c'est une cause racine confirmée.</div>
+    <div class="field"><label>Résumé des tests et conclusions</label><textarea id="a-conclusions" rows="4" placeholder="X1 (Lot fournisseur): p=0.003 < 0.05 → SIGNIFICATIF. Δ moyen = 0.15mm → PRATIQUEMENT significatif → CAUSE RACINE CONFIRMÉE\nX2 (Usure outil): p=0.42 > 0.05 → PAS significatif → Éliminé\nX3 (Vitesse): p=0.018 → Significatif mais Δ = 0.02mm → faible impact pratique → À surveiller">${STATE.analyze.conclusions||''}</textarea></div>
+    <div class="field"><label>Mise à jour FMEA</label><textarea id="a-fmea" rows="2" placeholder="Mettez à jour les RPN de la FMEA avec les résultats des tests. Recalculez les priorités.">${STATE.analyze.fmea||''}</textarea></div>
+  </div>
+
+  <div class="nav-btns"><button class="btn btn-o" onclick="saveA();goPhase(1)">← Measure</button><button class="btn btn-a" onclick="saveA();goPhase(3)">Passer à Improve →</button></div>`;
+  renderATest();
+}
+
+function saveA(){STATE.analyze.theories=V('a-theories');STATE.analyze.conclusions=V('a-conclusions');STATE.analyze.fmea=V('a-fmea')}
+
+function renderATest(){
+  const t=V('a-test');let h='';
+  if(t==='ttest1'){h=`<div class="field"><label>Données Y</label><textarea id="a-d1" rows="2" placeholder="25.02, 24.98, 25.01..."></textarea></div><div class="field"><label>Cible μ₀</label><input type="number" id="a-mu0" step="any" placeholder="25.00"></div><button class="btn btn-p btn-sm" onclick="runT1()">Tester</button><div id="a-r"></div>`}
+  else if(t==='ttest2'){h=`<div class="row"><div class="field"><label>Groupe A (ex: fournisseur A)</label><textarea id="a-g1" rows="2"></textarea></div><div class="field"><label>Groupe B (ex: fournisseur B)</label><textarea id="a-g2" rows="2"></textarea></div></div><button class="btn btn-p btn-sm" onclick="runT2()">Comparer</button><div id="a-r"></div>`}
+  else if(t==='paired'){h=`<div class="row"><div class="field"><label>Avant</label><textarea id="a-g1" rows="2" placeholder="Mesures avant intervention (même unités)"></textarea></div><div class="field"><label>Après</label><textarea id="a-g2" rows="2" placeholder="Mesures après (même unités, même ordre)"></textarea></div></div><button class="btn btn-p btn-sm" onclick="runPaired()">Test pairé</button><div id="a-r"></div>`}
+  else if(t==='anova'){h=`<div class="field"><label>Groupes (un par ligne : "Label: val1, val2, val3...")</label><textarea id="a-groups" rows="4" placeholder="Machine1: 25.02, 24.98, 25.01, 25.03\nMachine2: 25.10, 25.08, 25.12, 25.09\nMachine3: 24.90, 24.88, 24.95, 24.92"></textarea></div><button class="btn btn-p btn-sm" onclick="runANOVA()">ANOVA</button><div id="a-r"></div>`}
+  else if(t==='chi2'){h=`<div class="field"><label>Table de contingence (lignes = catégories de X, colonnes = catégories de Y)</label><textarea id="a-chi2" rows="3" placeholder="5, 8, 20\n20, 30, 25"></textarea></div><button class="btn btn-p btn-sm" onclick="runChi2()">Chi²</button><div id="a-r"></div>`}
+  else if(t==='prop1'){h=`<div class="row"><div class="field"><label>Nombre de succès</label><input type="number" id="a-x"></div><div class="field"><label>Taille échantillon</label><input type="number" id="a-n"></div></div><div class="field"><label>Proportion cible (p₀)</label><input type="number" id="a-p0" step="0.01" placeholder="0.05"></div><button class="btn btn-p btn-sm" onclick="runProp1()">Tester</button><div id="a-r"></div>`}
+  else if(t==='prop2'){h=`<div class="row"><div class="field"><label>Succès A / Taille A</label><div class="row"><input type="number" id="a-x1" placeholder="x₁"><input type="number" id="a-n1" placeholder="n₁"></div></div><div class="field"><label>Succès B / Taille B</label><div class="row"><input type="number" id="a-x2" placeholder="x₂"><input type="number" id="a-n2" placeholder="n₂"></div></div></div><button class="btn btn-p btn-sm" onclick="runProp2()">Comparer</button><div id="a-r"></div>`}
+  document.getElementById('a-test-area').innerHTML=h;
+}
+
+function showResult(html){document.getElementById('a-r').innerHTML=html}
+function fmtP(r){return`<div class="result-box"><div class="result-grid">${r.items}</div><div class="guide ${r.sig?'guide-warn':'guide-ok'}" style="margin-top:12px">${r.msg}</div></div>`}
+function ri(val,label,cls){return`<div class="result-item"><div class="ri-val ${cls||''}">${val}</div><div class="ri-label">${label}</div></div>`}
+
+function runT1(){const d=parseNums('a-d1');const mu=parseFloat(V('a-mu0'));if(d.length<2)return;const r=S.tTest1(d,mu);showResult(fmtP({items:ri(r.mean,'Moyenne')+ri(mu,'Cible μ₀')+ri(r.t,'t-stat')+ri(r.pValue,'p-value',r.significant?'ri-err':'ri-ok')+ri(r.df,'dl'),sig:r.significant,msg:r.significant?`Moyenne (${r.mean}) ≠ cible (${mu}). p=${r.pValue} < 0.05. Le processus est décentré.`:`Pas de différence significative. p=${r.pValue} > 0.05.`}))}
+
+function runT2(){const d1=parseNums('a-g1'),d2=parseNums('a-g2');if(d1.length<2||d2.length<2)return;const r=S.tTest2(d1,d2);showResult(fmtP({items:ri(r.mean1,'Moy. A')+ri(r.mean2,'Moy. B')+ri(r.diff,'Δ')+ri(r.t,'t-stat')+ri(r.pValue,'p-value',r.significant?'ri-err':'ri-ok'),sig:r.significant,msg:r.significant?`Différence significative (Δ=${r.diff}, p=${r.pValue}). Ce X impacte Y.`:`Pas de différence (p=${r.pValue}). Ce X n'impacte pas Y.`}))}
+
+function runPaired(){const d1=parseNums('a-g1'),d2=parseNums('a-g2');if(d1.length<2||d1.length!==d2.length)return;const diff=d1.map((v,i)=>v-d2[i]);const r=S.tTest1(diff,0);showResult(fmtP({items:ri(S.mean(d1).toFixed(3),'Moy. Avant')+ri(S.mean(d2).toFixed(3),'Moy. Après')+ri(r.mean,'Δ moyen')+ri(r.t,'t-stat')+ri(r.pValue,'p-value',r.significant?'ri-err':'ri-ok'),sig:r.significant,msg:r.significant?`Changement significatif (Δ=${r.mean}, p=${r.pValue}). L'intervention a un effet mesurable.`:`Pas de changement significatif (p=${r.pValue}).`}))}
+
+function runANOVA(){const lines=(V('a-groups')).split('\n').filter(l=>l.trim());const groups=lines.map(l=>{const parts=l.replace(/^[^:]*:/,'').split(/[,;\t]+/).map(s=>parseFloat(s.trim())).filter(n=>!isNaN(n));return parts}).filter(g=>g.length>=2);if(groups.length<3)return;const r=S.anova(groups);showResult(fmtP({items:ri(r.F,'F-stat')+ri(`${r.dfBetween}, ${r.dfWithin}`,'dl (inter, intra)')+ri(r.pValue,'p-value',r.significant?'ri-err':'ri-ok'),sig:r.significant,msg:r.significant?`Au moins un groupe est différent (F=${r.F}, p=${r.pValue}). Ce facteur impacte Y.`:`Pas de différence entre groupes (p=${r.pValue}).`}))}
+
+function runChi2(){const lines=(V('a-chi2')).split('\n').filter(l=>l.trim());const table=lines.map(l=>l.split(/[,;\t]+/).map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)));if(table.length<2||table[0].length<2)return;const r=S.chiSquare(table);showResult(fmtP({items:ri(r.chi2,'χ²')+ri(r.df,'dl')+ri(r.pValue,'p-value',r.significant?'ri-err':'ri-ok'),sig:r.significant,msg:r.significant?`Relation significative (χ²=${r.chi2}, p=${r.pValue}). Les variables sont dépendantes.`:`Pas de relation (p=${r.pValue}). Variables indépendantes.`}))}
+
+function runProp1(){const x=parseInt(V('a-x')),n=parseInt(V('a-n')),p0=parseFloat(V('a-p0'));if(!x||!n||!p0)return;const pHat=x/n;const z=(pHat-p0)/Math.sqrt(p0*(1-p0)/n);const pVal=2*(1-S.normCDF(Math.abs(z)));const sig=pVal<0.05;showResult(fmtP({items:ri((pHat*100).toFixed(1)+'%','p̂ observé')+ri((p0*100).toFixed(1)+'%','p₀ cible')+ri(z.toFixed(3),'Z')+ri(pVal.toFixed(4),'p-value',sig?'ri-err':'ri-ok'),sig,msg:sig?`Proportion observée (${(pHat*100).toFixed(1)}%) ≠ cible (${(p0*100).toFixed(1)}%). p=${pVal.toFixed(4)}.`:`Pas de différence significative. p=${pVal.toFixed(4)}.`}))}
+
+function runProp2(){const x1=parseInt(V('a-x1')),n1=parseInt(V('a-n1')),x2=parseInt(V('a-x2')),n2=parseInt(V('a-n2'));if(!x1||!n1||!x2||!n2)return;const p1=x1/n1,p2=x2/n2,pPool=(x1+x2)/(n1+n2);const z=(p1-p2)/Math.sqrt(pPool*(1-pPool)*(1/n1+1/n2));const pVal=2*(1-S.normCDF(Math.abs(z)));const sig=pVal<0.05;showResult(fmtP({items:ri((p1*100).toFixed(1)+'%','p̂₁')+ri((p2*100).toFixed(1)+'%','p̂₂')+ri(((p1-p2)*100).toFixed(1)+'%','Δ')+ri(z.toFixed(3),'Z')+ri(pVal.toFixed(4),'p-value',sig?'ri-err':'ri-ok'),sig,msg:sig?`Proportions différentes (Δ=${((p1-p2)*100).toFixed(1)}%, p=${pVal.toFixed(4)}).`:`Pas de différence (p=${pVal.toFixed(4)}).`}))}
+
+/* ═══════════════════════════════════════
+   PHASE 4: IMPROVE
+   Big Picture: Correlation → Regression → DOE (Define Problem → Objective →
+   Select Y → Select X → Levels → Design → Execute → Analyze → Practical Solutions
+   → Validate → Implement)
+   ═══════════════════════════════════════ */
+function renderImprove(){
+  document.getElementById('page').innerHTML=`
+  <div class="guide"><strong>Phase Improve — Optimiser les X vitaux</strong><br>
+  Objectif : sélectionner les X vitaux confirmés, quantifier la relation Y=f(X) par régression, optimiser les valeurs des X par DOE, simuler et valider le nouveau processus.</div>
+
+  <div class="card"><div class="card-title">4.1 — Corrélation & Régression <span class="tag">Y = β₀ + β₁·X</span></div>
+    <div class="guide">Vérifiez et quantifiez la relation entre chaque X vital et Y. Étapes : Scatter Plot → Corrélation (r, p<0.05) → Fitted Line → R² → Analyse des résidus (normalité, variance constante, indépendance).</div>
+    <div class="row"><div class="field"><label>Données X (facteur vital)</label><textarea id="i-x" rows="3" placeholder="1, 2, 3, 4, 5, 6..."></textarea></div>
+    <div class="field"><label>Données Y (réponse)</label><textarea id="i-y" rows="3" placeholder="12.3, 14.5, 15.2, 17.8..."></textarea></div></div>
+    <button class="btn btn-p btn-sm" onclick="runReg()">Régression + Scatter Plot</button>
+    <div id="i-reg-result"></div>
+  </div>
+
+  <div class="card"><div class="card-title">4.2 — Plan d'expériences (DOE) <span class="tag">Optimisation multi-facteurs</span></div>
+    <div class="guide">Si plusieurs X influencent Y simultanément, utilisez un DOE pour trouver la combinaison optimale. Méthodologie en 11 étapes :</div>
+    <div style="background:var(--sa);border-radius:var(--rlg);padding:16px;font-size:12px;line-height:2;font-family:var(--fh)">
+      1. Définir le problème pratique<br>
+      2. Établir l'objectif expérimental<br>
+      3. Sélectionner les variables de sortie (Y)<br>
+      4. Sélectionner les variables d'entrée (X₁, X₂, ...)<br>
+      5. Choisir les niveaux pour chaque X (haut/bas ou haut/moyen/bas)<br>
+      6. Sélectionner le plan expérimental (factoriel complet 2ᵏ, fractionnaire, Plackett-Burman)<br>
+      7. Exécuter l'expérience et collecter les données<br>
+      8. Analyser les données (effets principaux, interactions, ANOVA du modèle)<br>
+      9. Conclusions pratiques (quels X régler et à quel niveau)<br>
+      10. Répliquer ou valider les résultats<br>
+      11. Implémenter les solutions
+    </div>
+    <div class="field" style="margin-top:16px"><label>Documentation du DOE (facteurs, niveaux, résultats)</label><textarea id="i-doe" rows="4" placeholder="Facteur A (Vitesse): Bas=100, Haut=150\nFacteur B (Avance): Bas=0.1, Haut=0.3\n\nRun 1: A-, B- → Y=25.02\nRun 2: A+, B- → Y=24.98\n...">${STATE.improve.doe||''}</textarea></div>
+  </div>
+
+  <div class="card"><div class="card-title">4.3 — Validation du nouveau processus <span class="tag">Étape finale</span></div>
+    <div class="guide">Simulez le nouveau processus avec les paramètres optimisés. Validez que les résultats sont reproductibles avant déploiement complet.</div>
+    <div class="field"><label>Paramètres optimaux identifiés</label><textarea id="i-optimal" rows="2" placeholder="X1 (Vitesse) = 130 rpm, X2 (Avance) = 0.2 mm/tr, X3 (Lot fournisseur) = A">${STATE.improve.optimal||''}</textarea></div>
+    <div class="field"><label>Résultats de la validation (pilote)</label><textarea id="i-pilot" rows="2" placeholder="Y moyen pilote = 25.001, σ = 0.005, Cpk pilote = 1.45, n=30 pièces">${STATE.improve.pilot||''}</textarea></div>
+  </div>
+
+  <div class="nav-btns"><button class="btn btn-o" onclick="saveI();goPhase(2)">← Analyze</button><button class="btn btn-a" onclick="saveI();goPhase(4)">Passer à Control →</button></div>`;
+}
+
+function saveI(){STATE.improve.doe=V('i-doe');STATE.improve.optimal=V('i-optimal');STATE.improve.pilot=V('i-pilot')}
+
+function runReg(){const x=parseNums('i-x'),y=parseNums('i-y');if(x.length<3||y.length<3||x.length!==y.length){document.getElementById('i-reg-result').innerHTML='<div class="guide guide-warn">Min 3 paires (X,Y) de même taille.</div>';return}const r=S.regression(x,y);const cc=Math.abs(r.r)>=0.7?'ri-ok':Math.abs(r.r)>=0.4?'ri-warn':'ri-err';document.getElementById('i-reg-result').innerHTML=`<div class="result-box"><div class="result-title">Régression : ${r.equation}</div><div class="result-grid">${ri(r.r,'r (corrélation)',cc)}${ri(r.r2,'R²',r.r2>=0.7?'ri-ok':'ri-warn')}${ri(r.b0,'β₀ (intercept)')}${ri(r.b1,'β₁ (pente)')}${ri(r.pValue,'p-value',r.significant?'ri-ok':'ri-err')}</div>${Chart.scatter(x,y,r)}<div class="guide ${r.significant?'guide-ok':'guide-warn'}" style="margin-top:12px">${r.significant?`Relation significative (p=${r.pValue}). Le modèle explique ${Math.round(r.r2*100)}% de la variation de Y. ${Math.abs(r.r)>=0.7?'Corrélation forte — bon prédicteur.':'Corrélation modérée — d\'autres X influencent Y.'} Pour chaque unité de X, Y change de ${r.b1}.`:`Relation non significative (p=${r.pValue}). Ce X n'est pas un bon prédicteur.`}</div></div>`}
+
+/* ═══════════════════════════════════════
+   PHASE 5: CONTROL
+   Big Picture: Training Plan → Documentation Plan → Monitoring Plan (SPC) →
+   Response Plan → Align Systems & Structures → Verify Financial Impact →
+   Improvement Matrix (0-Training → 1-SOPs → 2-SPC on Y → 3-SPC on X →
+   4-Poka-Yoke → 5-Auto-interruption → 6-Automatisation)
+   ═══════════════════════════════════════ */
+function renderControl(){
+  document.getElementById('page').innerHTML=`
+  <div class="guide"><strong>Phase Control — Pérenniser les gains</strong><br>
+  Objectif : développer et implémenter les plans de formation, documentation, surveillance (SPC), réponse aux dérives, et aligner les systèmes. Vérifier l'impact financier. Matrice d'amélioration : 0-Formation → 1-SOPs → 2-SPC on Y → 3-SPC on X → 4-Poka-Yoke → 5-Auto-interruption → 6-Automatisation.</div>
+
+  <div class="card"><div class="card-title">5.1 — Plan de formation <span class="tag">Develop & Implement</span></div>
+    <div class="field"><label>Qui former ? Sur quoi ? Quand ?</label><textarea id="c-training" rows="3" placeholder="Opérateurs ligne 3 : nouveaux paramètres machine (vitesse, avance) — semaine 12\nContrôleurs : nouveau plan de contrôle — semaine 13\nResp. production : lecture cartes de contrôle — semaine 12">${STATE.control.training||''}</textarea></div>
+  </div>
+
+  <div class="card"><div class="card-title">5.2 — Plan de documentation <span class="tag">Develop & Implement</span></div>
+    <div class="field"><label>Documents à créer ou mettre à jour</label><textarea id="c-docs" rows="3" placeholder="Gamme opératoire GO-0234 : mise à jour paramètres (v2.1)\nPlan de contrôle PC-0234 : ajout SPC sur cote Ø25\nInstruction IT-0234 : nouveau réglage machine\nFMEA : mise à jour RPN post-amélioration">${STATE.control.docs||''}</textarea></div>
+  </div>
+
+  <div class="card"><div class="card-title">5.3 — Carte de contrôle SPC <span class="tag">Monitoring Plan</span></div>
+    <div class="guide">Mettez le processus sous surveillance statistique. Matrice de contrôle : Niveau 2 = SPC on Y (surveiller la sortie), Niveau 3 = SPC on X (surveiller les entrées vitales).</div>
+    <div class="field"><label>Type de carte</label><select id="c-type"><option value="imr">I-MR (mesures individuelles)</option><option value="xbarr">X̄-R (sous-groupes)</option></select></div>
+    <div class="field"><label>Données de surveillance</label><textarea id="c-data" rows="3" placeholder="Données post-amélioration (une valeur par virgule, ou une ligne = un sous-groupe pour X̄-R)"></textarea></div>
+    <button class="btn btn-p btn-sm" onclick="runSPC()">Générer la carte de contrôle</button>
+    <div id="c-spc-result"></div>
+  </div>
+
+  <div class="card"><div class="card-title">5.4 — Plan de réponse <span class="tag">Response Plan</span></div>
+    <div class="guide">Que faire quand un point sort des limites de contrôle ? Documentez la procédure de réaction.</div>
+    <div class="field"><label>Procédure en cas de signal hors contrôle</label><textarea id="c-response" rows="3" placeholder="1. Arrêt de la production\n2. Isolement des pièces suspectes\n3. Vérification du réglage machine (paramètres X1, X2)\n4. Si cause identifiable → corriger et redémarrer\n5. Si cause non identifiable → ouvrir un 8D\n6. Informer le responsable qualité">${STATE.control.response||''}</textarea></div>
+  </div>
+
+  <div class="card"><div class="card-title">5.5 — Matrice d'amélioration <span class="tag">Niveaux de contrôle</span></div>
+    <div style="background:var(--sa);border-radius:var(--rlg);padding:16px;font-size:13px;line-height:2">
+      <div style="font-family:var(--fh);font-weight:600;margin-bottom:8px">Niveau de maturité du contrôle (du plus faible au plus robuste) :</div>
+      <table class="data-table"><thead><tr><th>Niveau</th><th>Méthode</th><th>Robustesse</th></tr></thead><tbody>
+      <tr><td><strong>0</strong></td><td>Formation, sensibilisation</td><td style="color:var(--err)">Faible — dépend de l'humain</td></tr>
+      <tr><td><strong>1</strong></td><td>SOPs (procédures standardisées)</td><td style="color:var(--warn)">Moyen — documenté mais dépend du respect</td></tr>
+      <tr><td><strong>2</strong></td><td>SPC on Y (carte de contrôle sur la sortie)</td><td style="color:var(--warn)">Moyen — détection réactive</td></tr>
+      <tr><td><strong>3</strong></td><td>SPC on X (carte de contrôle sur les entrées)</td><td style="color:var(--ok)">Bon — détection proactive</td></tr>
+      <tr><td><strong>4</strong></td><td>Poka-Yoke (anti-erreur)</td><td style="color:var(--ok)">Très bon — empêche l'erreur</td></tr>
+      <tr><td><strong>5</strong></td><td>Auto-interruption (arrêt automatique)</td><td style="color:var(--ok)">Excellent</td></tr>
+      <tr><td><strong>6</strong></td><td>Automatisation complète</td><td style="color:var(--ok)">Maximum — erreur humaine éliminée</td></tr>
+      </tbody></table>
+    </div>
+    <div class="field" style="margin-top:12px"><label>Niveau actuel de contrôle pour chaque X vital</label><textarea id="c-matrix" rows="2" placeholder="X1 (Lot fournisseur): Niveau 1 (SOP) → Objectif: Niveau 3 (SPC on X)\nX2 (Vitesse): Niveau 2 (SPC on Y) → Objectif: Niveau 4 (Poka-Yoke)">${STATE.control.matrix||''}</textarea></div>
+  </div>
+
+  <div class="card"><div class="card-title">5.6 — Comparaison Avant / Après <span class="tag">Validation des gains</span></div>
+    <div class="row"><div class="field"><label>Données AVANT amélioration</label><textarea id="c-before" rows="2"></textarea></div>
+    <div class="field"><label>Données APRÈS amélioration</label><textarea id="c-after" rows="2"></textarea></div></div>
+    <div class="row-3"><div class="field"><label>LSL</label><input type="number" id="c-lsl" step="any"></div><div class="field"><label>USL</label><input type="number" id="c-usl" step="any"></div><div><button class="btn btn-p btn-sm" style="margin-top:22px" onclick="runBA()">Comparer</button></div></div>
+    <div id="c-ba-result"></div>
+  </div>
+
+  <div class="card"><div class="card-title">5.7 — Impact financier <span class="tag">Verify Financial Impact</span></div>
+    <div class="guide">Vérifiez que les gains financiers correspondent aux estimations du charter. C'est la validation finale du projet.</div>
+    <div class="row-3">
+      <div class="field"><label>COPQ avant (€/an)</label><input type="number" id="c-copq-before" value="${STATE.define.copq||''}" placeholder="Du charter"></div>
+      <div class="field"><label>COPQ après (€/an)</label><input type="number" id="c-copq-after" placeholder="Mesuré"></div>
+      <div class="field"><label>Coût du projet (€)</label><input type="number" id="c-project-cost" placeholder="Temps + moyens"></div>
+    </div>
+    <button class="btn btn-o btn-sm" onclick="calcROI()">Calculer le ROI</button>
+    <div id="c-roi-result"></div>
+  </div>
+
+  <div class="card"><div class="card-title">5.8 — Clôture du projet <span class="tag">Go to Next Project</span></div>
+    <button class="btn btn-a" onclick="exportProject()">Exporter le projet DMAIC complet (CSV)</button>
+  </div>
+
+  <div class="nav-btns"><button class="btn btn-o" onclick="saveC();goPhase(3)">← Improve</button><div></div></div>`;
+}
+
+function saveC(){STATE.control.training=V('c-training');STATE.control.docs=V('c-docs');STATE.control.response=V('c-response');STATE.control.matrix=V('c-matrix')}
+
+function runSPC(){const type=V('c-type');const raw=V('c-data');if(type==='imr'){const d=raw.split(/[\n,;\t]+/).map(s=>parseFloat(s.trim())).filter(n=>!isNaN(n));if(d.length<5){document.getElementById('c-spc-result').innerHTML='<div class="guide guide-warn">Min 5 observations.</div>';return}const r=S.imr(d);const ooc=r.ooc===0?'<span class="status-badge sb-ok">Sous contrôle</span>':`<span class="status-badge sb-err">${r.ooc} hors contrôle</span>`;document.getElementById('c-spc-result').innerHTML=`<div class="result-box"><div class="result-title">Carte I ${ooc}</div><div class="result-grid">${ri(r.xBar,'X̄','ri-info')}${ri(r.uclX,'UCL','ri-err')}${ri(r.lclX,'LCL','ri-ok')}${ri(r.mrBar,'MR̄')}${ri(r.uclMR,'UCL(MR)')}</div>${Chart.controlChart(d,r.xBar,r.uclX,r.lclX,'X̄')}<div style="margin-top:12px">${Chart.controlChart(r.mr,r.mrBar,r.uclMR,0,'MR̄')}</div></div>`}else{const lines=raw.split('\n').filter(l=>l.trim());const sg=lines.map(l=>l.split(/[,;\t]+/).map(s=>parseFloat(s.trim())).filter(n=>!isNaN(n))).filter(g=>g.length>=2);if(sg.length<5)return;const r=S.xbarR(sg);document.getElementById('c-spc-result').innerHTML=`<div class="result-box"><div class="result-title">Carte X̄-R</div><div class="result-grid">${ri(r.xBarBar,'X̿','ri-info')}${ri(r.uclX,'UCL(X̄)','ri-err')}${ri(r.lclX,'LCL(X̄)','ri-ok')}${ri(r.rBar,'R̄')}${ri(r.uclR,'UCL(R)')}${ri(r.lclR,'LCL(R)')}</div>${Chart.controlChart(r.means,r.xBarBar,r.uclX,r.lclX,'X̿')}<div style="margin-top:12px">${Chart.controlChart(r.ranges,r.rBar,r.uclR,r.lclR,'R̄')}</div></div>`}}
+
+function runBA(){const b=parseNums('c-before'),a=parseNums('c-after'),lsl=parseFloat(V('c-lsl')),usl=parseFloat(V('c-usl'));if(b.length<5||a.length<5||isNaN(lsl)||isNaN(usl))return;const cB=S.capability(b,lsl,usl),cA=S.capability(a,lsl,usl);const d=cA.cpk-cB.cpk;const imp=cA.cpk>cB.cpk;document.getElementById('c-ba-result').innerHTML=`<div class="result-box"><div class="result-title">Avant / Après ${imp?'<span class="status-badge sb-ok">Amélioration confirmée</span>':'<span class="status-badge sb-warn">Pas d\'amélioration</span>'}</div><table class="data-table"><thead><tr><th>Indicateur</th><th>Avant</th><th>Après</th><th>Delta</th></tr></thead><tbody><tr><td>Moyenne</td><td>${cB.mean}</td><td>${cA.mean}</td><td>${(cA.mean-cB.mean).toFixed(3)}</td></tr><tr><td>Écart-type</td><td>${cB.stdev}</td><td>${cA.stdev}</td><td style="color:${cA.stdev<cB.stdev?'var(--ok)':'var(--err)'}">${(cA.stdev-cB.stdev).toFixed(4)}</td></tr><tr><td><strong>Cpk</strong></td><td><strong>${cB.cpk}</strong></td><td><strong>${cA.cpk}</strong></td><td style="color:${d>0?'var(--ok)':'var(--err)'}"><strong>${d>0?'+':''}${d.toFixed(2)}</strong></td></tr><tr><td>Sigma</td><td>${cB.sigma}σ</td><td>${cA.sigma}σ</td><td style="color:${cA.sigma>cB.sigma?'var(--ok)':'var(--err)'}">${(cA.sigma-cB.sigma)>0?'+':''}${(cA.sigma-cB.sigma).toFixed(2)}σ</td></tr><tr><td>DPMO</td><td>${cB.dpmo.toLocaleString()}</td><td>${cA.dpmo.toLocaleString()}</td><td style="color:${cA.dpmo<cB.dpmo?'var(--ok)':'var(--err)'}">${(cA.dpmo-cB.dpmo).toLocaleString()}</td></tr></tbody></table></div>`}
+
+function calcROI(){const before=parseFloat(V('c-copq-before'))||0,after=parseFloat(V('c-copq-after'))||0,cost=parseFloat(V('c-project-cost'))||1;const saving=before-after;const roi=Math.round(saving/cost*100);const payback=saving>0?Math.round(cost/saving*12):0;document.getElementById('c-roi-result').innerHTML=`<div class="result-box"><div class="result-grid">${ri(saving.toLocaleString()+'€','Économie annuelle',saving>0?'ri-ok':'ri-err')}${ri(roi+'%','ROI',roi>100?'ri-ok':'ri-warn')}${ri(payback+' mois','Payback',payback<=12?'ri-ok':'ri-warn')}</div></div>`}
+
+function exportProject(){let csv='Phase;Champ;Valeur\n';const d=STATE.define;csv+=`Define;Problème;"${d.problem||''}"\nDefine;Objectif;"${d.objective||''}"\nDefine;Y;"${d.primaryY||''}"\nDefine;COPQ;"${d.copq||''}"\n`;const m=STATE.measure;if(m.data.length>0&&m.lsl!==null&&m.usl!==null){const c=S.capability(m.data,m.lsl,m.usl);csv+=`Measure;n;${m.data.length}\nMeasure;Cp;${c.cp}\nMeasure;Cpk;${c.cpk}\nMeasure;Sigma;${c.sigma}\nMeasure;DPMO;${c.dpmo}\n`}csv+=`Analyze;Conclusions;"${STATE.analyze.conclusions||''}"\n`;csv+=`Improve;Optimal;"${STATE.improve.optimal||''}"\n`;csv+=`Control;Training;"${STATE.control.training||''}"\n`;const blob=new Blob(['\uFEFF'+csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ASCALIS_DMAIC_${new Date().toISOString().split('T')[0]}.csv`;a.click()}
+
+/* INIT */
+buildNav();render();
+
+</script>
+</body>
+</html>

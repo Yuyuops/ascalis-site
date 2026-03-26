@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist Pré-Audit — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--night:#0F1A2E;--copper:#B07642;--copper-light:#D4956A;--cream:#FAF9F6;--white:#fff;--text:#2C3E50;--text-light:#5A6B7A;--text-muted:#8A95A0;--green:#0F6E56;--amber:#854F0B;--red:#A32D2D;--border:rgba(0,0,0,.06);--font:'DM Sans',sans-serif;--display:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--cream);color:var(--text)}
+.header{background:var(--white);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between}
+.header svg{height:22px}
+.header a{font-size:13px;color:var(--copper);text-decoration:none;font-weight:500}
+.hero-bar{background:var(--night);padding:40px 32px;text-align:center}
+.hero-bar h1{font-family:var(--display);font-size:clamp(24px,4vw,36px);font-weight:400;color:var(--cream);margin-bottom:8px}
+.hero-bar p{font-size:15px;color:rgba(232,230,223,.5);max-width:600px;margin:0 auto}
+.ref-toggle{display:flex;gap:8px;justify-content:center;margin-top:20px}
+.ref-btn{padding:8px 20px;border-radius:20px;border:1px solid rgba(232,230,223,.2);background:transparent;color:rgba(232,230,223,.6);font-family:var(--font);font-size:13px;cursor:pointer;transition:all .2s}
+.ref-btn.active{background:var(--copper);color:var(--night);border-color:var(--copper)}
+.container{max-width:800px;margin:0 auto;padding:40px 24px}
+.progress-bar-container{background:var(--white);border-radius:12px;padding:20px 24px;margin-bottom:32px;border:1px solid var(--border);position:sticky;top:0;z-index:10}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.progress-label{font-size:13px;font-weight:500;color:var(--text-light)}
+.progress-score{font-size:22px;font-weight:600}
+.score-green{color:var(--green)}.score-amber{color:var(--amber)}.score-red{color:var(--red)}
+.progress-track{height:8px;background:var(--cream);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width .4s ease,background .4s}
+.chapter{background:var(--white);border-radius:12px;padding:28px;margin-bottom:16px;border:1px solid var(--border)}
+.chapter-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;cursor:pointer}
+.chapter-title{font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px}
+.chapter-num{font-size:11px;background:var(--cream);padding:3px 10px;border-radius:12px;color:var(--text-muted);font-weight:500}
+.chapter-score{font-size:13px;font-weight:600;padding:4px 12px;border-radius:12px}
+.cs-green{background:#E1F5EE;color:var(--green)}.cs-amber{background:#FAEEDA;color:var(--amber)}.cs-red{background:#FCEBEB;color:var(--red)}
+.check-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.check-item:last-child{border:none}
+.check-btns{display:flex;gap:4px;flex-shrink:0;margin-top:2px}
+.check-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--white);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.check-btn:hover{border-color:var(--copper)}
+.check-btn.yes.on{background:#E1F5EE;border-color:var(--green);color:var(--green)}
+.check-btn.partial.on{background:#FAEEDA;border-color:var(--amber);color:var(--amber)}
+.check-btn.no.on{background:#FCEBEB;border-color:var(--red);color:var(--red)}
+.check-label{font-size:13px;color:var(--text-light);line-height:1.5;padding-top:3px}
+.cta-box{margin-top:32px;padding:28px;background:var(--white);border-radius:12px;border:1px solid var(--border);text-align:center}
+.cta-box h3{font-family:var(--display);font-size:22px;margin-bottom:8px}
+.cta-box p{font-size:14px;color:var(--text-light);margin-bottom:16px;line-height:1.6}
+.cta-box a{display:inline-block;padding:12px 28px;background:var(--night);color:var(--cream);border-radius:8px;text-decoration:none;font-size:14px;font-weight:500}
+</style>
+</head>
+<body>
+<div class="header">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'DM Sans',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <a href="ascalis-site.html">← Retour au site</a>
+</div>
+<div class="hero-bar">
+  <h1>Checklist pré-audit</h1>
+  <p>Évaluez votre niveau de conformité chapitre par chapitre avant votre prochain audit.</p>
+  <div class="ref-toggle">
+    <button class="ref-btn active" onclick="setRef('en9100')">EN 9100</button>
+    <button class="ref-btn" onclick="setRef('iso9001')">ISO 9001</button>
+  </div>
+</div>
+<div class="container">
+  <div class="progress-bar-container">
+    <div class="progress-header"><span class="progress-label">Score de conformité global</span><span class="progress-score" id="global-score">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="global-bar" style="width:0%;background:var(--red)"></div></div>
+  </div>
+  <div id="chapters"></div>
+  <div class="cta-box">
+    <h3>Besoin d'un diagnostic terrain ?</h3>
+    <p>Cette checklist donne un premier aperçu. Le Diagnostic Flash (offre 1) confronte vos réponses à la réalité du terrain en 3 à 5 jours.</p>
+    <a href="ascalis-site.html#contact">Planifier un diagnostic →</a>
+  </div>
+</div>
+<script>
+const DATA={en9100:[
+{title:'Contexte de l\'organisme',num:'§4',items:['Le domaine d\'application du SMQ est défini et documenté','Les parties intéressées et leurs exigences sont identifiées','Les processus et leurs interactions sont cartographiés','Les risques et opportunités sont identifiés pour chaque processus']},
+{title:'Leadership',num:'§5',items:['La politique qualité est définie, communiquée et comprise','Les rôles et responsabilités qualité sont attribués','La direction s\'engage visiblement dans le SMQ','Les objectifs qualité sont déclinés par processus']},
+{title:'Planification',num:'§6',items:['Les actions face aux risques et opportunités sont planifiées','Les objectifs qualité sont mesurables et suivis','Les modifications du SMQ sont planifiées et maîtrisées','La gestion de configuration est en place (EN 9100)']},
+{title:'Support',num:'§7',items:['Les ressources nécessaires sont déterminées et fournies','Les compétences requises sont identifiées et les formations tracées','L\'environnement de travail est maîtrisé (température, propreté, ESD...)','Les équipements de mesure sont étalonnés et suivis','Les documents sont maîtrisés (versioning, accès, périmés retirés)','La sensibilisation qualité des opérateurs est assurée']},
+{title:'Réalisation des activités opérationnelles',num:'§8',items:['La revue des exigences client est formalisée avant acceptation','La conception est planifiée avec des revues et vérifications','Les achats et la sous-traitance sont maîtrisés (évaluation fournisseurs)','Les gammes opératoires sont à jour et respectées','La traçabilité des produits est assurée tout au long du process','Les FAI (First Article Inspection) sont réalisées','Les procédés spéciaux sont qualifiés (NADCAP si applicable)','Le contrôle final et la libération sont formalisés']},
+{title:'Évaluation des performances',num:'§9',items:['Les audits internes sont planifiés et réalisés','La revue de direction est conduite avec les données requises','Les indicateurs de performance processus sont suivis','La satisfaction client est mesurée et analysée','Les données sont analysées pour détecter les tendances']},
+{title:'Amélioration',num:'§10',items:['Les non-conformités sont enregistrées et traitées (8D/A3)','Les actions correctives sont vérifiées en efficacité','L\'amélioration continue est structurée et animée','Les retours d\'expérience sont capitalisés']}
+],iso9001:[
+{title:'Contexte de l\'organisme',num:'§4',items:['Le domaine d\'application du SMQ est défini','Les parties intéressées sont identifiées','Les processus et interactions sont déterminés','Les enjeux internes et externes sont analysés']},
+{title:'Leadership',num:'§5',items:['La politique qualité est établie et communiquée','Les responsabilités sont définies','L\'orientation client est démontrée','La direction revoit le SMQ régulièrement']},
+{title:'Planification',num:'§6',items:['Les risques et opportunités sont traités','Les objectifs qualité sont planifiés','Les modifications sont maîtrisées']},
+{title:'Support',num:'§7',items:['Les ressources sont adéquates','Les compétences sont gérées','La documentation est maîtrisée','La communication interne/externe est définie','Les équipements de mesure sont gérés']},
+{title:'Réalisation',num:'§8',items:['La planification opérationnelle est en place','Les exigences clients sont revues','La conception est maîtrisée (si applicable)','Les prestataires externes sont évalués','La production est maîtrisée','La libération des produits est formalisée','Les éléments de sortie non conformes sont gérés']},
+{title:'Évaluation des performances',num:'§9',items:['La surveillance et mesure sont planifiées','La satisfaction client est évaluée','Les audits internes sont réalisés','La revue de direction est conduite']},
+{title:'Amélioration',num:'§10',items:['Les NC sont traitées avec actions correctives','L\'amélioration continue est démontrée','Les opportunités d\'amélioration sont saisies']}
+]};
+let currentRef='en9100';
+let states={};
+function setRef(ref){
+  currentRef=ref;
+  document.querySelectorAll('.ref-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  states={};render();
+}
+function stateKey(ci,ii){return `${currentRef}-${ci}-${ii}`}
+function getState(ci,ii){return states[stateKey(ci,ii)]||'none'}
+function setState(ci,ii,val){
+  const k=stateKey(ci,ii);
+  states[k]=states[k]===val?'none':val;
+  render();
+}
+function render(){
+  const chapters=DATA[currentRef];
+  let html='';
+  let totalYes=0,totalPartial=0,totalItems=0;
+  chapters.forEach((ch,ci)=>{
+    let chYes=0,chPartial=0;
+    ch.items.forEach((_,ii)=>{const s=getState(ci,ii);if(s==='yes')chYes++;if(s==='partial')chPartial++});
+    const chTotal=ch.items.length;
+    totalItems+=chTotal;totalYes+=chYes;totalPartial+=chPartial;
+    const chScore=Math.round((chYes+chPartial*0.5)/chTotal*100);
+    const cls=chScore>=75?'cs-green':chScore>=40?'cs-amber':'cs-red';
+    html+=`<div class="chapter"><div class="chapter-header"><div class="chapter-title"><span class="chapter-num">${ch.num}</span>${ch.title}</div><span class="chapter-score ${cls}">${chScore}%</span></div>`;
+    ch.items.forEach((item,ii)=>{
+      const s=getState(ci,ii);
+      html+=`<div class="check-item"><div class="check-btns"><button class="check-btn yes ${s==='yes'?'on':''}" onclick="setState(${ci},${ii},'yes')" title="En place">✓</button><button class="check-btn partial ${s==='partial'?'on':''}" onclick="setState(${ci},${ii},'partial')" title="Partiel">½</button><button class="check-btn no ${s==='no'?'on':''}" onclick="setState(${ci},${ii},'no')" title="Absent">✗</button></div><span class="check-label">${item}</span></div>`;
+    });
+    html+='</div>';
+  });
+  document.getElementById('chapters').innerHTML=html;
+  const globalScore=totalItems?Math.round((totalYes+totalPartial*0.5)/totalItems*100):0;
+  const scoreEl=document.getElementById('global-score');
+  scoreEl.textContent=globalScore+'%';
+  scoreEl.className='progress-score '+(globalScore>=75?'score-green':globalScore>=40?'score-amber':'score-red');
+  const bar=document.getElementById('global-bar');
+  bar.style.width=globalScore+'%';
+  bar.style.background=globalScore>=75?'var(--green)':globalScore>=40?'var(--amber)':'var(--red)';
+}
+render();
+</script>
+</body>
+</html>

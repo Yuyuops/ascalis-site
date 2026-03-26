@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grille d'Audit à Blanc — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--night:#0F1A2E;--teal:#1B3A4B;--copper:#B07642;--cl:#D4956A;--cream:#FAF9F6;--w:#fff;--tx:#2C3E50;--tl:#5A6B7A;--tm:#8A95A0;--g:#0F6E56;--a:#854F0B;--r:#A32D2D;--b:#185FA5;--bd:rgba(0,0,0,.06);--f:'DM Sans',sans-serif;--d:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--f);background:var(--cream);color:var(--tx)}
+.hd{background:var(--w);border-bottom:1px solid var(--bd);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--f);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--w);color:var(--tl);transition:all .2s}.btn:hover{border-color:var(--copper);color:var(--copper)}.btn.p{background:var(--night);color:var(--cream);border-color:var(--night)}
+.hero{background:var(--night);padding:28px;color:var(--cream)}.hero h1{font-family:var(--d);font-size:26px;font-weight:400;margin-bottom:6px}.hero p{font-size:13px;color:rgba(232,230,223,.5)}
+.ref-bar{padding:12px 28px;background:var(--w);border-bottom:1px solid var(--bd);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ref-btn{padding:7px 18px;border-radius:20px;border:1px solid var(--bd);background:var(--w);font-family:var(--f);font-size:12px;cursor:pointer;transition:all .2s;color:var(--tl)}.ref-btn.on{background:var(--copper);color:var(--w);border-color:var(--copper)}
+.meta{padding:12px 28px;background:var(--w);border-bottom:1px solid var(--bd);display:flex;gap:12px;flex-wrap:wrap}
+.mf{display:flex;flex-direction:column;gap:3px;flex:1;min-width:150px}.mf label{font-size:10px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.5px}.mf input{padding:6px 10px;border:1px solid var(--bd);border-radius:5px;font-family:var(--f);font-size:12px;outline:none;background:var(--cream)}.mf input:focus{border-color:var(--copper)}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+.summary{background:var(--w);border-radius:10px;border:1px solid var(--bd);padding:20px;margin-bottom:20px;display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:center}
+.sum-score{text-align:center}.sum-val{font-family:var(--d);font-size:44px;line-height:1}.sum-label{font-size:11px;color:var(--tm);margin-top:4px}
+.sum-bars{display:flex;flex-direction:column;gap:6px}
+.sb-row{display:flex;align-items:center;gap:8px;font-size:12px}.sb-name{width:80px;text-align:right;color:var(--tl);flex-shrink:0}.sb-track{flex:1;height:16px;background:var(--cream);border-radius:4px;overflow:hidden;position:relative}.sb-fill{height:100%;border-radius:4px;transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;color:var(--w);font-weight:600;min-width:20px}.sb-c{background:var(--g)}.sb-nc{background:var(--r)}.sb-obs{background:var(--a)}.sb-na{background:var(--tm)}.sb-pct{width:40px;font-weight:600;flex-shrink:0;text-align:right}
+.clause{background:var(--w);border-radius:10px;border:1px solid var(--bd);margin-bottom:12px;overflow:hidden}
+.cl-hd{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}.cl-hd:hover{background:rgba(0,0,0,.01)}
+.cl-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}.cl-num{font-size:11px;background:var(--cream);padding:2px 8px;border-radius:10px;color:var(--tm);font-weight:500}
+.cl-score{font-size:12px;font-weight:600;padding:3px 10px;border-radius:10px}.cs-g{background:#E1F5EE;color:var(--g)}.cs-a{background:#FAEEDA;color:var(--a)}.cs-r{background:#FCEBEB;color:var(--r)}
+.cl-toggle{font-size:14px;color:var(--tm);transition:transform .2s}.clause.open .cl-toggle{transform:rotate(180deg)}
+.cl-body{display:none;border-top:1px solid var(--bd)}.clause.open .cl-body{display:block}
+.req{display:grid;grid-template-columns:1fr 140px 1fr;gap:8px;padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.03);align-items:start;font-size:12px}
+.req:last-child{border:none}.req-txt{color:var(--tl);line-height:1.5;padding-top:2px}
+.req-btns{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;padding-top:2px}
+.rb{width:28px;height:24px;border-radius:4px;border:1px solid var(--bd);background:var(--w);cursor:pointer;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.rb:hover{border-color:var(--copper)}.rb.c.on{background:#E1F5EE;border-color:var(--g);color:var(--g)}.rb.nc.on{background:#FCEBEB;border-color:var(--r);color:var(--r)}.rb.ob.on{background:#FAEEDA;border-color:var(--a);color:var(--a)}.rb.na.on{background:var(--cream);border-color:var(--tm);color:var(--tm)}
+.req-ev textarea{width:100%;padding:5px 8px;border:1px solid var(--bd);border-radius:4px;font-family:var(--f);font-size:11px;min-height:28px;resize:vertical;outline:none;background:var(--cream)}.req-ev textarea:focus{border-color:var(--copper)}
+.csv-z{border:2px dashed var(--bd);border-radius:8px;padding:14px;text-align:center;cursor:pointer;margin-top:16px;transition:border-color .2s}.csv-z:hover{border-color:var(--copper)}.csv-z p{font-size:12px;color:var(--tm)}.csv-z input{display:none}
+@media print{.hd,.ref-bar,.meta,.csv-z,.btn,.cl-toggle{display:none!important}.clause.open .cl-body{display:block!important}.clause{break-inside:avoid}body{background:white}.hero{background:none;color:var(--tx);padding:12px 0}.hero h1{color:var(--night);font-size:20px}}
+@media(max-width:800px){.req{grid-template-columns:1fr}.summary{grid-template-columns:1fr}.meta{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'DM Sans',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="window.print()">🖨 Imprimer</button><button class="btn p" onclick="expandAll()">Tout ouvrir</button></div>
+</div>
+<div class="hero"><h1>Grille d'Audit à Blanc</h1><p>Évaluation de conformité par exigence — ISO 9001:2015 / EN 9100:2018</p></div>
+<div class="ref-bar">
+  <span style="font-size:12px;color:var(--tl);margin-right:4px">Référentiel :</span>
+  <button class="ref-btn on" onclick="setRef('en9100',this)">EN 9100:2018</button>
+  <button class="ref-btn" onclick="setRef('iso9001',this)">ISO 9001:2015</button>
+</div>
+<div class="meta">
+  <div class="mf"><label>Entreprise</label><input id="m-co" placeholder="Nom"></div>
+  <div class="mf"><label>Auditeur</label><input id="m-aud" placeholder="Nom"></div>
+  <div class="mf"><label>Date</label><input type="date" id="m-dt"></div>
+  <div class="mf"><label>Périmètre</label><input id="m-scope" placeholder="Site, processus..."></div>
+</div>
+<div class="container">
+  <div class="summary" id="summary"></div>
+  <div id="clauses"></div>
+  <div class="csv-z" onclick="document.getElementById('csv-in').click()">
+    <p>Importer un audit précédent (CSV)</p>
+    <input type="file" id="csv-in" accept=".csv" onchange="importCSV(event)">
+  </div>
+</div>
+<script>
+const DATA={
+en9100:[
+{num:'4.1',title:'Contexte de l\'organisme',reqs:['Enjeux internes et externes déterminés','Enjeux surveillés et revus','Impact des enjeux sur le SMQ évalué']},
+{num:'4.2',title:'Parties intéressées',reqs:['Parties intéressées pertinentes identifiées','Exigences des parties intéressées déterminées','Informations surveillées et mises à jour']},
+{num:'4.3',title:'Domaine d\'application du SMQ',reqs:['Domaine d\'application défini et documenté','Limites et applicabilité déterminées','Exclusions justifiées le cas échéant']},
+{num:'4.4',title:'SMQ et processus',reqs:['Processus nécessaires identifiés','Séquence et interactions des processus déterminées','Critères et indicateurs de performance définis','Ressources nécessaires déterminées','Responsabilités et autorités attribuées','Risques et opportunités traités','Processus évalués et améliorés']},
+{num:'5.1',title:'Leadership et engagement',reqs:['Direction assume la responsabilité de l\'efficacité du SMQ','Politique qualité établie et compatible avec l\'orientation stratégique','Exigences du SMQ intégrées aux processus métier','Approche par les risques promue','Ressources nécessaires disponibles','Importance du SMQ communiquée','Résultats attendus atteints','Personnel dirigé et soutenu']},
+{num:'5.2',title:'Politique qualité',reqs:['Politique qualité appropriée à la finalité de l\'organisme','Cadre pour les objectifs qualité fourni','Engagement de satisfaire aux exigences','Engagement d\'amélioration continue','Politique documentée, communiquée et comprise','Politique disponible pour les parties intéressées']},
+{num:'5.3',title:'Rôles, responsabilités et autorités',reqs:['Responsabilités et autorités attribuées et communiquées','SMQ conforme aux exigences','Processus fournissent les résultats attendus','Performance du SMQ rapportée à la direction','Intégrité du SMQ maintenue lors de changements']},
+{num:'6.1',title:'Actions face aux risques et opportunités',reqs:['Risques et opportunités déterminés','Actions pour traiter les risques planifiées','Actions intégrées aux processus du SMQ','Efficacité des actions évaluée']},
+{num:'6.2',title:'Objectifs qualité',reqs:['Objectifs qualité établis aux fonctions et niveaux pertinents','Objectifs cohérents avec la politique qualité','Objectifs mesurables','Objectifs tenant compte des exigences applicables','Objectifs surveillés et communiqués','Objectifs mis à jour si nécessaire','Planification pour atteindre les objectifs documentée']},
+{num:'7.1',title:'Ressources',reqs:['Ressources nécessaires déterminées et fournies','Personnes nécessaires déterminées','Infrastructure déterminée et maintenue','Environnement de processus approprié','Ressources de surveillance et mesure appropriées','Équipements étalonnés ou vérifiés','Connaissances organisationnelles gérées']},
+{num:'7.2',title:'Compétences',reqs:['Compétences nécessaires déterminées','Compétences assurées par formation ou expérience','Actions pour acquérir les compétences menées','Efficacité des actions évaluée','Preuves de compétences conservées']},
+{num:'7.5',title:'Informations documentées',reqs:['Informations documentées exigées par la norme maintenues','Informations documentées nécessaires au SMQ maintenues','Création et mise à jour appropriées','Maîtrise des informations documentées assurée','Documents d\'origine externe identifiés et maîtrisés','Informations documentées conservées protégées']},
+{num:'8.1',title:'Planification et maîtrise opérationnelles',reqs:['Processus nécessaires planifiés et maîtrisés','Critères pour les processus déterminés','Gestion de configuration en place (EN 9100)','Maîtrise des transferts de travail','Sécurité du produit prise en compte (EN 9100)','Prévention de la contrefaçon (EN 9100)']},
+{num:'8.2',title:'Exigences relatives aux produits et services',reqs:['Communication avec les clients définie','Exigences déterminées avant engagement','Revue des exigences réalisée avant acceptation','Exigences non documentées confirmées','Écarts entre exigences et contrat résolus','Capacité à satisfaire les exigences démontrée']},
+{num:'8.4',title:'Maîtrise des processus fournis en externe',reqs:['Processus externalisés maîtrisés','Critères d\'évaluation et de sélection définis','Fournisseurs évalués et réévalués','Informations communiquées aux prestataires','Surveillance des prestataires externes réalisée','Risques liés aux prestataires évalués (EN 9100)']},
+{num:'8.5',title:'Production et prestation de service',reqs:['Production maîtrisée dans des conditions planifiées','Informations documentées disponibles','Activités de surveillance et mesure réalisées','Infrastructure et environnement appropriés','Personnel compétent désigné','Validation des processus spéciaux réalisée','Actions de prévention des erreurs humaines (EN 9100)','Identification et traçabilité assurées','Propriété du client préservée','Préservation des éléments de sortie assurée','FAI réalisées (EN 9100)','Exigences après livraison satisfaites']},
+{num:'8.7',title:'Maîtrise des éléments de sortie non conformes',reqs:['Éléments non conformes identifiés et maîtrisés','Actions appropriées menées','Correction, isolement, information client','Non-conformités enregistrées','Vérification de conformité après correction']},
+{num:'9.1',title:'Surveillance, mesure, analyse et évaluation',reqs:['Éléments à surveiller et mesurer déterminés','Méthodes de surveillance définies','Résultats analysés et évalués','Satisfaction client surveillée','Performance et efficacité du SMQ évaluées','KPIs définis et suivis (EN 9100)']},
+{num:'9.2',title:'Audit interne',reqs:['Programme d\'audit planifié','Critères et périmètre définis','Auditeurs objectifs et impartiaux sélectionnés','Résultats communiqués au management','Corrections et actions correctives menées','Informations documentées conservées']},
+{num:'9.3',title:'Revue de direction',reqs:['Revue de direction planifiée et réalisée','Éléments d\'entrée complets','État des actions des revues précédentes examiné','Changements des enjeux examinés','Performance et tendances analysées','Décisions et actions documentées','Opportunités d\'amélioration identifiées']},
+{num:'10.1',title:'Amélioration',reqs:['Opportunités d\'amélioration déterminées','Actions pour satisfaire les exigences client menées','Amélioration des processus','Amélioration du SMQ']},
+{num:'10.2',title:'Non-conformité et action corrective',reqs:['Réaction aux NC : maîtrise, correction','Causes des NC analysées','NC similaires recherchées','Actions correctives mises en œuvre','Efficacité des actions correctives vérifiée','Risques et opportunités mis à jour si nécessaire','Modifications du SMQ si nécessaire','Informations documentées conservées']},
+{num:'10.3',title:'Amélioration continue',reqs:['Amélioration continue du SMQ démontrée','Résultats d\'analyse utilisés pour l\'amélioration','Opportunités identifiées comme priorités']}
+],
+iso9001:[]
+};
+// ISO 9001 = EN 9100 sans les items spécifiques EN
+DATA.iso9001=DATA.en9100.map(cl=>({...cl,reqs:cl.reqs.filter(r=>!r.includes('(EN 9100)'))}));
+
+let currentRef='en9100';
+let states={};// key: "ref-clauseIdx-reqIdx" => 'c'|'nc'|'obs'|'na'|''
+let evidence={};
+
+function stateKey(ci,ri){return`${currentRef}-${ci}-${ri}`}
+function getState(ci,ri){return states[stateKey(ci,ri)]||''}
+function setState(ci,ri,val){const k=stateKey(ci,ri);states[k]=states[k]===val?'':val;render()}
+function getEvidence(ci,ri){return evidence[stateKey(ci,ri)]||''}
+function setEvidence(ci,ri,val){evidence[stateKey(ci,ri)]=val}
+
+function setRef(ref,btn){
+  currentRef=ref;
+  document.querySelectorAll('.ref-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');render();
+}
+
+function counts(){
+  const cls=DATA[currentRef];
+  let c=0,nc=0,obs=0,na=0,total=0;
+  cls.forEach((cl,ci)=>cl.reqs.forEach((_,ri)=>{total++;const s=getState(ci,ri);if(s==='c')c++;else if(s==='nc')nc++;else if(s==='obs')obs++;else if(s==='na')na++}));
+  return{c,nc,obs,na,total,evaluated:c+nc+obs+na};
+}
+
+function render(){
+  const cls=DATA[currentRef];
+  const ct=counts();
+  const pctC=ct.evaluated?Math.round(ct.c/ct.evaluated*100):0;
+  const pctNC=ct.evaluated?Math.round(ct.nc/ct.evaluated*100):0;
+  const pctObs=ct.evaluated?Math.round(ct.obs/ct.evaluated*100):0;
+
+  const scoreColor=pctC>=75?'var(--g)':pctC>=50?'var(--a)':'var(--r)';
+  document.getElementById('summary').innerHTML=`
+    <div class="sum-score"><div class="sum-val" style="color:${scoreColor}">${pctC}%</div><div class="sum-label">Conformité (${ct.c}/${ct.evaluated} évalués sur ${ct.total})</div></div>
+    <div class="sum-bars">
+      <div class="sb-row"><span class="sb-name">Conforme</span><div class="sb-track"><div class="sb-fill sb-c" style="width:${ct.total?ct.c/ct.total*100:0}%">${ct.c}</div></div><span class="sb-pct" style="color:var(--g)">${ct.c}</span></div>
+      <div class="sb-row"><span class="sb-name">Non-conf.</span><div class="sb-track"><div class="sb-fill sb-nc" style="width:${ct.total?ct.nc/ct.total*100:0}%">${ct.nc}</div></div><span class="sb-pct" style="color:var(--r)">${ct.nc}</span></div>
+      <div class="sb-row"><span class="sb-name">Observation</span><div class="sb-track"><div class="sb-fill sb-obs" style="width:${ct.total?ct.obs/ct.total*100:0}%">${ct.obs}</div></div><span class="sb-pct" style="color:var(--a)">${ct.obs}</span></div>
+      <div class="sb-row"><span class="sb-name">N/A</span><div class="sb-track"><div class="sb-fill sb-na" style="width:${ct.total?ct.na/ct.total*100:0}%">${ct.na}</div></div><span class="sb-pct" style="color:var(--tm)">${ct.na}</span></div>
+    </div>`;
+
+  document.getElementById('clauses').innerHTML=cls.map((cl,ci)=>{
+    let clC=0,clTotal=cl.reqs.length;
+    cl.reqs.forEach((_,ri)=>{if(getState(ci,ri)==='c')clC++});
+    const clPct=clTotal?Math.round(clC/clTotal*100):0;
+    const cls2=clPct>=75?'cs-g':clPct>=50?'cs-a':'cs-r';
+    const isOpen=document.querySelector(`.clause[data-ci="${ci}"]`)?.classList.contains('open');
+    return`<div class="clause${isOpen?' open':''}" data-ci="${ci}">
+      <div class="cl-hd" onclick="this.parentElement.classList.toggle('open')">
+        <div class="cl-title"><span class="cl-num">§${cl.num}</span>${cl.title}</div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="cl-score ${cls2}">${clPct}%</span><span class="cl-toggle">▾</span></div>
+      </div>
+      <div class="cl-body">${cl.reqs.map((r,ri)=>{
+        const s=getState(ci,ri);
+        return`<div class="req">
+          <div class="req-txt">${r}</div>
+          <div class="req-btns">
+            <div class="rb c ${s==='c'?'on':''}" onclick="setState(${ci},${ri},'c')" title="Conforme">C</div>
+            <div class="rb nc ${s==='nc'?'on':''}" onclick="setState(${ci},${ri},'nc')" title="Non-conformité">NC</div>
+            <div class="rb ob ${s==='obs'?'on':''}" onclick="setState(${ci},${ri},'obs')" title="Observation">OBS</div>
+            <div class="rb na ${s==='na'?'on':''}" onclick="setState(${ci},${ri},'na')" title="Non applicable">N/A</div>
+          </div>
+          <div class="req-ev"><textarea placeholder="Preuves / constats..." oninput="setEvidence(${ci},${ri},this.value)">${getEvidence(ci,ri)}</textarea></div>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function expandAll(){document.querySelectorAll('.clause').forEach(c=>c.classList.add('open'))}
+
+function exportCSV(){
+  const cls=DATA[currentRef];
+  let csv='Clause;Titre;Exigence;Statut;Preuves\n';
+  cls.forEach((cl,ci)=>cl.reqs.forEach((r,ri)=>{
+    const s=getState(ci,ri)||'Non évalué';
+    const map={c:'Conforme',nc:'Non-conformité',obs:'Observation',na:'N/A'};
+    csv+=`"§${cl.num}";"${cl.title}";"${r}";"${map[s]||s}";"${(getEvidence(ci,ri)||'').replace(/"/g,'""')}"\n`;
+  }));
+  csv+=`\nRéférentiel;${currentRef==='en9100'?'EN 9100:2018':'ISO 9001:2015'}\n`;
+  csv+=`Entreprise;"${document.getElementById('m-co').value}"\n`;
+  csv+=`Auditeur;"${document.getElementById('m-aud').value}"\n`;
+  csv+=`Date;"${document.getElementById('m-dt').value}"\n`;
+  const ct=counts();csv+=`Score conformité;${ct.evaluated?Math.round(ct.c/ct.evaluated*100):0}%\n`;
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`ASCALIS_audit_${currentRef}_${document.getElementById('m-co').value||'entreprise'}_${document.getElementById('m-dt').value||new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+}
+
+function importCSV(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const lines=ev.target.result.split('\n').filter(l=>l.trim()&&!l.startsWith('Clause')&&!l.startsWith('Référentiel')&&!l.startsWith('Entreprise')&&!l.startsWith('Auditeur')&&!l.startsWith('Date')&&!l.startsWith('Score'));
+    const map={'Conforme':'c','Non-conformité':'nc','Observation':'obs','N/A':'na'};
+    const cls=DATA[currentRef];
+    lines.forEach(line=>{
+      const p=line.split(';').map(s=>s.replace(/^"|"$/g,'').trim());
+      if(p.length>=4){
+        cls.forEach((cl,ci)=>{
+          if(`§${cl.num}`===p[0]){
+            cl.reqs.forEach((r,ri)=>{
+              if(r===p[2]){
+                const st=map[p[3]];if(st)states[stateKey(ci,ri)]=st;
+                if(p[4])evidence[stateKey(ci,ri)]=p[4];
+              }
+            });
+          }
+        });
+      }
+    });
+    render();expandAll();
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+document.getElementById('m-dt').value=new Date().toISOString().split('T')[0];
+render();
+</script>
+</body>
+</html>

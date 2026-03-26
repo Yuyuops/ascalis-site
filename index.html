@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCALIS — Performance qualité & amélioration continue</title>
+<meta name="description" content="Consultant amélioration continue & performance qualité pour PME et ETI industrielles. Aéronautique, BTP, Transport & Logistique.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS (UI/UX Pro Max Methodology)
+   Style: Minimalism + Trust & Authority
+   Typography: Corporate Trust (Lexend + Source Sans 3)
+   Color: B2B Service palette + ASCALIS copper
+   Spacing: 8dp system
+   ═══════════════════════════════════════════ */
+:root {
+  /* — Semantic Color Tokens — */
+  --color-primary: #0F1A2E;
+  --color-primary-light: #1B3A4B;
+  --color-secondary: #334155;
+  --color-accent: #B07642;
+  --color-accent-light: #D4956A;
+  --color-accent-hover: #C4875A;
+  --color-accent-bg: rgba(176,118,66,.08);
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #F8FAFC;
+  --color-surface-warm: #FAF9F6;
+  --color-on-primary: #F8FAFC;
+  --color-on-surface: #020617;
+  --color-on-surface-secondary: #475569;
+  --color-on-surface-muted: #94A3B8;
+  --color-border: #E2E8F0;
+  --color-border-light: #F1F5F9;
+  --color-success: #059669;
+  --color-success-bg: #ECFDF5;
+  --color-warning: #D97706;
+  --color-warning-bg: #FFFBEB;
+  --color-error: #DC2626;
+  --color-error-bg: #FEF2F2;
+  /* — Typography Tokens — */
+  --font-heading: 'Lexend', sans-serif;
+  --font-body: 'Source Sans 3', sans-serif;
+  --font-display: 'Instrument Serif', serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+  --font-size-5xl: 3.5rem;
+  /* — Spacing Tokens (8dp system) — */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-7: 32px; --space-8: 40px;
+  --space-9: 48px; --space-10: 56px; --space-11: 64px; --space-12: 80px;
+  --space-13: 96px; --space-14: 120px;
+  /* — Elevation Tokens — */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.05);
+  --shadow-sm: 0 2px 4px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.06);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,.06);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,.08);
+  /* — Radius Tokens — */
+  --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px; --radius-xl: 16px; --radius-full: 9999px;
+  /* — Transition Tokens — */
+  --ease-spring: cubic-bezier(.16,1,.3,1);
+  --ease-bounce: cubic-bezier(.34,1.56,.64,1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  /* — Layout — */
+  --container-max: 1120px;
+  --nav-height: 64px;
+}
+
+/* ═══ RESET & BASE ═══ */
+*,*::before,*::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--font-body); font-size: var(--font-size-base); line-height: 1.6; color: var(--color-on-surface); background: var(--color-surface-warm); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; max-width: 100%; }
+button, input, select, textarea { font-family: inherit; font-size: inherit; }
+
+/* ═══ SKIP LINK (Accessibility) ═══ */
+.skip-link { position: absolute; top: -100%; left: var(--space-4); padding: var(--space-2) var(--space-4); background: var(--color-primary); color: var(--color-on-primary); border-radius: var(--radius-sm); font-size: var(--font-size-sm); z-index: 1000; transition: top var(--duration-fast); }
+.skip-link:focus { top: var(--space-2); }
+
+/* ═══ NAV ═══ */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-height); padding: 0 var(--space-8); display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--color-border-light); transition: box-shadow var(--duration-normal) var(--ease-spring); }
+.nav.scrolled { box-shadow: var(--shadow-sm); }
+.nav-logo svg { height: 24px; }
+.nav-links { display: flex; gap: var(--space-7); align-items: center; }
+.nav-links a { color: var(--color-on-surface-secondary); font-family: var(--font-heading); font-size: var(--font-size-sm); font-weight: 400; letter-spacing: .01em; transition: color var(--duration-fast); min-height: 44px; display: flex; align-items: center; }
+.nav-links a:hover, .nav-links a:focus-visible { color: var(--color-on-surface); }
+.nav-cta { background: var(--color-primary); color: var(--color-on-primary); padding: var(--space-2) var(--space-5); border-radius: var(--radius-sm); font-family: var(--font-heading); font-size: var(--font-size-sm); font-weight: 500; border: none; cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; transition: background var(--duration-fast), transform var(--duration-fast); }
+.nav-cta:hover { background: var(--color-primary-light); }
+.nav-cta:active { transform: scale(.97); }
+.nav-cta:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+
+/* ═══ HERO ═══ */
+.hero { min-height: 100dvh; display: flex; align-items: center; background: var(--color-surface); position: relative; padding: var(--space-14) var(--space-8) var(--space-12); }
+.hero::after { content: ''; position: absolute; top: 0; right: 0; width: 45%; height: 100%; background: linear-gradient(135deg, var(--color-surface-alt) 0%, transparent 70%); pointer-events: none; }
+.hero-inner { max-width: var(--container-max); margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+.hero-tag { display: inline-flex; align-items: center; gap: var(--space-2); font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: var(--space-7); }
+.hero-tag::before { content: ''; width: 24px; height: 2px; background: var(--color-accent); border-radius: 1px; }
+.hero h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.5rem, 5.5vw, var(--font-size-5xl)); line-height: 1.1; color: var(--color-primary); max-width: 720px; margin-bottom: var(--space-6); }
+.hero h1 em { font-style: italic; color: var(--color-accent); }
+.hero-sub { font-size: var(--font-size-lg); line-height: 1.7; color: var(--color-on-surface-secondary); max-width: 540px; margin-bottom: var(--space-9); }
+.hero-actions { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+.btn-primary { background: var(--color-primary); color: var(--color-on-primary); padding: var(--space-3) var(--space-7); border-radius: var(--radius-md); font-family: var(--font-heading); font-size: var(--font-size-base); font-weight: 500; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: var(--space-2); min-height: 48px; transition: all var(--duration-normal) var(--ease-spring); }
+.btn-primary:hover { background: var(--color-primary-light); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.btn-primary:active { transform: scale(.97) translateY(0); }
+.btn-primary:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.btn-secondary { background: transparent; color: var(--color-on-surface); padding: var(--space-3) var(--space-7); border-radius: var(--radius-md); font-family: var(--font-heading); font-size: var(--font-size-base); font-weight: 400; border: 1px solid var(--color-border); cursor: pointer; min-height: 48px; display: inline-flex; align-items: center; transition: all var(--duration-normal) var(--ease-spring); }
+.btn-secondary:hover { border-color: var(--color-accent); color: var(--color-accent); }
+.btn-secondary:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.hero-metrics { display: flex; gap: var(--space-9); margin-top: var(--space-12); padding-top: var(--space-8); border-top: 1px solid var(--color-border-light); }
+.metric-val { font-family: var(--font-display); font-size: var(--font-size-4xl); color: var(--color-accent); line-height: 1; }
+.metric-label { font-size: var(--font-size-sm); color: var(--color-on-surface-muted); margin-top: var(--space-1); line-height: 1.4; }
+
+/* ═══ SECTIONS ═══ */
+.section { padding: var(--space-13) var(--space-8); }
+.section-header { max-width: 640px; margin: 0 auto var(--space-11); text-align: center; }
+.section-tag { font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: var(--space-4); display: flex; align-items: center; justify-content: center; gap: var(--space-2); }
+.section-tag::before, .section-tag::after { content: ''; width: 20px; height: 1px; background: var(--color-accent); opacity: .4; }
+.section-header h2 { font-family: var(--font-display); font-size: clamp(1.75rem, 3.5vw, var(--font-size-4xl)); font-weight: 400; line-height: 1.2; margin-bottom: var(--space-4); color: var(--color-primary); }
+.section-header p { font-size: var(--font-size-base); color: var(--color-on-surface-secondary); line-height: 1.7; max-width: 540px; margin: 0 auto; }
+
+/* ═══ GEAR DIVIDERS ═══ */
+.gear-div { position: relative; height: 72px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.gear-div .line { position: absolute; width: 100%; height: 1px; background: linear-gradient(90deg, transparent 0%, var(--color-border) 20%, var(--color-border) 80%, transparent 100%); }
+.gear-div svg { position: absolute; opacity: .08; }
+.gear-div .g1 { animation: gearCW 14s linear infinite; }
+.gear-div .g2 { animation: gearCCW 10s linear infinite; }
+@keyframes gearCW { to { transform: rotate(360deg); } }
+@keyframes gearCCW { to { transform: rotate(-360deg); } }
+@media (prefers-reduced-motion: reduce) { .gear-div svg { animation: none !important; } }
+
+/* ═══ PILIERS ═══ */
+.pillars { background: var(--color-surface-alt); }
+.pillars-grid { max-width: var(--container-max); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
+.pillar { padding: var(--space-7); border-radius: var(--radius-lg); background: var(--color-surface); border: 1px solid var(--color-border-light); transition: transform var(--duration-normal) var(--ease-spring), box-shadow var(--duration-normal); }
+.pillar:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.pillar-icon { width: 44px; height: 44px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-5); transition: transform var(--duration-normal) var(--ease-bounce); }
+.pillar:hover .pillar-icon { transform: scale(1.08) rotate(-3deg); }
+.pi-1 { background: var(--color-success-bg); }
+.pi-2 { background: var(--color-warning-bg); }
+.pi-3 { background: #EFF6FF; }
+.pillar h3 { font-family: var(--font-heading); font-size: var(--font-size-lg); font-weight: 600; margin-bottom: var(--space-2); }
+.pillar p { font-size: var(--font-size-sm); color: var(--color-on-surface-secondary); line-height: 1.7; }
+
+/* ═══ RESULTATS ═══ */
+.resultats { background: var(--color-primary); color: var(--color-on-primary); }
+.resultats .section-tag { color: var(--color-accent-light); }
+.resultats .section-tag::before, .resultats .section-tag::after { background: var(--color-accent-light); }
+.resultats .section-header h2 { color: var(--color-on-primary); }
+.resultats .section-header p { color: rgba(248,250,252,.5); }
+.results-grid { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); text-align: center; }
+.r-val { font-family: var(--font-display); font-size: var(--font-size-4xl); color: var(--color-accent-light); line-height: 1; }
+.r-label { font-size: var(--font-size-sm); color: rgba(248,250,252,.45); margin-top: var(--space-2); line-height: 1.4; }
+
+/* ═══ OFFRES ═══ */
+.offres { background: var(--color-surface); }
+.offres-grid { max-width: var(--container-max); margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+.offre-card { border-radius: var(--radius-lg); padding: var(--space-7); transition: transform var(--duration-normal) var(--ease-spring), box-shadow var(--duration-normal); position: relative; overflow: hidden; }
+.offre-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--color-accent); opacity: 0; transition: opacity var(--duration-fast); }
+.oc-light { background: var(--color-surface-alt); border: 1px solid var(--color-border-light); color: var(--color-on-surface); }
+.oc-dark { background: var(--color-primary); border: 1px solid rgba(248,250,252,.06); color: var(--color-on-primary); }
+.oc-teal { background: var(--color-primary-light); border: 1px solid rgba(248,250,252,.06); color: var(--color-on-primary); }
+.oc-accent { background: linear-gradient(135deg, var(--color-accent), #C4875A); border: none; color: #fff; }
+.offre-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.oc-light:hover::before { opacity: 1; }
+.oc-dark::before, .oc-teal::before, .oc-accent::before { display: none; }
+.offre-num { font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 600; letter-spacing: .08em; margin-bottom: var(--space-2); }
+.oc-light .offre-num { color: var(--color-accent); }
+.oc-dark .offre-num, .oc-teal .offre-num { color: var(--color-accent-light); }
+.oc-accent .offre-num { color: rgba(255,255,255,.7); }
+.offre-card h3 { font-family: var(--font-heading); font-size: var(--font-size-base); font-weight: 600; margin-bottom: var(--space-2); line-height: 1.3; }
+.offre-card .pitch { font-size: var(--font-size-sm); line-height: 1.6; font-style: italic; margin-bottom: var(--space-4); }
+.oc-light .pitch { color: var(--color-on-surface-secondary); }
+.oc-dark .pitch, .oc-teal .pitch { color: rgba(248,250,252,.55); }
+.oc-accent .pitch { color: rgba(255,255,255,.75); }
+.offre-meta { display: flex; gap: var(--space-4); font-size: var(--font-size-xs); flex-wrap: wrap; }
+.oc-light .offre-meta { color: var(--color-on-surface-muted); }
+.oc-dark .offre-meta, .oc-teal .offre-meta { color: rgba(248,250,252,.35); }
+.oc-accent .offre-meta { color: rgba(255,255,255,.6); }
+.offre-card.featured { grid-column: 1 / -1; }
+
+/* ═══ PARCOURS ═══ */
+.parcours { background: var(--color-surface-alt); }
+.parcours-flow { max-width: 860px; margin: 0 auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
+.parcours-step { text-align: center; padding: var(--space-5) var(--space-6); flex: 1; min-width: 150px; }
+.step-badge { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: var(--radius-full); background: var(--color-primary); color: var(--color-accent-light); font-family: var(--font-display); font-size: var(--font-size-xl); margin-bottom: var(--space-3); }
+.step-label { font-family: var(--font-heading); font-size: var(--font-size-sm); font-weight: 500; }
+.step-offers { font-size: var(--font-size-xs); color: var(--color-on-surface-muted); margin-top: var(--space-1); }
+.step-arrow { color: var(--color-accent); font-size: var(--font-size-xl); flex-shrink: 0; }
+
+/* ═══ ABOUT ═══ */
+.about { background: var(--color-surface); }
+.about-inner { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: var(--space-10); align-items: start; }
+.about-photo { width: 280px; height: 340px; border-radius: var(--radius-xl); background: var(--color-surface-alt); display: flex; align-items: center; justify-content: center; border: 1px solid var(--color-border-light); }
+.about-photo-placeholder { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); color: var(--color-on-surface-muted); font-size: var(--font-size-sm); }
+.about-content h3 { font-family: var(--font-display); font-size: var(--font-size-3xl); font-weight: 400; margin-bottom: var(--space-2); }
+.about-role { font-family: var(--font-heading); font-size: var(--font-size-sm); color: var(--color-accent); font-weight: 500; margin-bottom: var(--space-6); }
+.about-text { font-size: var(--font-size-base); color: var(--color-on-surface-secondary); line-height: 1.8; margin-bottom: var(--space-5); }
+.about-diff { background: var(--color-surface-alt); border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-6); border-left: 3px solid var(--color-accent); }
+.about-diff-title { font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 600; color: var(--color-accent); text-transform: uppercase; letter-spacing: .08em; margin-bottom: var(--space-2); }
+.about-diff p { font-size: var(--font-size-sm); color: var(--color-on-surface-secondary); line-height: 1.7; }
+.about-stats { display: flex; gap: var(--space-7); padding-top: var(--space-6); border-top: 1px solid var(--color-border-light); }
+.about-stat-val { font-family: var(--font-display); font-size: var(--font-size-2xl); color: var(--color-primary); }
+.about-stat-label { font-size: var(--font-size-xs); color: var(--color-on-surface-muted); margin-top: 2px; }
+.about-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
+.about-tag { font-family: var(--font-heading); font-size: var(--font-size-xs); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); background: var(--color-surface-alt); border: 1px solid var(--color-border-light); color: var(--color-on-surface-secondary); }
+
+/* ═══ REFERENCES ═══ */
+.references { background: var(--color-surface-alt); }
+.ref-grid { max-width: var(--container-max); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
+.ref-card { padding: var(--space-7); border-radius: var(--radius-lg); border: 1px solid var(--color-border-light); background: var(--color-surface); transition: transform var(--duration-normal) var(--ease-spring), box-shadow var(--duration-normal); }
+.ref-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.ref-quote { font-size: var(--font-size-sm); color: var(--color-on-surface-secondary); line-height: 1.7; font-style: italic; margin-bottom: var(--space-5); padding-left: var(--space-5); border-left: 2px solid var(--color-accent); }
+.ref-author { font-family: var(--font-heading); font-size: var(--font-size-sm); font-weight: 500; }
+.ref-company { font-size: var(--font-size-xs); color: var(--color-on-surface-muted); margin-top: 2px; }
+.ref-result { display: inline-flex; align-items: center; gap: var(--space-1); font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 500; color: var(--color-accent); margin-top: var(--space-3); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); background: var(--color-accent-bg); }
+.ref-badge { display: inline-block; font-family: var(--font-heading); font-size: 10px; font-weight: 500; padding: 2px var(--space-2); border-radius: var(--radius-full); margin-top: var(--space-2); }
+.rb-aero { background: #EFF6FF; color: #1D4ED8; }
+.rb-btp { background: var(--color-warning-bg); color: var(--color-warning); }
+.rb-transport { background: var(--color-success-bg); color: var(--color-success); }
+
+/* ═══ SECTEURS ═══ */
+.secteurs { background: var(--color-surface); }
+.secteurs-grid { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
+.secteur-card { padding: var(--space-7); border-radius: var(--radius-lg); border: 1px solid var(--color-border-light); background: var(--color-surface-alt); transition: all var(--duration-normal) var(--ease-spring); }
+.secteur-card:hover { border-color: var(--color-accent-light); transform: translateY(-2px); }
+.secteur-card h3 { font-family: var(--font-heading); font-size: var(--font-size-base); font-weight: 600; margin: var(--space-4) 0 var(--space-2); }
+.secteur-card p { font-size: var(--font-size-sm); color: var(--color-on-surface-secondary); line-height: 1.7; }
+.secteur-refs { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-top: var(--space-3); }
+.secteur-ref { font-family: var(--font-heading); font-size: 10px; font-weight: 500; padding: 2px var(--space-2); border-radius: var(--radius-full); background: var(--color-surface); border: 1px solid var(--color-border-light); color: var(--color-on-surface-muted); }
+/* SVG sector icons */
+.secteur-svg { width: 36px; height: 36px; color: var(--color-accent); }
+
+/* ═══ TOOLBOX ═══ */
+.toolbox { background: var(--color-primary); color: var(--color-on-primary); }
+.toolbox .section-tag { color: var(--color-accent-light); }
+.toolbox .section-tag::before, .toolbox .section-tag::after { background: var(--color-accent-light); }
+.toolbox .section-header h2 { color: var(--color-on-primary); }
+.toolbox .section-header p { color: rgba(248,250,252,.45); }
+.tools-grid { max-width: var(--container-max); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+.tools-grid-2 { grid-template-columns: repeat(2, 1fr); margin-top: var(--space-5); max-width: var(--container-max); margin-left: auto; margin-right: auto; }
+.tool-card { padding: var(--space-6); border-radius: var(--radius-lg); border: 1px solid rgba(248,250,252,.06); background: rgba(248,250,252,.03); transition: all var(--duration-normal) var(--ease-spring); display: block; color: var(--color-on-primary); position: relative; min-height: 44px; }
+.tool-card:hover { border-color: rgba(212,149,106,.3); transform: translateY(-3px); background: rgba(248,250,252,.06); }
+.tool-card:focus-visible { outline: 3px solid var(--color-accent-light); outline-offset: 2px; }
+.tool-card h3 { font-family: var(--font-heading); font-size: var(--font-size-base); font-weight: 600; margin: var(--space-3) 0 var(--space-2); }
+.tool-card p { font-size: var(--font-size-sm); color: rgba(248,250,252,.5); line-height: 1.6; margin-bottom: var(--space-3); }
+.tool-link-text { font-family: var(--font-heading); font-size: var(--font-size-xs); color: var(--color-accent-light); font-weight: 500; }
+.tool-badge { position: absolute; top: var(--space-4); right: var(--space-4); font-family: var(--font-heading); font-size: 10px; padding: 2px var(--space-2); border-radius: var(--radius-full); background: rgba(212,149,106,.15); color: var(--color-accent-light); font-weight: 500; }
+/* SVG tool icons */
+.tool-svg { width: 28px; height: 28px; color: var(--color-accent-light); }
+
+/* ═══ CONTACT ═══ */
+.contact { background: var(--color-surface); }
+.contact-box { max-width: 640px; margin: 0 auto; background: var(--color-surface-alt); border-radius: var(--radius-xl); padding: var(--space-10) var(--space-9); text-align: center; border: 1px solid var(--color-border-light); }
+.contact-box h2 { font-family: var(--font-display); font-size: var(--font-size-3xl); font-weight: 400; margin-bottom: var(--space-3); }
+.contact-box > p { font-size: var(--font-size-base); color: var(--color-on-surface-secondary); margin-bottom: var(--space-8); line-height: 1.7; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); text-align: left; margin-bottom: var(--space-5); }
+.form-grid .full { grid-column: 1 / -1; }
+.form-grid label { font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 500; color: var(--color-on-surface-muted); display: block; margin-bottom: var(--space-1); }
+.form-grid input, .form-grid select, .form-grid textarea { width: 100%; padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-size: var(--font-size-base); background: var(--color-surface); color: var(--color-on-surface); transition: border-color var(--duration-fast); outline: none; min-height: 44px; }
+.form-grid input:focus, .form-grid select:focus, .form-grid textarea:focus { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-bg); }
+.form-grid textarea { resize: vertical; min-height: 80px; }
+.form-submit { width: 100%; padding: var(--space-3); background: var(--color-primary); color: var(--color-on-primary); border: none; border-radius: var(--radius-md); font-family: var(--font-heading); font-size: var(--font-size-base); font-weight: 500; cursor: pointer; min-height: 48px; transition: background var(--duration-fast), transform var(--duration-fast); }
+.form-submit:hover { background: var(--color-primary-light); }
+.form-submit:active { transform: scale(.98); }
+.form-submit:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+
+/* ═══ FOOTER ═══ */
+.footer { background: var(--color-primary); padding: var(--space-9) var(--space-8) var(--space-7); text-align: center; }
+.footer-logo svg { height: 22px; margin: 0 auto var(--space-5); }
+.footer-links { display: flex; justify-content: center; gap: var(--space-6); margin-bottom: var(--space-6); flex-wrap: wrap; }
+.footer-links a { color: rgba(248,250,252,.4); font-family: var(--font-heading); font-size: var(--font-size-sm); transition: color var(--duration-fast); min-height: 44px; display: inline-flex; align-items: center; }
+.footer-links a:hover { color: var(--color-on-primary); }
+.footer-copy { font-size: var(--font-size-xs); color: rgba(248,250,252,.2); }
+
+/* ═══ ANIMATIONS (Motion-Driven, UI/UX Pro Max compliant) ═══ */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity var(--duration-slow) var(--ease-spring), transform var(--duration-slow) var(--ease-spring); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.hero-tag { opacity: 0; animation: fadeUp 600ms 200ms var(--ease-spring) forwards; }
+.hero h1 { opacity: 0; animation: fadeUp 600ms 350ms var(--ease-spring) forwards; }
+.hero-sub { opacity: 0; animation: fadeUp 600ms 500ms var(--ease-spring) forwards; }
+.hero-actions { opacity: 0; animation: fadeUp 600ms 650ms var(--ease-spring) forwards; }
+.hero-metrics { opacity: 0; animation: fadeUp 600ms 800ms var(--ease-spring) forwards; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .hero-tag, .hero h1, .hero-sub, .hero-actions, .hero-metrics { opacity: 1; transform: none; animation: none; }
+}
+
+/* ═══ RESPONSIVE (Mobile-first breakpoints: 375/768/1024/1440) ═══ */
+@media (max-width: 1024px) {
+  .pillars-grid, .secteurs-grid, .ref-grid, .tools-grid, .tools-grid-2 { grid-template-columns: 1fr; }
+  .offres-grid { grid-template-columns: 1fr; }
+  .offre-card.featured { grid-column: 1; }
+  .results-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-7); }
+  .about-inner { grid-template-columns: 1fr; gap: var(--space-7); }
+  .about-photo { width: 100%; max-width: 280px; margin: 0 auto; }
+}
+@media (max-width: 768px) {
+  .nav-links a:not(.nav-cta) { display: none; }
+  .section { padding: var(--space-11) var(--space-5); }
+  .hero { padding: var(--space-13) var(--space-5) var(--space-9); }
+  .nav { padding: 0 var(--space-5); }
+  .hero-metrics { flex-direction: column; gap: var(--space-6); }
+  .parcours-flow { flex-direction: column; }
+  .step-arrow { transform: rotate(90deg); }
+  .form-grid { grid-template-columns: 1fr; }
+  .contact-box { padding: var(--space-7) var(--space-5); }
+  .about-stats { flex-wrap: wrap; gap: var(--space-5); }
+}
+</style>
+</head>
+<body>
+
+<!-- SKIP LINK (Accessibility §1) -->
+<a href="#main" class="skip-link">Aller au contenu principal</a>
+
+<!-- NAV -->
+<nav class="nav" id="nav" role="navigation" aria-label="Navigation principale">
+  <a href="#" class="nav-logo" aria-label="ASCALIS — Accueil">
+    <svg viewBox="0 0 240 40" height="24" fill="none" role="img" aria-hidden="true"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  </a>
+  <div class="nav-links">
+    <a href="#approche">Approche</a>
+    <a href="#offres">Offres</a>
+    <a href="#outils">Outils gratuits</a>
+    <a href="#about">Qui suis-je</a>
+    <a href="#contact" class="nav-cta">Prendre rendez-vous</a>
+    <a href="dashboard.html" class="nav-cta" style="background:transparent;color:var(--color-accent);border:1px solid var(--color-accent);" aria-label="Espace Pro">Espace Pro</a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main id="main">
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <div class="hero-tag" aria-hidden="true">Consultant amélioration continue & performance qualité</div>
+    <h1 id="hero-heading">La <em>qualité</em> comme levier de performance industrielle</h1>
+    <p class="hero-sub">J'accompagne les PME et ETI industrielles qui ont des problèmes concrets de qualité, de conformité ou de performance opérationnelle. Chaque mission part du terrain et débouche sur un résultat mesurable.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Discutons de votre situation
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#outils" class="btn-secondary">Tester vos outils gratuits</a>
+    </div>
+    <div class="hero-metrics" aria-label="Chiffres clés">
+      <div><div class="metric-val">8</div><div class="metric-label">Offres modulaires<br>et combinables</div></div>
+      <div><div class="metric-val">3</div><div class="metric-label">Secteurs industriels<br>couverts</div></div>
+      <div><div class="metric-val">100%</div><div class="metric-label">Transfert de<br>compétences</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- GEAR DIVIDER -->
+<div class="gear-div" aria-hidden="true">
+  <div class="line"></div>
+  <svg class="g1" width="48" height="48" viewBox="0 0 48 48" style="left:calc(50% - 54px)"><path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill="#B07642"/><circle cx="24" cy="24" r="7" fill="var(--color-surface-warm)"/></svg>
+  <svg class="g2" width="36" height="36" viewBox="0 0 48 48" style="left:calc(50% + 12px)"><path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill="#1B3A4B"/><circle cx="24" cy="24" r="7" fill="var(--color-surface-warm)"/></svg>
+</div>
+
+<!-- PILIERS -->
+<section class="section pillars" id="approche" aria-labelledby="pillars-heading">
+  <div class="section-header"><div class="section-tag" aria-hidden="true">Approche</div><h2 id="pillars-heading">Trois piliers, un objectif : vous rendre autonome</h2><p>Mon objectif est de me rendre inutile. Chaque mission se termine par un transfert de compétences et des outils que vos équipes maîtrisent.</p></div>
+  <div class="pillars-grid">
+    <article class="pillar reveal"><div class="pillar-icon pi-1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Terrain d'abord</h3><p>Je passe du temps dans les ateliers, sur les lignes, avec les opérateurs. Pas de diagnostic PowerPoint déconnecté de la réalité.</p></article>
+    <article class="pillar reveal"><div class="pillar-icon pi-2"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div><h3>Digitalisation intégrée</h3><p>J'utilise Power Automate, SharePoint et Power BI comme leviers d'exécution, pas comme offre principale. L'outil sert le processus.</p></article>
+    <article class="pillar reveal"><div class="pillar-icon pi-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Autonomie transférée</h3><p>Chaque mission se termine par un transfert de compétences. Des outils que vos équipes maîtrisent, pas qui dépendent d'un consultant.</p></article>
+  </div>
+</section>
+
+<!-- GEAR DIVIDER -->
+<div class="gear-div" aria-hidden="true"><div class="line"></div><svg class="g2" width="42" height="42" viewBox="0 0 48 48" style="left:calc(50% - 50px)"><path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill="#B07642"/><circle cx="24" cy="24" r="7" fill="var(--color-surface-alt)"/></svg><svg class="g1" width="54" height="54" viewBox="0 0 48 48" style="left:calc(50% + 8px)"><path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill="#0F1A2E"/><circle cx="24" cy="24" r="7" fill="var(--color-surface-alt)"/></svg></div>
+
+<!-- RESULTATS -->
+<section class="section resultats" aria-labelledby="results-heading">
+  <div class="section-header"><div class="section-tag">Résultats</div><h2 id="results-heading">Des résultats mesurables, pas des promesses</h2><p>Les chiffres issus des missions terrain.</p></div>
+  <div class="results-grid">
+    <div class="reveal"><div class="r-val">-40%</div><div class="r-label">Réduction des NC<br>récurrentes en 3 mois</div></div>
+    <div class="reveal"><div class="r-val">1-2j</div><div class="r-label">Récupérés par semaine<br>pour le resp. qualité</div></div>
+    <div class="reveal"><div class="r-val">90j</div><div class="r-label">Pour un plan d'action<br>actionnable post-diagnostic</div></div>
+    <div class="reveal"><div class="r-val">6-12</div><div class="r-label">Mois pour atteindre<br>l'autonomie complète</div></div>
+  </div>
+</section>
+
+<!-- OFFRES -->
+<section class="section offres" id="offres" aria-labelledby="offres-heading">
+  <div class="section-header"><div class="section-tag">Offres</div><h2 id="offres-heading">Huit offres, une logique terrain</h2><p>Chaque offre part d'une douleur identifiée et débouche sur un résultat mesurable. Elles sont modulaires et combinables.</p></div>
+  <div class="offres-grid">
+    <article class="offre-card oc-light reveal"><div class="offre-num">OFFRE 01</div><h3>Diagnostic Flash Qualité</h3><p class="pitch">En une semaine, vous savez exactement où sont vos failles qualité et par quoi commencer.</p><div class="offre-meta"><span>3-5 jours</span><span>3-5 k€ HT</span></div></article>
+    <article class="offre-card oc-dark reveal"><div class="offre-num">OFFRE 02</div><h3>Remise en conformité documentaire</h3><p class="pitch">Vos documents reflètent enfin ce que vous faites vraiment — et vos équipes savent les maintenir.</p><div class="offre-meta"><span>10-20 jours</span><span>8-20 k€ HT</span></div></article>
+    <article class="offre-card oc-teal reveal"><div class="offre-num">OFFRE 03</div><h3>NC récurrentes : traitement à la racine</h3><p class="pitch">Vos 5 défauts les plus coûteux identifiés, traités à la racine, et surveillés automatiquement.</p><div class="offre-meta"><span>10-15 jours</span><span>8-15 k€ HT</span></div></article>
+    <article class="offre-card oc-light reveal"><div class="offre-num">OFFRE 04</div><h3>Structuration du SMQ</h3><p class="pitch">Un système qualité qui tient la route pour la certification — et que vos équipes utilisent vraiment.</p><div class="offre-meta"><span>20-40 jours</span><span>18-40 k€ HT</span></div></article>
+    <article class="offre-card oc-dark reveal"><div class="offre-num">OFFRE 05</div><h3>Automatisation des processus qualité</h3><p class="pitch">Vos process qualité tournent tout seuls — votre responsable qualité retourne enfin sur le terrain.</p><div class="offre-meta"><span>5-15 jours</span><span>5-15 k€ HT</span></div></article>
+    <article class="offre-card oc-light reveal"><div class="offre-num">OFFRE 06</div><h3>Accompagnement performance continue</h3><p class="pitch">Un copilote terrain qui maintient la dynamique qualité jusqu'à ce que vos équipes volent seules.</p><div class="offre-meta"><span>1-2 j/mois</span><span>1-2 k€/mois</span></div></article>
+    <article class="offre-card oc-accent featured reveal"><div class="offre-num">OFFRE 07 — POINT D'ENTRÉE STRATÉGIQUE</div><h3>Diagnostic Performance & Maturité Numérique</h3><p class="pitch">En une semaine, vous voyez votre performance réelle sur un radar — et vous savez où chaque euro investi aura le plus d'impact.</p><div class="offre-meta"><span>3-8 jours</span><span>2,5-8 k€ HT</span><span>2 formats disponibles</span></div></article>
+    <article class="offre-card oc-teal featured reveal"><div class="offre-num">OFFRE 08 — STRUCTURATION PME</div><h3>Structuration opérationnelle PME</h3><p class="pitch">Vous avez grandi vite. On structure votre pilotage pour que vous puissiez continuer à grandir — sans que tout repose sur vous.</p><div class="offre-meta"><span>15-30 jours</span><span>12-30 k€ HT</span><span>Pilotage, commercial, achats, com</span></div></article>
+  </div>
+</section>
+
+<!-- GEAR DIVIDER -->
+<div class="gear-div" aria-hidden="true"><div class="line"></div><svg class="g1" width="44" height="44" viewBox="0 0 48 48" style="left:calc(50% - 22px)"><path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill="#B07642"/><circle cx="24" cy="24" r="7" fill="var(--color-surface-alt)"/></svg></div>
+
+<!-- PARCOURS -->
+<section class="section parcours" aria-labelledby="parcours-heading">
+  <div class="section-header"><div class="section-tag">Parcours</div><h2 id="parcours-heading">Une logique de progression</h2><p>Deux portes d'entrée, un chemin vers l'autonomie.</p></div>
+  <div class="parcours-flow" role="list">
+    <div class="parcours-step reveal" role="listitem"><div class="step-badge">1</div><div class="step-label">Diagnostic</div><div class="step-offers">Offre 1 ou 7</div></div>
+    <div class="step-arrow reveal" aria-hidden="true">→</div>
+    <div class="parcours-step reveal" role="listitem"><div class="step-badge">2</div><div class="step-label">Correction</div><div class="step-offers">Offre 2, 3 ou 4</div></div>
+    <div class="step-arrow reveal" aria-hidden="true">→</div>
+    <div class="parcours-step reveal" role="listitem"><div class="step-badge">3</div><div class="step-label">Accélération</div><div class="step-offers">Offre 5</div></div>
+    <div class="step-arrow reveal" aria-hidden="true">→</div>
+    <div class="parcours-step reveal" role="listitem"><div class="step-badge">4</div><div class="step-label">Pérennisation</div><div class="step-offers">Offre 6</div></div>
+  </div>
+</section>
+
+<!-- QUI SUIS-JE -->
+<section class="section about" id="about" aria-labelledby="about-heading">
+  <div class="section-header"><div class="section-tag">Qui suis-je</div><h2 id="about-heading">Un ingénieur qualité, pas un cabinet de plus</h2></div>
+  <div class="about-inner reveal">
+    <div class="about-photo"><div class="about-photo-placeholder"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>Votre photo ici</div></div>
+    <div class="about-content">
+      <h3>Votre prénom Nom</h3>
+      <div class="about-role">Consultant Amélioration Continue & Performance Qualité</div>
+      <p class="about-text">Ingénieur qualité de formation, j'ai passé plus de 8 ans sur le terrain — en atelier, sur les lignes de production, au contact des opérateurs et des responsables qualité. J'ai travaillé dans l'aéronautique (traitement de surface, peinture), le BTP et le transport.</p>
+      <div class="about-diff"><div class="about-diff-title">Ce qui me différencie d'un cabinet</div><p>Vous travaillez avec moi directement, pas avec un junior envoyé par un cabinet. Pas de couche commerciale, pas de rapport de 80 pages. Un interlocuteur unique qui connaît votre terrain et qui s'engage sur des résultats. Mon objectif : me rendre inutile en 6 à 12 mois.</p></div>
+      <div class="about-stats"><div><div class="about-stat-val">8+</div><div class="about-stat-label">Années terrain</div></div><div><div class="about-stat-val">3</div><div class="about-stat-label">Secteurs maîtrisés</div></div><div><div class="about-stat-val">100%</div><div class="about-stat-label">Transfert de compétences</div></div></div>
+      <div class="about-tags"><span class="about-tag">SMQ / ISO 9001</span><span class="about-tag">EN 9100</span><span class="about-tag">Lean terrain</span><span class="about-tag">Power Automate</span><span class="about-tag">SharePoint</span><span class="about-tag">Power BI</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- REFERENCES -->
+<section class="section references" aria-labelledby="refs-heading">
+  <div class="section-header"><div class="section-tag">Références</div><h2 id="refs-heading">Ils ont fait appel à ASCALIS</h2><p>Quelques retours de missions terrain.</p></div>
+  <div class="ref-grid">
+    <article class="ref-card reveal"><blockquote class="ref-quote">On avait un audit EN 9100 dans 3 mois et aucune visibilité. En une semaine, on savait exactement par où commencer. Le plan d'action était clair et on l'a exécuté seuls.</blockquote><div class="ref-author">Directeur Qualité</div><div class="ref-company">PME aéronautique — 45 personnes</div><div class="ref-result">Audit réussi du premier coup</div><span class="ref-badge rb-aero">Aéronautique</span></article>
+    <article class="ref-card reveal"><blockquote class="ref-quote">Nos DOE étaient incomplets sur chaque chantier. Il a restructuré le processus et mis en place un suivi SharePoint. Les réserves ont chuté.</blockquote><div class="ref-author">Responsable Travaux</div><div class="ref-company">Contractant général BTP — 120 personnes</div><div class="ref-result">-60% de réserves chantier</div><span class="ref-badge rb-btp">BTP</span></article>
+    <article class="ref-card reveal"><blockquote class="ref-quote">On traitait les litiges transport au cas par cas. Il a automatisé le suivi et créé un dashboard temps réel. Le taux de service a bondi.</blockquote><div class="ref-author">Directeur Logistique</div><div class="ref-company">ETI transport — 180 personnes</div><div class="ref-result">Taux de service de 87% à 95%</div><span class="ref-badge rb-transport">Transport</span></article>
+  </div>
+</section>
+
+<!-- SECTEURS -->
+<section class="section secteurs" id="secteurs" aria-labelledby="secteurs-heading">
+  <div class="section-header"><div class="section-tag">Secteurs</div><h2 id="secteurs-heading">Trois secteurs, un même ADN terrain</h2><p>Les offres se déclinent sur chaque secteur en changeant le vocabulaire et les référentiels.</p></div>
+  <div class="secteurs-grid">
+    <article class="secteur-card reveal"><svg class="secteur-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 17l10-10 4 4 6-6"/><path d="M17 5h5v5"/></svg><h3>Aéronautique</h3><p>EN 9100, NADCAP, gammes opératoires, FAI, traitement de surface, peinture, MRO.</p><div class="secteur-refs"><span class="secteur-ref">EN 9100</span><span class="secteur-ref">NADCAP</span><span class="secteur-ref">FAI</span><span class="secteur-ref">MRO</span></div></article>
+    <article class="secteur-card reveal"><svg class="secteur-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 20h20M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg><h3>BTP / Construction</h3><p>DOE, réserves chantier, OPR, fiches d'autocontrôle, PPSPS, ISO 9001.</p><div class="secteur-refs"><span class="secteur-ref">ISO 9001</span><span class="secteur-ref">DOE</span><span class="secteur-ref">OPR</span><span class="secteur-ref">PPSPS</span></div></article>
+    <article class="secteur-card reveal"><svg class="secteur-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><h3>Transport & Logistique</h3><p>Litiges transport, taux de service, traçabilité, OTD, OTIF, ISO 9001.</p><div class="secteur-refs"><span class="secteur-ref">ISO 9001</span><span class="secteur-ref">OTD/OTIF</span><span class="secteur-ref">CMR</span></div></article>
+  </div>
+</section>
+
+<!-- BOÎTE À OUTILS -->
+<section class="section toolbox" id="outils" aria-labelledby="tools-heading">
+  <div class="section-header"><div class="section-tag">Boîte à outils gratuite</div><h2 id="tools-heading">Évaluez, mesurez, priorisez</h2><p>10 outils interactifs pour faire le point sur votre performance qualité et votre gestion. Gratuits, sans inscription, résultats immédiats.</p></div>
+  <div class="tools-grid">
+    <a href="calculateur-cnq.html" class="tool-card reveal" aria-label="Calculateur coût de non-qualité"><span class="tool-badge">Offres 1, 3</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><h3>Calculateur coût de non-qualité</h3><p>Combien vous coûtent vos NC chaque année ? Découvrez le montant réel.</p><span class="tool-link-text">Calculer mes coûts</span></a>
+    <a href="checklist-audit.html" class="tool-card reveal" aria-label="Checklist pré-audit"><span class="tool-badge">Offres 1, 2, 4</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><h3>Checklist pré-audit</h3><p>EN 9100 ou ISO 9001 : évaluez votre conformité chapitre par chapitre.</p><span class="tool-link-text">Vérifier ma conformité</span></a>
+    <a href="matrice-priorisation.html" class="tool-card reveal" aria-label="Matrice de priorisation"><span class="tool-badge">Offres 3, 4, 6</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg><h3>Matrice de priorisation</h3><p>Impact vs. effort — la matrice montre par où commencer.</p><span class="tool-link-text">Prioriser mes chantiers</span></a>
+  </div>
+  <div class="tools-grid tools-grid-2">
+    <a href="score-documentaire.html" class="tool-card reveal" aria-label="Score maturité documentaire"><span class="tool-badge">Offre 2</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg><h3>Score maturité documentaire</h3><p>15 questions sur la santé de votre système documentaire.</p><span class="tool-link-text">Évaluer ma documentation</span></a>
+    <a href="simulateur-roi.html" class="tool-card reveal" aria-label="Simulateur ROI automatisation"><span class="tool-badge">Offre 5</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><h3>Simulateur ROI automatisation</h3><p>Temps et argent récupérables en automatisant vos tâches qualité.</p><span class="tool-link-text">Calculer mon ROI</span></a>
+  </div>
+  <div class="tools-grid" style="margin-top:var(--space-5)">
+    <a href="seuil-rentabilite.html" class="tool-card reveal" aria-label="Calculateur seuil de rentabilité"><span class="tool-badge">Offre 8</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 17l10-10 4 4 6-6"/><path d="M17 5h5v5"/></svg><h3>Calculateur seuil de rentabilité</h3><p>À partir de quel chiffre d'affaires votre entreprise gagne-t-elle de l'argent ?</p><span class="tool-link-text">Calculer mon seuil</span></a>
+    <a href="simulateur-prix.html" class="tool-card reveal" aria-label="Simulateur prix de vente"><span class="tool-badge">Offre 8</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4M2 11h20"/></svg><h3>Simulateur prix de vente</h3><p>Coûts, marge, concurrence — trouvez le prix juste pour votre offre.</p><span class="tool-link-text">Simuler mon prix</span></a>
+    <a href="diagnostic-dirigeant.html" class="tool-card reveal" aria-label="Auto-diagnostic dirigeant"><span class="tool-badge">Offres 7, 8</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><h3>Auto-diagnostic dirigeant</h3><p>Radar de profil : forces, zones de délégation, axes de développement.</p><span class="tool-link-text">Évaluer mon profil</span></a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact" id="contact" aria-labelledby="contact-heading">
+  <div class="contact-box reveal">
+    <h2 id="contact-heading">Parlons de votre situation</h2>
+    <p>Un échange de 30 minutes pour comprendre votre contexte, identifier les leviers et voir si on peut travailler ensemble.</p>
+    <form class="form-grid" aria-label="Formulaire de contact">
+      <div><label for="f-name">Nom</label><input type="text" id="f-name" placeholder="Votre nom" autocomplete="name" required></div>
+      <div><label for="f-company">Entreprise</label><input type="text" id="f-company" placeholder="Nom de l'entreprise" autocomplete="organization"></div>
+      <div><label for="f-email">Email</label><input type="email" id="f-email" placeholder="votre@email.com" autocomplete="email" required></div>
+      <div><label for="f-sector">Secteur</label><select id="f-sector"><option value="">Sélectionner</option><option>Aéronautique</option><option>BTP / Construction</option><option>Transport & Logistique</option><option>Autre</option></select></div>
+      <div class="full"><label for="f-message">Votre problématique en quelques mots</label><textarea id="f-message" placeholder="Ex: On a un audit EN 9100 dans 4 mois et on ne sait pas où on en est..."></textarea></div>
+    </form>
+    <button type="submit" class="form-submit">Demander un échange gratuit</button>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+  <svg viewBox="0 0 240 40" height="22" fill="none" class="footer-logo" aria-hidden="true"><path d="M4 36 L14 6 L24 36" stroke="#D4956A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="rgba(248,250,252,.5)" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="footer-links"><a href="#approche">Approche</a><a href="#offres">Offres</a><a href="#outils">Outils gratuits</a><a href="#about">Qui suis-je</a><a href="#contact">Contact</a></div>
+  <div class="footer-copy">&copy; 2026 ASCALIS — Consultant Amélioration Continue & Performance Qualité</div>
+</footer>
+
+<script>
+/* ═══ NAV SCROLL ═══ */
+const nav=document.getElementById('nav');
+let ticking=false;
+window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{nav.classList.toggle('scrolled',window.scrollY>48);ticking=false});ticking=true}});
+
+/* ═══ SCROLL REVEAL (Stagger: 40ms per sibling, UI/UX Pro Max §7) ═══ */
+const revealObs=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const el=entry.target;
+      const parent=el.parentElement;
+      const siblings=[...parent.querySelectorAll('.reveal')];
+      const idx=siblings.indexOf(el);
+      setTimeout(()=>el.classList.add('visible'),idx>=0?idx*40:0);
+      revealObs.unobserve(el);
+    }
+  });
+},{threshold:.1,rootMargin:'0px 0px -48px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+/* ═══ COUNTER ANIMATION (Results section) ═══ */
+function animateCounters(){
+  document.querySelectorAll('.r-val').forEach(el=>{
+    if(el.dataset.done)return;
+    const r=el.getBoundingClientRect();
+    if(r.top<window.innerHeight&&r.bottom>0){
+      el.dataset.done='1';
+      const txt=el.textContent;
+      const m=txt.match(/(-?\d+\.?\d*)/);
+      if(!m)return;
+      const target=parseFloat(m[1]);
+      const pre=txt.substring(0,txt.indexOf(m[1]));
+      const suf=txt.substring(txt.indexOf(m[1])+m[1].length);
+      const dur=900;const start=performance.now();
+      function step(now){
+        const t=Math.min((now-start)/dur,1);
+        const e=1-Math.pow(1-t,3);
+        const c=Number.isInteger(target)?Math.round(target*e):(target*e).toFixed(1);
+        el.textContent=pre+c+suf;
+        if(t<1)requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+  });
+}
+window.addEventListener('scroll',animateCounters,{passive:true});
+animateCounters();
+
+/* ═══ GEAR SPEED (responsive to scroll velocity) ═══ */
+let lastY=0;
+window.addEventListener('scroll',()=>{
+  const speed=Math.abs(window.scrollY-lastY);
+  lastY=window.scrollY;
+  const dur=Math.max(3,14-speed*.4);
+  document.querySelectorAll('.g1,.g2').forEach(g=>g.style.animationDuration=dur+'s');
+},{passive:true});
+
+/* ═══ SMOOTH SCROLL ═══ */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){
+      const offset=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height'))||64;
+      const y=t.getBoundingClientRect().top+window.scrollY-offset;
+      window.scrollTo({top:y,behavior:'smooth'});
+    }
+  });
+});
+</script>
+</body>
+</html>

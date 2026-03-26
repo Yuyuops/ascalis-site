@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score Maturité Documentaire — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--night:#0F1A2E;--copper:#B07642;--copper-light:#D4956A;--cream:#FAF9F6;--white:#fff;--text:#2C3E50;--text-light:#5A6B7A;--text-muted:#8A95A0;--green:#0F6E56;--amber:#854F0B;--red:#A32D2D;--border:rgba(0,0,0,.06);--font:'DM Sans',sans-serif;--display:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--cream);color:var(--text)}
+.header{background:var(--white);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between}
+.header svg{height:22px}
+.header a{font-size:13px;color:var(--copper);text-decoration:none;font-weight:500}
+.hero-bar{background:var(--night);padding:40px 32px;text-align:center}
+.hero-bar h1{font-family:var(--display);font-size:clamp(24px,4vw,36px);font-weight:400;color:var(--cream);margin-bottom:8px}
+.hero-bar p{font-size:15px;color:rgba(232,230,223,.5);max-width:600px;margin:0 auto}
+.container{max-width:800px;margin:0 auto;padding:40px 24px}
+.layout{display:grid;grid-template-columns:1fr 300px;gap:32px;align-items:start}
+.card{background:var(--white);border-radius:12px;padding:28px;border:1px solid var(--border)}
+.section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--copper);margin-bottom:16px}
+.category{margin-bottom:28px}
+.category:last-child{margin-bottom:0}
+.cat-title{font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.cat-title .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.question{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.question:last-child{border:none;padding-bottom:0;margin-bottom:0}
+.q-label{font-size:13px;color:var(--text-light);margin-bottom:8px;line-height:1.5}
+.q-options{display:flex;gap:6px;flex-wrap:wrap}
+.q-opt{padding:6px 14px;border:1px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;transition:all .15s;background:var(--white);color:var(--text-light)}
+.q-opt:hover{border-color:var(--copper)}
+.q-opt.on-1{background:#FCEBEB;border-color:rgba(163,45,45,.3);color:var(--red)}
+.q-opt.on-2{background:#FAEEDA;border-color:rgba(133,79,11,.3);color:var(--amber)}
+.q-opt.on-3{background:#E1F5EE;border-color:rgba(15,110,86,.3);color:var(--green)}
+.result-panel{position:sticky;top:24px}
+.gauge{text-align:center;padding:28px 20px;background:var(--white);border-radius:12px;border:1px solid var(--border);margin-bottom:16px}
+.gauge-score{font-family:var(--display);font-size:52px;line-height:1}
+.gauge-max{font-size:14px;color:var(--text-muted)}
+.gauge-label{font-size:14px;font-weight:500;margin-top:8px;padding:4px 16px;border-radius:20px;display:inline-block}
+.gl-red{background:#FCEBEB;color:var(--red)}.gl-amber{background:#FAEEDA;color:var(--amber)}.gl-green{background:#E1F5EE;color:var(--green)}
+.cat-scores{margin-top:16px}
+.cat-score-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.cat-score-name{font-size:12px;color:var(--text-light);width:100px;flex-shrink:0}
+.cat-score-track{flex:1;height:8px;background:var(--cream);border-radius:4px;overflow:hidden}
+.cat-score-fill{height:100%;border-radius:4px;transition:width .4s}
+.cat-score-val{font-size:12px;font-weight:500;width:40px;text-align:right;flex-shrink:0}
+.reco{background:var(--white);border-radius:12px;padding:20px;border:1px solid var(--border);margin-top:16px}
+.reco-title{font-size:12px;font-weight:600;color:var(--copper);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.reco-item{font-size:13px;color:var(--text-light);line-height:1.6;margin-bottom:6px;padding-left:16px;position:relative}
+.reco-item::before{content:'→';position:absolute;left:0;color:var(--copper)}
+.cta-box{margin-top:20px;padding:20px;background:var(--cream);border-radius:10px;text-align:center}
+.cta-box p{font-size:13px;color:var(--text-light);margin-bottom:12px;line-height:1.5}
+.cta-box a{display:inline-block;padding:10px 24px;background:var(--night);color:var(--cream);border-radius:6px;text-decoration:none;font-size:13px;font-weight:500}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.result-panel{position:static}}
+</style>
+</head>
+<body>
+<div class="header">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'DM Sans',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <a href="ascalis-site.html">← Retour au site</a>
+</div>
+<div class="hero-bar">
+  <h1>Score de maturité documentaire</h1>
+  <p>15 questions pour évaluer la santé de votre système documentaire qualité.</p>
+</div>
+<div class="container">
+<div class="layout">
+  <div class="card" id="form-area"></div>
+  <div class="result-panel">
+    <div class="gauge"><div class="gauge-score" id="g-score">0</div><div class="gauge-max">/ 45</div><div id="g-label" class="gauge-label gl-red">À structurer</div></div>
+    <div class="card"><div class="section-title">Par catégorie</div><div class="cat-scores" id="cat-bars"></div></div>
+    <div class="reco" id="recos"></div>
+    <div class="cta-box"><p>L'offre <strong>Remise en conformité documentaire</strong> traite ces points en 10-20 jours.</p><a href="ascalis-site.html#contact">En savoir plus →</a></div>
+  </div>
+</div>
+</div>
+<script>
+const CATS=[
+{name:'Accessibilité',color:'#185FA5',questions:[
+{q:'Les documents qualité sont-ils accessibles par tous ceux qui en ont besoin ?',opts:['Non, il faut demander','Partiellement (réseau partagé)','Oui, espace centralisé']},
+{q:'Le temps pour trouver un document est-il raisonnable ?',opts:['Plus de 10 min souvent','Variable, parfois long','Moins de 2 min systématiquement']},
+{q:'Les documents sont-ils accessibles depuis le poste de travail / atelier ?',opts:['Non, uniquement au bureau','Certains seulement','Oui, tous les documents utiles']}
+]},
+{name:'Maîtrise',color:'#0F6E56',questions:[
+{q:'Les versions des documents sont-elles gérées (numérotation, date) ?',opts:['Non, pas de versioning','Partiellement','Oui, avec historique complet']},
+{q:'Les documents périmés sont-ils retirés des postes de travail ?',opts:['Non, anciennes versions circulent','Parfois, pas systématique','Oui, retrait systématique']},
+{q:'Un circuit de validation existe-t-il avant diffusion ?',opts:['Non, chacun publie librement','Informel (mail de validation)','Oui, workflow formalisé']}
+]},
+{name:'Adéquation terrain',color:'#D4956A',questions:[
+{q:'Les documents reflètent-ils les pratiques réelles ?',opts:['Non, décalage important','Partiellement à jour','Oui, alignés sur le terrain']},
+{q:'Les opérateurs participent-ils à la rédaction/relecture ?',opts:['Jamais','Parfois consultés','Systématiquement impliqués']},
+{q:'La fréquence de révision est-elle définie et respectée ?',opts:['Pas de fréquence définie','Définie mais non respectée','Définie et respectée']}
+]},
+{name:'Autonomie',color:'#534AB7',questions:[
+{q:'Les équipes savent-elles créer/modifier un document qualité ?',opts:['Non, dépendance au resp. qualité','Quelques personnes formées','Pilotes de processus autonomes']},
+{q:'Des modèles/trames standardisés existent-ils ?',opts:['Non, format libre','Quelques modèles','Trames complètes pour chaque type']},
+{q:'La matrice documentaire (inventaire) est-elle à jour ?',opts:['Pas de matrice','Existe mais obsolète','À jour avec propriétaires et fréquences']}
+]},
+{name:'Digitalisation',color:'#854F0B',questions:[
+{q:'Les documents sont-ils gérés sur une plateforme (SharePoint, GED...) ?',opts:['Non, fichiers en vrac','Partiellement migré','Oui, plateforme structurée']},
+{q:'Des alertes automatiques signalent-elles les documents à réviser ?',opts:['Non, suivi manuel','Tableur de suivi','Alertes automatiques']},
+{q:'Les circuits de validation sont-ils digitalisés ?',opts:['Non, signatures papier/mail','Partiellement','Workflows automatisés']}
+]}
+];
+let answers=CATS.map(c=>c.questions.map(()=>0));
+function setAnswer(ci,qi,val){answers[ci][qi]=val;render()}
+function render(){
+  let html='';
+  CATS.forEach((cat,ci)=>{
+    html+=`<div class="category"><div class="cat-title"><span class="dot" style="background:${cat.color}"></span>${cat.name}</div>`;
+    cat.questions.forEach((q,qi)=>{
+      html+=`<div class="question"><div class="q-label">${q.q}</div><div class="q-options">`;
+      q.opts.forEach((o,oi)=>{
+        const on=answers[ci][qi]===oi+1?` on-${oi+1}`:'';
+        html+=`<span class="q-opt${on}" onclick="setAnswer(${ci},${qi},${oi+1})">${o}</span>`;
+      });
+      html+='</div></div>';
+    });
+    html+='</div>';
+  });
+  document.getElementById('form-area').innerHTML='<div class="section-title">Évaluation</div>'+html;
+  const catScores=CATS.map((c,ci)=>answers[ci].reduce((a,b)=>a+b,0));
+  const total=catScores.reduce((a,b)=>a+b,0);
+  const max=CATS.reduce((a,c)=>a+c.questions.length*3,0);
+  document.getElementById('g-score').textContent=total;
+  const pct=total/max*100;
+  const labelEl=document.getElementById('g-label');
+  if(pct>=70){labelEl.textContent='Maîtrisé';labelEl.className='gauge-label gl-green'}
+  else if(pct>=40){labelEl.textContent='En progression';labelEl.className='gauge-label gl-amber'}
+  else{labelEl.textContent='À structurer';labelEl.className='gauge-label gl-red'}
+  const catMax=CATS.map(c=>c.questions.length*3);
+  document.getElementById('cat-bars').innerHTML=CATS.map((c,i)=>{
+    const p=catMax[i]?catScores[i]/catMax[i]*100:0;
+    const col=p>=70?'var(--green)':p>=40?'var(--amber)':'var(--red)';
+    return `<div class="cat-score-row"><span class="cat-score-name">${c.name}</span><div class="cat-score-track"><div class="cat-score-fill" style="width:${p}%;background:${col}"></div></div><span class="cat-score-val">${Math.round(p)}%</span></div>`;
+  }).join('');
+  let recos=[];
+  CATS.forEach((c,ci)=>{const p=catScores[ci]/catMax[ci]*100;if(p<50)recos.push({cat:c.name,score:p})});
+  recos.sort((a,b)=>a.score-b.score);
+  const recoMap={'Accessibilité':'Mettre en place un espace documentaire centralisé (SharePoint recommandé)','Maîtrise':'Structurer le versioning et le circuit de validation','Adéquation terrain':'Réviser les documents avec les opérateurs pour coller à la réalité','Autonomie':'Former les pilotes de processus à la mise à jour autonome','Digitalisation':'Automatiser les alertes de révision et les circuits de validation'};
+  let recoHtml='<div class="reco-title">Axes de progrès prioritaires</div>';
+  if(recos.length)recos.forEach(r=>{recoHtml+=`<div class="reco-item">${recoMap[r.cat]||r.cat}</div>`});
+  else recoHtml+='<div class="reco-item">Répondez aux questions pour voir vos recommandations.</div>';
+  document.getElementById('recos').innerHTML=recoHtml;
+}
+render();
+</script>
+</body>
+</html>

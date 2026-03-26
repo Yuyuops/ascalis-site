@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur Coût de Non-Qualité — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--night:#0F1A2E;--copper:#B07642;--copper-light:#D4956A;--cream:#FAF9F6;--white:#fff;--text:#2C3E50;--text-light:#5A6B7A;--text-muted:#8A95A0;--border:rgba(0,0,0,.06);--font:'DM Sans',sans-serif;--display:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--cream);color:var(--text);min-height:100vh}
+.header{background:var(--white);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between}
+.header svg{height:22px}
+.header a{font-size:13px;color:var(--copper);text-decoration:none;font-weight:500}
+.hero-bar{background:var(--night);padding:40px 32px;text-align:center}
+.hero-bar h1{font-family:var(--display);font-size:clamp(24px,4vw,36px);font-weight:400;color:var(--cream);margin-bottom:8px}
+.hero-bar p{font-size:15px;color:rgba(232,230,223,.5);max-width:600px;margin:0 auto}
+.container{max-width:960px;margin:0 auto;padding:40px 24px}
+.layout{display:grid;grid-template-columns:1fr 360px;gap:32px;align-items:start}
+.card{background:var(--white);border-radius:12px;padding:32px;border:1px solid var(--border)}
+.section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--copper);margin-bottom:20px}
+.field{margin-bottom:20px}
+.field label{font-size:13px;font-weight:500;color:var(--text-light);display:block;margin-bottom:6px}
+.field-hint{font-size:11px;color:var(--text-muted);margin-top:3px}
+.field input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:14px;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--copper)}
+.input-group{display:flex;align-items:center;gap:0}
+.input-group input{border-radius:6px 0 0 6px;border-right:none}
+.input-group .unit{padding:10px 14px;background:var(--white);border:1px solid var(--border);border-radius:0 6px 6px 0;font-size:13px;color:var(--text-muted);white-space:nowrap}
+.result-panel{position:sticky;top:24px}
+.result-total{text-align:center;padding:28px 20px;background:linear-gradient(135deg,var(--night),#1B3A4B);border-radius:12px;margin-bottom:20px;color:var(--cream)}
+.result-total .label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:rgba(232,230,223,.5);margin-bottom:8px}
+.result-total .amount{font-family:var(--display);font-size:42px;color:var(--copper-light);line-height:1}
+.result-total .sub{font-size:13px;color:rgba(232,230,223,.4);margin-top:8px}
+.breakdown{margin-top:16px}
+.bk-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.bk-item:last-child{border:none}
+.bk-label{color:var(--text-light)}
+.bk-val{font-weight:600;color:var(--text)}
+.bar-chart{margin-top:20px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bar-name{font-size:11px;color:var(--text-muted);width:80px;text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:20px;background:var(--cream);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .5s ease;min-width:2px}
+.bar-val{font-size:11px;font-weight:500;color:var(--text);width:70px;flex-shrink:0}
+.cta-box{margin-top:20px;padding:20px;background:var(--cream);border-radius:10px;text-align:center}
+.cta-box p{font-size:13px;color:var(--text-light);margin-bottom:12px;line-height:1.5}
+.cta-box a{display:inline-block;padding:10px 24px;background:var(--night);color:var(--cream);border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;transition:background .2s}
+.cta-box a:hover{background:#1B3A4B}
+.colors{display:flex;gap:4px;justify-content:center;margin-top:8px}
+.colors span{display:inline-block;width:8px;height:8px;border-radius:50%}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.result-panel{position:static}}
+</style>
+</head>
+<body>
+<div class="header">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'DM Sans',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <a href="ascalis-site.html">← Retour au site</a>
+</div>
+<div class="hero-bar">
+  <h1>Calculateur du coût de non-qualité</h1>
+  <p>Combien vous coûtent vos non-conformités chaque année ? Renseignez vos données pour le découvrir.</p>
+</div>
+<div class="container">
+<div class="layout">
+  <div class="card">
+    <div class="section-title">Vos données</div>
+    <div class="field"><label>Nombre de NC par mois</label><div class="input-group"><input type="number" id="nc-count" value="15" min="0" oninput="calc()"><span class="unit">NC/mois</span></div><div class="field-hint">Toutes non-conformités confondues (internes + clients)</div></div>
+    <div class="field"><label>Temps moyen de traitement par NC</label><div class="input-group"><input type="number" id="nc-time" value="4" min="0" step="0.5" oninput="calc()"><span class="unit">heures</span></div><div class="field-hint">Investigation + actions correctives + vérification</div></div>
+    <div class="field"><label>Coût horaire chargé moyen</label><div class="input-group"><input type="number" id="hourly-cost" value="45" min="0" oninput="calc()"><span class="unit">€/h</span></div><div class="field-hint">Salaire chargé des personnes impliquées</div></div>
+    <div class="field"><label>Coût moyen de rebut/retouche par NC</label><div class="input-group"><input type="number" id="scrap-cost" value="120" min="0" oninput="calc()"><span class="unit">€/NC</span></div><div class="field-hint">Matière perdue, pièces retouchées, heures machine</div></div>
+    <div class="field"><label>Pénalités client / retours / garantie par mois</label><div class="input-group"><input type="number" id="penalty" value="500" min="0" oninput="calc()"><span class="unit">€/mois</span></div><div class="field-hint">Avoirs, pénalités de retard, coûts de garantie</div></div>
+    <div class="field"><label>Coût des contrôles supplémentaires par mois</label><div class="input-group"><input type="number" id="inspection" value="300" min="0" oninput="calc()"><span class="unit">€/mois</span></div><div class="field-hint">Contrôles renforcés, tri, inspections ajoutées</div></div>
+  </div>
+  <div class="result-panel">
+    <div class="result-total">
+      <div class="label">Coût annuel de non-qualité</div>
+      <div class="amount" id="total">0 €</div>
+      <div class="sub" id="total-month">soit 0 €/mois</div>
+    </div>
+    <div class="card">
+      <div class="section-title">Décomposition</div>
+      <div class="breakdown">
+        <div class="bk-item"><span class="bk-label">Temps de traitement</span><span class="bk-val" id="bk-time">0 €</span></div>
+        <div class="bk-item"><span class="bk-label">Rebuts & retouches</span><span class="bk-val" id="bk-scrap">0 €</span></div>
+        <div class="bk-item"><span class="bk-label">Pénalités & retours</span><span class="bk-val" id="bk-penalty">0 €</span></div>
+        <div class="bk-item"><span class="bk-label">Contrôles supplémentaires</span><span class="bk-val" id="bk-inspection">0 €</span></div>
+      </div>
+      <div class="bar-chart" id="bars"></div>
+      <div class="cta-box">
+        <p>L'offre <strong>NC récurrentes</strong> vise <strong>-40% à -60%</strong> de ce coût en 3 mois.</p>
+        <a href="ascalis-site.html#contact">Estimer mes gains →</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+const colors=['#185FA5','#D4956A','#993C1D','#0F6E56'];
+function fmt(n){return n.toLocaleString('fr-FR',{maximumFractionDigits:0})+' €'}
+function calc(){
+  const nc=+document.getElementById('nc-count').value||0;
+  const time=+document.getElementById('nc-time').value||0;
+  const rate=+document.getElementById('hourly-cost').value||0;
+  const scrap=+document.getElementById('scrap-cost').value||0;
+  const penalty=+document.getElementById('penalty').value||0;
+  const inspection=+document.getElementById('inspection').value||0;
+  const cTime=nc*time*rate*12;
+  const cScrap=nc*scrap*12;
+  const cPenalty=penalty*12;
+  const cInspection=inspection*12;
+  const total=cTime+cScrap+cPenalty+cInspection;
+  document.getElementById('total').textContent=fmt(total);
+  document.getElementById('total-month').textContent='soit '+fmt(total/12)+'/mois';
+  document.getElementById('bk-time').textContent=fmt(cTime);
+  document.getElementById('bk-scrap').textContent=fmt(cScrap);
+  document.getElementById('bk-penalty').textContent=fmt(cPenalty);
+  document.getElementById('bk-inspection').textContent=fmt(cInspection);
+  const items=[{name:'Traitement',val:cTime},{name:'Rebuts',val:cScrap},{name:'Pénalités',val:cPenalty},{name:'Contrôles',val:cInspection}];
+  const max=Math.max(...items.map(i=>i.val),1);
+  document.getElementById('bars').innerHTML=items.map((it,i)=>`<div class="bar-row"><span class="bar-name">${it.name}</span><div class="bar-track"><div class="bar-fill" style="width:${it.val/max*100}%;background:${colors[i]}"></div></div><span class="bar-val">${fmt(it.val)}</span></div>`).join('');
+}
+calc();
+</script>
+</body>
+</html>

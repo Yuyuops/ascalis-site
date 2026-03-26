@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Contrôle — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--night:#0F1A2E;--copper:#B07642;--cl:#D4956A;--cream:#FAF9F6;--w:#fff;--tx:#2C3E50;--tl:#5A6B7A;--tm:#8A95A0;--g:#0F6E56;--a:#854F0B;--r:#A32D2D;--bd:rgba(0,0,0,.06);--f:'DM Sans',sans-serif;--d:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--f);background:var(--cream);color:var(--tx)}
+.hd{background:var(--w);border-bottom:1px solid var(--bd);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--f);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--w);color:var(--tl);transition:all .2s}.btn:hover{border-color:var(--copper);color:var(--copper)}.btn.p{background:var(--night);color:var(--cream);border-color:var(--night)}
+.hero{background:var(--night);padding:28px;color:var(--cream)}.hero h1{font-family:var(--d);font-size:26px;font-weight:400;margin-bottom:6px}.hero p{font-size:13px;color:rgba(232,230,223,.5)}
+.meta{padding:14px 28px;background:var(--w);border-bottom:1px solid var(--bd);display:flex;gap:12px;flex-wrap:wrap}
+.mf{display:flex;flex-direction:column;gap:3px;flex:1;min-width:150px}.mf label{font-size:10px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.5px}.mf input,.mf select{padding:6px 10px;border:1px solid var(--bd);border-radius:5px;font-family:var(--f);font-size:12px;outline:none;background:var(--cream)}.mf input:focus,.mf select:focus{border-color:var(--copper)}
+.container{max-width:1300px;margin:0 auto;padding:20px;overflow-x:auto}
+.stats{display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.stat{background:var(--w);border-radius:8px;border:1px solid var(--bd);padding:14px 20px;text-align:center;min-width:120px}
+.stat-val{font-family:var(--d);font-size:28px;line-height:1}.stat-label{font-size:11px;color:var(--tm);margin-top:4px}
+.table-wrap{background:var(--w);border-radius:10px;border:1px solid var(--bd);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:1000px}
+thead{background:var(--night);color:rgba(232,230,223,.8)}
+th{padding:10px 8px;text-align:left;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+td{padding:6px 8px;border-bottom:1px solid var(--bd);vertical-align:top}
+tr:hover td{background:rgba(0,0,0,.01)}
+td input,td select,td textarea{width:100%;border:1px solid transparent;padding:4px 6px;font-family:var(--f);font-size:11px;background:transparent;outline:none;border-radius:3px;color:var(--tx)}
+td input:focus,td select:focus,td textarea:focus{border-color:var(--copper);background:var(--cream)}
+td textarea{resize:vertical;min-height:26px}
+td select{min-width:80px}
+.del{color:var(--tm);cursor:pointer;font-size:14px;text-align:center;padding:4px}.del:hover{color:var(--r)}
+.add-row{padding:10px;text-align:center;border-top:1px solid var(--bd);cursor:pointer;color:var(--tm);font-size:12px;transition:all .2s}.add-row:hover{background:rgba(176,118,66,.05);color:var(--copper)}
+.sev{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.sev-c{background:#E1F5EE;color:var(--g)}.sev-m{background:#FAEEDA;color:var(--a)}.sev-h{background:#FCEBEB;color:var(--r)}.sev-s{background:#EEEDFE;color:#534AB7}
+.csv-z{border:2px dashed var(--bd);border-radius:8px;padding:14px;text-align:center;cursor:pointer;margin-top:16px;transition:border-color .2s}.csv-z:hover{border-color:var(--copper)}.csv-z p{font-size:12px;color:var(--tm)}.csv-z input{display:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--tl)}
+.legend span{display:flex;align-items:center;gap:4px}
+@media print{.hd,.meta,.csv-z,.btn,.del,.add-row{display:none!important}body{background:white}.hero{background:none;color:var(--tx);padding:8px 0}.hero h1{color:var(--night);font-size:18px}table{font-size:9px}th{background:var(--cream);color:var(--tx)}td input,td select,td textarea{border:none;padding:2px}}
+@media(max-width:800px){.meta{flex-direction:column}.stats{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'DM Sans',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="importEl()">↑ Import CSV</button><button class="btn" onclick="window.print()">🖨 Imprimer</button><button class="btn p" onclick="addRow()">+ Ajouter ligne</button></div>
+</div>
+<div class="hero"><h1>Plan de Contrôle & Surveillance</h1><p>Tableau éditable — définissez les caractéristiques à contrôler, méthodes, fréquences et responsables</p></div>
+<div class="meta">
+  <div class="mf"><label>Produit / Référence</label><input id="m-prod" placeholder="Réf. produit"></div>
+  <div class="mf"><label>Process / Ligne</label><input id="m-proc" placeholder="Ligne, poste"></div>
+  <div class="mf"><label>Indice</label><input id="m-rev" placeholder="A" style="width:60px"></div>
+  <div class="mf"><label>Date</label><input type="date" id="m-dt"></div>
+  <div class="mf"><label>Rédacteur</label><input id="m-auth" placeholder="Nom"></div>
+</div>
+<div class="container">
+  <div class="stats" id="stats"></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th style="width:30px">N°</th>
+        <th>Étape process</th>
+        <th>Caractéristique</th>
+        <th>Type</th>
+        <th>Spécification / Tolérance</th>
+        <th>Méthode de contrôle</th>
+        <th>Moyen</th>
+        <th>Fréquence</th>
+        <th>Taille éch.</th>
+        <th>Responsable</th>
+        <th>Enregistrement</th>
+        <th>Sévérité</th>
+        <th>Réaction si NC</th>
+        <th style="width:30px"></th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="add-row" onclick="addRow()">+ Ajouter une ligne de contrôle</div>
+  </div>
+  <div class="legend">
+    <span>Type : <strong>P</strong> = Produit, <strong>Pr</strong> = Process</span>
+    <span>Sévérité : <span class="sev sev-s">Sécurité</span> <span class="sev sev-h">Critique</span> <span class="sev sev-m">Majeure</span> <span class="sev sev-c">Mineure</span></span>
+  </div>
+  <div class="csv-z" onclick="importEl()">
+    <p>Importer un plan de contrôle existant (CSV)</p>
+    <input type="file" id="csv-in" accept=".csv" onchange="importCSV(event)">
+  </div>
+</div>
+<script>
+let rows=[
+  {step:'Réception matière',charac:'Certificat matière (CCPU)',type:'P',spec:'Conforme au CDC',method:'Contrôle documentaire',moyen:'Visuel',freq:'Chaque lot',sample:'100%',resp:'Contrôleur réception',record:'Fiche réception',severity:'Critique',reaction:'Blocage lot + alerte fournisseur'},
+  {step:'Usinage',charac:'Cote Ø 25 ±0.02',type:'P',spec:'24.98 — 25.02 mm',method:'Mesure dimensionnelle',moyen:'MMT / Micromètre',freq:'Démarrage + 1/heure',sample:'5 pièces',resp:'Opérateur',record:'Carte de contrôle',severity:'Critique',reaction:'Arrêt production + tri'},
+  {step:'Traitement de surface',charac:'Épaisseur revêtement',type:'Pr',spec:'8-12 µm',method:'Mesure épaisseur',moyen:'Mesureur d\'épaisseur',freq:'Chaque bain',sample:'3 pièces',resp:'Opérateur TS',record:'Fiche suivi bain',severity:'Majeure',reaction:'Réglage bain + recontôle'},
+  {step:'Contrôle final',charac:'Aspect visuel',type:'P',spec:'Pas de défaut visible',method:'Contrôle visuel',moyen:'Visuel / Loupe',freq:'100%',sample:'100%',resp:'Contrôleur final',record:'PV de contrôle',severity:'Majeure',reaction:'Rebut ou retouche'},
+  {step:'Emballage',charac:'Identification / Étiquetage',type:'P',spec:'Conforme BL',method:'Contrôle documentaire',moyen:'Visuel',freq:'Chaque OF',sample:'100%',resp:'Opérateur emballage',record:'Check-list expédition',severity:'Mineure',reaction:'Correction avant expédition'}
+];
+
+function addRow(){rows.push({step:'',charac:'',type:'P',spec:'',method:'',moyen:'',freq:'',sample:'',resp:'',record:'',severity:'Majeure',reaction:''});render()}
+function delRow(i){rows.splice(i,1);render()}
+function upd(i,field,val){rows[i][field]=val;renderStats()}
+
+function sevClass(s){return s==='Sécurité'?'sev-s':s==='Critique'?'sev-h':s==='Majeure'?'sev-m':'sev-c'}
+
+function render(){
+  document.getElementById('tbody').innerHTML=rows.map((r,i)=>`<tr>
+    <td style="color:var(--tm);font-weight:500;text-align:center">${i+1}</td>
+    <td><input value="${r.step}" oninput="upd(${i},'step',this.value)" placeholder="Étape"></td>
+    <td><input value="${r.charac}" oninput="upd(${i},'charac',this.value)" placeholder="Caractéristique"></td>
+    <td><select onchange="upd(${i},'type',this.value)"><option ${r.type==='P'?'selected':''}>P</option><option ${r.type==='Pr'?'selected':''}>Pr</option></select></td>
+    <td><input value="${r.spec}" oninput="upd(${i},'spec',this.value)" placeholder="Tolérance"></td>
+    <td><input value="${r.method}" oninput="upd(${i},'method',this.value)" placeholder="Méthode"></td>
+    <td><input value="${r.moyen}" oninput="upd(${i},'moyen',this.value)" placeholder="Moyen"></td>
+    <td><input value="${r.freq}" oninput="upd(${i},'freq',this.value)" placeholder="Fréquence"></td>
+    <td><input value="${r.sample}" oninput="upd(${i},'sample',this.value)" placeholder="Éch." style="width:60px"></td>
+    <td><input value="${r.resp}" oninput="upd(${i},'resp',this.value)" placeholder="Qui"></td>
+    <td><input value="${r.record}" oninput="upd(${i},'record',this.value)" placeholder="Enregistrement"></td>
+    <td><select onchange="upd(${i},'severity',this.value)"><option ${r.severity==='Sécurité'?'selected':''}>Sécurité</option><option ${r.severity==='Critique'?'selected':''}>Critique</option><option ${r.severity==='Majeure'?'selected':''}>Majeure</option><option ${r.severity==='Mineure'?'selected':''}>Mineure</option></select></td>
+    <td><input value="${r.reaction}" oninput="upd(${i},'reaction',this.value)" placeholder="Réaction si NC"></td>
+    <td class="del" onclick="delRow(${i})">×</td>
+  </tr>`).join('');
+  renderStats();
+}
+
+function renderStats(){
+  const total=rows.length;
+  const crit=rows.filter(r=>r.severity==='Critique'||r.severity==='Sécurité').length;
+  const steps=[...new Set(rows.map(r=>r.step).filter(Boolean))].length;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="stat-val" style="color:var(--night)">${total}</div><div class="stat-label">Points de contrôle</div></div>
+    <div class="stat"><div class="stat-val" style="color:var(--r)">${crit}</div><div class="stat-label">Critiques / Sécurité</div></div>
+    <div class="stat"><div class="stat-val" style="color:var(--copper)">${steps}</div><div class="stat-label">Étapes process</div></div>
+  `;
+}
+
+function exportCSV(){
+  const headers=['N°','Étape process','Caractéristique','Type','Spécification','Méthode','Moyen','Fréquence','Taille échantillon','Responsable','Enregistrement','Sévérité','Réaction si NC'];
+  let csv=headers.join(';')+'\n';
+  rows.forEach((r,i)=>{
+    csv+=`${i+1};"${r.step}";"${r.charac}";"${r.type}";"${r.spec}";"${r.method}";"${r.moyen}";"${r.freq}";"${r.sample}";"${r.resp}";"${r.record}";"${r.severity}";"${r.reaction}"\n`;
+  });
+  csv+=`\nProduit;"${document.getElementById('m-prod').value}"\nProcess;"${document.getElementById('m-proc').value}"\nDate;"${document.getElementById('m-dt').value}"\n`;
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`ASCALIS_plan_controle_${document.getElementById('m-prod').value||'produit'}_${document.getElementById('m-dt').value||new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+}
+
+function importEl(){document.getElementById('csv-in').click()}
+function importCSV(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const lines=ev.target.result.split('\n').filter(l=>l.trim()&&!l.startsWith('N°')&&!l.startsWith('Produit')&&!l.startsWith('Process')&&!l.startsWith('Date'));
+    const imported=[];
+    lines.forEach(line=>{
+      const p=line.split(';').map(s=>s.replace(/^"|"$/g,'').trim());
+      if(p.length>=13&&!isNaN(p[0])){
+        imported.push({step:p[1],charac:p[2],type:p[3]||'P',spec:p[4],method:p[5],moyen:p[6],freq:p[7],sample:p[8],resp:p[9],record:p[10],severity:p[11]||'Majeure',reaction:p[12]});
+      }
+    });
+    if(imported.length){rows=imported;render()}
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+document.getElementById('m-dt').value=new Date().toISOString().split('T')[0];
+render();
+</script>
+</body>
+</html>
