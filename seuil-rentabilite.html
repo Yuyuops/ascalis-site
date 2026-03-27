@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seuil de Rentabilité — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--pl:#1B3A4B;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--warnbg:#FFFBEB;--err:#DC2626;--info:#2563EB;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px}.btn:hover{border-color:var(--a);color:var(--a)}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:26px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.45);max-width:540px}
+.container{max-width:900px;margin:0 auto;padding:28px 24px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.card{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:24px}
+.card-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.field{margin-bottom:14px}
+.field label{font-family:var(--fh);font-size:12px;font-weight:500;color:var(--t3);display:block;margin-bottom:4px}
+.field input{width:100%;padding:10px 14px;border:1px solid var(--bd);border-radius:6px;font-size:15px;outline:none;background:var(--sa);font-family:var(--fb);transition:border-color .15s}
+.field input:focus{border-color:var(--a)}
+.field .unit{font-size:11px;color:var(--t3);margin-top:3px}
+.result-box{background:var(--sa);border-radius:12px;padding:20px;border:1px solid var(--bl);margin-top:16px}
+.result-title{font-family:var(--fh);font-size:12px;font-weight:600;color:var(--a);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.ri{text-align:center;padding:16px;background:var(--s);border-radius:8px;border:1px solid var(--bl)}
+.ri-val{font-family:var(--fd);font-size:28px;line-height:1}
+.ri-label{font-size:11px;color:var(--t3);margin-top:4px}
+.ri-ok{color:var(--ok)}.ri-warn{color:var(--warn)}.ri-info{color:var(--info)}.ri-accent{color:var(--a)}
+.guide{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:14px 16px;font-size:13px;color:#1E40AF;line-height:1.6;margin-bottom:16px}
+.guide-ok{background:var(--okbg);border-color:#A7F3D0;color:#065F46}
+.guide-warn{background:var(--warnbg);border-color:#FDE68A;color:#92400E}
+.scenario{display:flex;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bl);font-size:13px}
+.scenario:last-child{border:none}
+.scenario-label{flex:1;color:var(--t2)}
+.scenario-val{font-family:var(--fh);font-weight:600;min-width:100px;text-align:right}
+@media(max-width:768px){.grid{grid-template-columns:1fr}.result-grid{grid-template-columns:1fr}}
+@media print{.hd{display:none}body{background:white}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="window.print()">Imprimer</button><a href="index.html" class="btn">← Retour au site</a></div>
+</div>
+<div class="hero"><h1>Calculateur de Seuil de Rentabilité</h1><p>À partir de quel chiffre d'affaires votre entreprise gagne-t-elle de l'argent ? Renseignez vos données et visualisez votre point mort.</p></div>
+
+<div class="container">
+  <div class="guide">Le seuil de rentabilité (point mort) est le niveau de chiffre d'affaires à partir duquel l'entreprise couvre l'ensemble de ses charges fixes et variables. En dessous, elle perd de l'argent. Au-dessus, elle dégage du bénéfice.</div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <div class="card-title">Vos données <span class="tag">Offre 8</span></div>
+        <div class="field"><label>Charges fixes annuelles</label><input type="number" id="cf" value="120000" step="1000" oninput="calc()"><div class="unit">Loyer, salaires fixes, assurances, amortissements... (€/an)</div></div>
+        <div class="field"><label>Prix de vente unitaire moyen</label><input type="number" id="pv" value="50" step="0.5" oninput="calc()"><div class="unit">Prix moyen d'une unité vendue (€ HT)</div></div>
+        <div class="field"><label>Coût variable unitaire moyen</label><input type="number" id="cv" value="30" step="0.5" oninput="calc()"><div class="unit">Matière, main d'œuvre directe, sous-traitance... (€/unité)</div></div>
+        <div class="field"><label>CA annuel actuel (optionnel)</label><input type="number" id="ca" value="300000" step="1000" oninput="calc()"><div class="unit">Pour calculer votre marge de sécurité (€ HT/an)</div></div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">Scénarios <span class="tag">Et si...?</span></div>
+        <div id="scenarios"></div>
+      </div>
+    </div>
+
+    <div>
+      <div id="results"></div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">Graphique coûts / revenus</div>
+        <div id="chart"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function fmt(n){return new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(n)}
+
+function calc(){
+  const cf=parseFloat(document.getElementById('cf').value)||0;
+  const pv=parseFloat(document.getElementById('pv').value)||0;
+  const cv=parseFloat(document.getElementById('cv').value)||0;
+  const ca=parseFloat(document.getElementById('ca').value)||0;
+
+  const marge=pv-cv;
+  const tauxMarge=pv>0?marge/pv:0;
+  const seuilUnites=marge>0?Math.ceil(cf/marge):Infinity;
+  const seuilCA=tauxMarge>0?cf/tauxMarge:Infinity;
+  const seuilJours=seuilCA>0&&ca>0?Math.ceil(seuilCA/ca*365):0;
+  const margeSecurite=ca>0&&seuilCA<Infinity?((ca-seuilCA)/ca*100):0;
+  const benefice=ca>0?ca*tauxMarge-cf:0;
+
+  const isRentable=ca>=seuilCA&&seuilCA<Infinity;
+  const isFaisable=seuilCA<Infinity;
+
+  // Results
+  document.getElementById('results').innerHTML=`
+    <div class="result-box"><div class="result-title">Seuil de rentabilité</div>
+      <div class="result-grid">
+        <div class="ri"><div class="ri-val ri-accent">${isFaisable?fmt(seuilCA)+'€':'∞'}</div><div class="ri-label">CA minimum (€/an)</div></div>
+        <div class="ri"><div class="ri-val ri-info">${isFaisable?fmt(seuilUnites):'-'}</div><div class="ri-label">Unités à vendre</div></div>
+        <div class="ri"><div class="ri-val ${seuilJours<=365?'ri-ok':'ri-err'}">${seuilJours>0?seuilJours+'j':'-'}</div><div class="ri-label">Point mort (jours)</div></div>
+        <div class="ri"><div class="ri-val ${margeSecurite>20?'ri-ok':margeSecurite>0?'ri-warn':'ri-err'}">${margeSecurite.toFixed(1)}%</div><div class="ri-label">Marge de sécurité</div></div>
+      </div>
+    </div>
+    <div class="result-box" style="margin-top:12px"><div class="result-title">Détail</div>
+      <div class="result-grid">
+        <div class="ri"><div class="ri-val">${fmt(marge)}€</div><div class="ri-label">Marge sur coût variable / unité</div></div>
+        <div class="ri"><div class="ri-val">${(tauxMarge*100).toFixed(1)}%</div><div class="ri-label">Taux de marge sur CV</div></div>
+        <div class="ri"><div class="ri-val ${benefice>=0?'ri-ok':'ri-err'}">${fmt(benefice)}€</div><div class="ri-label">Résultat au CA actuel</div></div>
+        <div class="ri"><div class="ri-val">${fmt(cf)}€</div><div class="ri-label">Charges fixes</div></div>
+      </div>
+    </div>
+    ${isFaisable?`<div class="guide ${isRentable?'guide-ok':'guide-warn'}" style="margin-top:12px">${isRentable?`Avec un CA de ${fmt(ca)}€, vous dépassez votre seuil de rentabilité de ${fmt(ca-seuilCA)}€. Votre marge de sécurité est de ${margeSecurite.toFixed(1)}% — ${margeSecurite>20?'confortable.':'à surveiller. En dessous de 20%, un aléa peut vous mettre en perte.'}`:`Attention : votre CA actuel (${fmt(ca)}€) est inférieur au seuil de rentabilité (${fmt(seuilCA)}€). Vous perdez ${fmt(Math.abs(benefice))}€/an. Il faut soit augmenter le volume/prix, soit réduire les charges.`}</div>`:`<div class="guide guide-warn" style="margin-top:12px">La marge sur coût variable est nulle ou négative (PV ≤ CV). Chaque vente vous fait perdre de l'argent. Il faut revoir la structure de prix.</div>`}
+  `;
+
+  // Chart
+  if(isFaisable){
+    const maxQ=Math.ceil(seuilUnites*2);
+    const W=640,H=320,pad={t:20,r:20,b:40,l:65};
+    const w=W-pad.l-pad.r,h=H-pad.t-pad.b;
+    const maxCA=maxQ*pv;
+    const maxCost=cf+maxQ*cv;
+    const yMax=Math.max(maxCA,maxCost)*1.1;
+    const scX=q=>pad.l+q/maxQ*w;
+    const scY=v=>pad.t+h-v/yMax*h;
+
+    let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">`;
+    // Grid
+    for(let i=0;i<=4;i++){const y=pad.t+h*i/4;const v=yMax*(1-i/4);svg+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+w}" y2="${y}" stroke="var(--bl)" stroke-width="1"/><text x="${pad.l-8}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--t3)" font-family="var(--fh)">${fmt(v)}€</text>`}
+    // X axis
+    for(let i=0;i<=5;i++){const q=Math.round(maxQ*i/5);const x=scX(q);svg+=`<text x="${x}" y="${pad.t+h+20}" text-anchor="middle" font-size="10" fill="var(--t3)" font-family="var(--fh)">${fmt(q)}</text>`}
+    svg+=`<text x="${pad.l+w/2}" y="${pad.t+h+35}" text-anchor="middle" font-size="11" fill="var(--t3)" font-family="var(--fh)">Unités vendues</text>`;
+
+    // Revenue line
+    svg+=`<line x1="${scX(0)}" y1="${scY(0)}" x2="${scX(maxQ)}" y2="${scY(maxQ*pv)}" stroke="var(--ok)" stroke-width="2.5"/>`;
+    // Total cost line
+    svg+=`<line x1="${scX(0)}" y1="${scY(cf)}" x2="${scX(maxQ)}" y2="${scY(cf+maxQ*cv)}" stroke="var(--err)" stroke-width="2.5"/>`;
+    // Fixed cost line
+    svg+=`<line x1="${scX(0)}" y1="${scY(cf)}" x2="${scX(maxQ)}" y2="${scY(cf)}" stroke="var(--err)" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>`;
+    // Break-even point
+    svg+=`<circle cx="${scX(seuilUnites)}" cy="${scY(seuilCA)}" r="6" fill="var(--a)" stroke="var(--s)" stroke-width="2"/>`;
+    svg+=`<text x="${scX(seuilUnites)+10}" y="${scY(seuilCA)-10}" font-size="11" fill="var(--a)" font-family="var(--fh)" font-weight="600">Seuil : ${fmt(seuilUnites)} u. = ${fmt(seuilCA)}€</text>`;
+    // Profit zone
+    if(seuilUnites<maxQ){
+      const pts=`${scX(seuilUnites)},${scY(seuilCA)} ${scX(maxQ)},${scY(maxQ*pv)} ${scX(maxQ)},${scY(cf+maxQ*cv)}`;
+      svg+=`<polygon points="${pts}" fill="var(--ok)" opacity="0.06"/>`;
+    }
+    // Loss zone
+    const lpts=`${scX(0)},${scY(0)} ${scX(seuilUnites)},${scY(seuilCA)} ${scX(seuilUnites)},${scY(cf+seuilUnites*cv)} ${scX(0)},${scY(cf)}`;
+    svg+=`<polygon points="${lpts}" fill="var(--err)" opacity="0.04"/>`;
+    // Legend
+    svg+=`<circle cx="${pad.l+10}" cy="${pad.t+10}" r="4" fill="var(--ok)"/><text x="${pad.l+20}" y="${pad.t+14}" font-size="10" fill="var(--t2)" font-family="var(--fb)">Chiffre d'affaires</text>`;
+    svg+=`<circle cx="${pad.l+140}" cy="${pad.t+10}" r="4" fill="var(--err)"/><text x="${pad.l+150}" y="${pad.t+14}" font-size="10" fill="var(--t2)" font-family="var(--fb)">Coûts totaux</text>`;
+    // Current CA marker
+    if(ca>0){const caUnits=ca/pv;if(caUnits<=maxQ){svg+=`<line x1="${scX(caUnits)}" y1="${pad.t}" x2="${scX(caUnits)}" y2="${pad.t+h}" stroke="var(--info)" stroke-width="1.5" stroke-dasharray="4,3"/><text x="${scX(caUnits)}" y="${pad.t+h+20}" text-anchor="middle" font-size="10" fill="var(--info)" font-family="var(--fh)">CA actuel</text>`}}
+    svg+=`</svg>`;
+    document.getElementById('chart').innerHTML=svg;
+  }else{
+    document.getElementById('chart').innerHTML='<div class="guide guide-warn">Graphique indisponible — la marge unitaire doit être positive.</div>';
+  }
+
+  // Scenarios
+  const scenarios=[];
+  if(isFaisable){
+    const pv10=pv*1.1;const sr10=cf/(pv10-cv);scenarios.push({label:'Prix +10%',val:fmt(Math.round(sr10*pv10))+'€',good:sr10*pv10<seuilCA});
+    const pv_10=pv*0.9;const m2=pv_10-cv;const sr_10=m2>0?cf/m2:Infinity;scenarios.push({label:'Prix -10%',val:sr_10<Infinity?fmt(Math.round(sr_10*pv_10))+'€':'∞',good:false});
+    const cf_10=cf*0.9;const sr_cf=cf_10/(pv-cv);scenarios.push({label:'Charges fixes -10%',val:fmt(Math.round(sr_cf*pv))+'€',good:true});
+    const cf10=cf*1.1;const sr_cf2=cf10/(pv-cv);scenarios.push({label:'Charges fixes +10%',val:fmt(Math.round(sr_cf2*pv))+'€',good:false});
+    const cv_10=cv*0.9;const sr_cv=cf/(pv-cv_10);scenarios.push({label:'Coût variable -10%',val:fmt(Math.round(sr_cv*pv))+'€',good:true});
+    scenarios.push({label:'Embauche (+40k€ CF)',val:fmt(Math.round((cf+40000)/(pv-cv)*pv))+'€',good:false});
+  }
+  document.getElementById('scenarios').innerHTML=scenarios.length?scenarios.map(s=>`<div class="scenario"><span class="scenario-label">${s.label}</span><span class="scenario-val" style="color:${s.good?'var(--ok)':'var(--warn)'}">${s.val}</span></div>`).join(''):'<div style="font-size:13px;color:var(--t3)">Renseignez les données pour voir les scénarios.</div>';
+}
+
+calc();
+</script>
+</body>
+</html>

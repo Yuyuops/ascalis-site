@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VSM — Cartographie Chaîne de Valeur — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--err:#DC2626;--info:#2563EB;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px}.btn:hover{border-color:var(--a);color:var(--a)}.btn-p{background:var(--p);color:var(--sa);border-color:var(--p)}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:26px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.45);max-width:600px}
+.container{max-width:1100px;margin:0 auto;padding:28px 24px}
+.card{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:24px;margin-bottom:20px}
+.card-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.meta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.field{margin-bottom:0;flex:1;min-width:120px}.field label{font-family:var(--fh);font-size:11px;font-weight:500;color:var(--t3);display:block;margin-bottom:3px}.field input{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:6px;font-size:13px;outline:none;background:var(--sa);font-family:var(--fb)}.field input:focus{border-color:var(--a)}
+.steps-table{width:100%;border-collapse:collapse;font-size:12px}
+.steps-table th{background:var(--sa);padding:7px 8px;text-align:left;font-family:var(--fh);font-size:10px;font-weight:500;color:var(--t3);border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.3px}
+.steps-table td{padding:5px 6px;border-bottom:1px solid var(--bl)}
+.steps-table input{border:1px solid transparent;padding:4px 6px;font-family:var(--fb);font-size:12px;width:100%;outline:none;border-radius:3px;background:transparent}.steps-table input:focus{border-color:var(--a);background:var(--sa)}
+.del{color:var(--t3);cursor:pointer;text-align:center;font-size:14px}.del:hover{color:var(--err)}
+.add-row{width:100%;padding:8px;border:1px dashed var(--bd);background:none;border-radius:6px;font-size:12px;color:var(--t3);cursor:pointer;font-family:var(--fb);margin-top:8px}.add-row:hover{border-color:var(--a);color:var(--a)}
+.vsm-container{overflow-x:auto;background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:16px}
+.result-box{background:var(--sa);border-radius:12px;padding:20px;border:1px solid var(--bl);margin-top:16px}
+.result-title{font-family:var(--fh);font-size:12px;font-weight:600;color:var(--a);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.ri{text-align:center;padding:12px;background:var(--s);border-radius:8px;border:1px solid var(--bl)}.ri-val{font-family:var(--fd);font-size:22px;line-height:1}.ri-label{font-size:10px;color:var(--t3);margin-top:3px}
+.ri-ok{color:var(--ok)}.ri-warn{color:var(--warn)}.ri-err{color:var(--err)}.ri-accent{color:var(--a)}.ri-info{color:var(--info)}
+.guide{border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.7;margin-top:16px}
+.guide-ok{background:var(--okbg);border:1px solid #A7F3D0;color:#065F46}
+.guide-warn{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E}
+@media(max-width:768px){.meta-row{flex-direction:column}.result-grid{grid-template-columns:1fr 1fr}}
+@media print{.hd,.add-row,.del,.btn{display:none!important}body{background:white}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="window.print()">Imprimer</button><a href="index.html" class="btn">← Retour</a></div>
+</div>
+<div class="hero"><h1>VSM — Cartographie Chaîne de Valeur</h1><p>Visualisez le flux de valeur de bout en bout. Identifiez les temps à valeur ajoutée vs. les gaspillages (attentes, stocks, déplacements).</p></div>
+
+<div class="container">
+  <div class="card">
+    <div class="card-title">Paramètres généraux <span class="tag">Offres 1, 3, 4</span></div>
+    <div class="meta-row">
+      <div class="field"><label>Produit / Famille</label><input id="product" value="Pièce usinée aéro" placeholder="Nom du produit"></div>
+      <div class="field"><label>Demande client (unités/jour)</label><input type="number" id="demand" value="40" step="1" oninput="renderVSM()"></div>
+      <div class="field"><label>Temps disponible (min/jour)</label><input type="number" id="available" value="450" step="10" oninput="renderVSM()"></div>
+      <div class="field"><label>Nb de jours ouvrés / mois</label><input type="number" id="workdays" value="22" step="1" oninput="renderVSM()"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Étapes du processus</div>
+    <table class="steps-table"><thead><tr>
+      <th>Étape</th><th style="width:80px">Cycle (min)</th><th style="width:80px">Setup (min)</th><th style="width:70px">Uptime %</th><th style="width:60px">Op.</th><th style="width:90px">WIP avant</th><th style="width:70px">Lot</th><th style="width:30px"></th>
+    </tr></thead><tbody id="tbody"></tbody></table>
+    <button class="add-row" onclick="addStep()">+ Ajouter une étape</button>
+  </div>
+
+  <div class="vsm-container"><div id="vsm-chart"></div></div>
+  <div id="vsm-results"></div>
+</div>
+
+<script>
+let steps=[
+  {name:'Découpe',ct:2,setup:15,uptime:95,ops:1,wip:80,lot:40},
+  {name:'Usinage',ct:5,setup:30,uptime:90,ops:1,wip:120,lot:40},
+  {name:'Ébavurage',ct:1.5,setup:5,uptime:98,ops:1,wip:30,lot:40},
+  {name:'Traitement surface',ct:3,setup:20,uptime:85,ops:1,wip:200,lot:100},
+  {name:'Contrôle final',ct:2,setup:0,uptime:100,ops:1,wip:40,lot:40},
+  {name:'Emballage',ct:1,setup:5,uptime:98,ops:1,wip:20,lot:40}
+];
+
+function addStep(){steps.push({name:'',ct:0,setup:0,uptime:95,ops:1,wip:0,lot:1});render()}
+function delStep(i){steps.splice(i,1);render()}
+function upd(i,f,v){steps[i][f]=['name'].includes(f)?v:parseFloat(v)||0;renderVSM()}
+
+function render(){
+  document.getElementById('tbody').innerHTML=steps.map((s,i)=>`<tr>
+    <td><input value="${s.name}" oninput="upd(${i},'name',this.value)" placeholder="Nom étape"></td>
+    <td><input type="number" value="${s.ct}" oninput="upd(${i},'ct',this.value)" step="0.1"></td>
+    <td><input type="number" value="${s.setup}" oninput="upd(${i},'setup',this.value)"></td>
+    <td><input type="number" value="${s.uptime}" oninput="upd(${i},'uptime',this.value)" max="100"></td>
+    <td><input type="number" value="${s.ops}" oninput="upd(${i},'ops',this.value)" min="1"></td>
+    <td><input type="number" value="${s.wip}" oninput="upd(${i},'wip',this.value)"></td>
+    <td><input type="number" value="${s.lot}" oninput="upd(${i},'lot',this.value)" min="1"></td>
+    <td class="del" onclick="delStep(${i})">×</td>
+  </tr>`).join('');
+  renderVSM();
+}
+
+function renderVSM(){
+  const demand=parseFloat(document.getElementById('demand').value)||1;
+  const avail=parseFloat(document.getElementById('available').value)||450;
+  const workdays=parseFloat(document.getElementById('workdays').value)||22;
+  const takt=avail/demand;
+  const valid=steps.filter(s=>s.name);
+  if(valid.length<2){document.getElementById('vsm-chart').innerHTML='';document.getElementById('vsm-results').innerHTML='';return}
+
+  // Calculations
+  let totalVA=0,totalNVA=0,totalWIP=0;
+  const data=valid.map(s=>{
+    const va=s.ct;
+    const wipDays=demand>0?s.wip/demand:0;
+    const nva=wipDays*avail;// wait time in minutes (WIP * takt)
+    totalVA+=va;totalNVA+=nva;totalWIP+=s.wip;
+    return{...s,va,nva:wipDays,wipDays,bottleneck:s.ct>takt};
+  });
+  const totalLT=totalVA+data.reduce((s,d)=>s+d.wipDays,0)*avail;
+  const pce=totalLT>0?(totalVA/totalLT*100):0;
+
+  // SVG Map
+  const n=data.length;
+  const boxW=110,boxH=80,gap=60,invW=40;
+  const W=Math.max(n*(boxW+gap)+200,800),H=320;
+  const startX=80,boxY=100;
+
+  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;min-width:${W}px">`;
+
+  // Takt time reference
+  svg+=`<text x="${W/2}" y="20" text-anchor="middle" font-family="var(--fh)" font-size="11" fill="var(--t3)">Takt Time = ${takt.toFixed(1)} min/pièce | Demande = ${demand} u/j | Disponible = ${avail} min/j</text>`;
+
+  // Process boxes + inventory triangles
+  data.forEach((s,i)=>{
+    const x=startX+i*(boxW+gap);
+
+    // Inventory triangle before step
+    if(s.wip>0){
+      const tx=x-gap/2;
+      svg+=`<polygon points="${tx-12},${boxY-5} ${tx+12},${boxY-5} ${tx},${boxY-25}" fill="var(--warn)" opacity="0.2" stroke="var(--warn)" stroke-width="1"/>`;
+      svg+=`<text x="${tx}" y="${boxY-30}" text-anchor="middle" font-size="9" fill="var(--warn)" font-family="var(--fh)" font-weight="600">${s.wip}</text>`;
+      svg+=`<text x="${tx}" y="${boxY+6}" text-anchor="middle" font-size="8" fill="var(--t3)" font-family="var(--fb)">${s.wipDays.toFixed(1)}j</text>`;
+    }
+
+    // Process box
+    const isBottleneck=s.bottleneck;
+    svg+=`<rect x="${x}" y="${boxY}" width="${boxW}" height="${boxH}" rx="6" fill="${isBottleneck?'#FEF2F2':'var(--sa)'}" stroke="${isBottleneck?'var(--err)':'var(--bd)'}" stroke-width="${isBottleneck?2:1}"/>`;
+    svg+=`<text x="${x+boxW/2}" y="${boxY+18}" text-anchor="middle" font-family="var(--fh)" font-size="11" font-weight="600" fill="${isBottleneck?'var(--err)':'var(--t)'}">${s.name}</text>`;
+    svg+=`<text x="${x+8}" y="${boxY+35}" font-size="9" fill="var(--t2)" font-family="var(--fb)">CT: ${s.ct} min</text>`;
+    svg+=`<text x="${x+8}" y="${boxY+47}" font-size="9" fill="var(--t2)" font-family="var(--fb)">Setup: ${s.setup} min</text>`;
+    svg+=`<text x="${x+8}" y="${boxY+59}" font-size="9" fill="var(--t2)" font-family="var(--fb)">Uptime: ${s.uptime}%</text>`;
+    svg+=`<text x="${x+8}" y="${boxY+71}" font-size="9" fill="var(--t3)" font-family="var(--fb)">${s.ops} op. | Lot ${s.lot}</text>`;
+
+    if(isBottleneck){svg+=`<text x="${x+boxW/2}" y="${boxY+boxH+14}" text-anchor="middle" font-size="9" fill="var(--err)" font-family="var(--fh)" font-weight="600">GOULOT</text>`}
+
+    // Arrow to next
+    if(i<n-1){
+      svg+=`<line x1="${x+boxW}" y1="${boxY+boxH/2}" x2="${x+boxW+gap}" y2="${boxY+boxH/2}" stroke="var(--bd)" stroke-width="1.5" marker-end="url(#arrowhead)"/>`;
+    }
+  });
+
+  // Arrow marker
+  svg+=`<defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="var(--bd)"/></marker></defs>`;
+
+  // Timeline at bottom
+  const tlY=boxY+boxH+40;
+  svg+=`<line x1="${startX}" y1="${tlY}" x2="${startX+n*(boxW+gap)-gap}" y2="${tlY}" stroke="var(--bd)" stroke-width="1"/>`;
+  data.forEach((s,i)=>{
+    const x=startX+i*(boxW+gap);
+    // NVA (wait) segment
+    if(s.wipDays>0){
+      svg+=`<rect x="${x-gap/2-15}" y="${tlY-14}" width="${30}" height="12" rx="2" fill="var(--err)" opacity="0.15"/>`;
+      svg+=`<text x="${x-gap/2}" y="${tlY-5}" text-anchor="middle" font-size="8" fill="var(--err)" font-family="var(--fh)">${s.wipDays.toFixed(1)}j</text>`;
+    }
+    // VA segment
+    svg+=`<rect x="${x+boxW/2-15}" y="${tlY+4}" width="30" height="12" rx="2" fill="var(--ok)" opacity="0.2"/>`;
+    svg+=`<text x="${x+boxW/2}" y="${tlY+13}" text-anchor="middle" font-size="8" fill="var(--ok)" font-family="var(--fh)">${s.ct}m</text>`;
+  });
+  svg+=`<text x="${startX-10}" y="${tlY-5}" text-anchor="end" font-size="8" fill="var(--err)" font-family="var(--fh)">NVA</text>`;
+  svg+=`<text x="${startX-10}" y="${tlY+13}" text-anchor="end" font-size="8" fill="var(--ok)" font-family="var(--fh)">VA</text>`;
+
+  svg+=`</svg>`;
+  document.getElementById('vsm-chart').innerHTML=svg;
+
+  // Results
+  const bottlenecks=data.filter(d=>d.bottleneck);
+  document.getElementById('vsm-results').innerHTML=`
+    <div class="result-box"><div class="result-title">Indicateurs de flux</div>
+      <div class="result-grid">
+        <div class="ri"><div class="ri-val ri-accent">${takt.toFixed(1)}</div><div class="ri-label">Takt Time (min/pce)</div></div>
+        <div class="ri"><div class="ri-val ri-ok">${totalVA.toFixed(1)}</div><div class="ri-label">Temps VA total (min)</div></div>
+        <div class="ri"><div class="ri-val ri-err">${data.reduce((s,d)=>s+d.wipDays,0).toFixed(1)}</div><div class="ri-label">Temps NVA (jours)</div></div>
+        <div class="ri"><div class="ri-val ${pce>25?'ri-ok':pce>10?'ri-warn':'ri-err'}">${pce.toFixed(1)}%</div><div class="ri-label">PCE (efficience cycle)</div></div>
+        <div class="ri"><div class="ri-val ri-info">${totalWIP}</div><div class="ri-label">WIP total (pièces)</div></div>
+        <div class="ri"><div class="ri-val">${(totalWIP/demand).toFixed(1)}</div><div class="ri-label">Lead Time (jours)</div></div>
+        <div class="ri"><div class="ri-val ${bottlenecks.length===0?'ri-ok':'ri-err'}">${bottlenecks.length}</div><div class="ri-label">Goulot(s) (CT>Takt)</div></div>
+      </div>
+      ${bottlenecks.length>0?`<div class="guide guide-warn"><strong>Goulots identifiés :</strong> ${bottlenecks.map(b=>`${b.name} (CT=${b.ct}min > Takt=${takt.toFixed(1)}min)`).join(', ')}. Ces étapes limitent le débit du flux. Actions : réduire le temps de cycle, augmenter l'uptime, paralléliser, ou déplacer de la charge.</div>`:`<div class="guide guide-ok"><strong>Pas de goulot.</strong> Toutes les étapes ont un temps de cycle inférieur au takt time. Le flux peut répondre à la demande.</div>`}
+      <div class="guide ${pce>25?'guide-ok':'guide-warn'}" style="margin-top:8px"><strong>PCE (Process Cycle Efficiency) = ${pce.toFixed(1)}%</strong> — ${pce>25?'Bon ratio VA/NVA.':pce>10?'Ratio moyen — potentiel d\'amélioration sur les en-cours et temps d\'attente.':'Ratio faible — le processus passe l\'essentiel du temps en attente. Réduisez les WIP et les lots.'} Objectif Lean : >25%. World-class : >40%.</div>
+    </div>
+  `;
+}
+
+function exportCSV(){
+  let csv='Étape;Cycle (min);Setup (min);Uptime %;Opérateurs;WIP avant;Lot\n';
+  steps.forEach(s=>csv+=`"${s.name}";${s.ct};${s.setup};${s.uptime};${s.ops};${s.wip};${s.lot}\n`);
+  csv+=`\nProduit;"${document.getElementById('product').value}"\nDemande;${document.getElementById('demand').value}\nDisponible;${document.getElementById('available').value}\n`;
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`ASCALIS_vsm_${new Date().toISOString().split('T')[0]}.csv`;a.click();
+}
+
+render();
+</script>
+</body>
+</html>

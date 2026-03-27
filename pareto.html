@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagramme de Pareto — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--err:#DC2626;--info:#2563EB;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px}.btn:hover{border-color:var(--a);color:var(--a)}.btn-p{background:var(--p);color:var(--sa);border-color:var(--p)}.btn-p:hover{background:#1B3A4B}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:26px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.45);max-width:600px}
+.container{max-width:960px;margin:0 auto;padding:28px 24px}
+.card{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:24px;margin-bottom:20px}
+.card-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.field{margin-bottom:12px}.field label{font-family:var(--fh);font-size:12px;font-weight:500;color:var(--t3);display:block;margin-bottom:4px}.field textarea,.field input{width:100%;padding:10px 14px;border:1px solid var(--bd);border-radius:6px;font-size:14px;outline:none;background:var(--sa);font-family:var(--fb)}.field textarea:focus,.field input:focus{border-color:var(--a)}.field textarea{resize:vertical}
+.data-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.data-table th{background:var(--sa);padding:8px 10px;text-align:left;font-family:var(--fh);font-size:11px;font-weight:500;color:var(--t3);border-bottom:1px solid var(--bd)}.data-table td{padding:8px 10px;border-bottom:1px solid var(--bl)}
+.data-table input{border:1px solid transparent;padding:4px 8px;font-family:var(--fb);font-size:13px;width:100%;outline:none;border-radius:4px;background:transparent}.data-table input:focus{border-color:var(--a);background:var(--sa)}
+.del{color:var(--t3);cursor:pointer;text-align:center;font-size:16px}.del:hover{color:var(--err)}
+.add-row{width:100%;padding:8px;border:1px dashed var(--bd);background:none;border-radius:6px;font-size:12px;color:var(--t3);cursor:pointer;font-family:var(--fb);margin-top:8px}.add-row:hover{border-color:var(--a);color:var(--a)}
+.result-box{background:var(--sa);border-radius:12px;padding:20px;border:1px solid var(--bl);margin-top:16px}
+.result-title{font-family:var(--fh);font-size:12px;font-weight:600;color:var(--a);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.ri{text-align:center;padding:12px;background:var(--s);border-radius:8px;border:1px solid var(--bl)}
+.ri-val{font-family:var(--fd);font-size:24px;line-height:1}.ri-label{font-size:11px;color:var(--t3);margin-top:3px}
+.ri-ok{color:var(--ok)}.ri-warn{color:var(--warn)}.ri-accent{color:var(--a)}
+.guide{background:var(--okbg);border:1px solid #A7F3D0;border-radius:8px;padding:14px 16px;font-size:13px;color:#065F46;line-height:1.7;margin-top:16px}
+.vital{background:var(--err);opacity:.08;position:absolute;top:0;bottom:0;left:0}
+.import-zone{border:2px dashed var(--bd);border-radius:8px;padding:16px;text-align:center;cursor:pointer;margin:12px 0;transition:border-color .2s}.import-zone:hover{border-color:var(--a)}.import-zone p{font-size:12px;color:var(--t3)}.import-zone input{display:none}
+@media(max-width:768px){.result-grid{grid-template-columns:1fr 1fr}}
+@media print{.hd,.add-row,.del,.import-zone,.btn{display:none!important}body{background:white}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="window.print()">Imprimer</button><a href="index.html" class="btn">← Retour</a></div>
+</div>
+<div class="hero"><h1>Diagramme de Pareto</h1><p>Identifiez les causes vitales — 80% des effets viennent de 20% des causes. Saisissez vos catégories et fréquences, l'outil trie, trace et identifie le "Vital Few".</p></div>
+
+<div class="container">
+  <div class="card">
+    <div class="card-title">Données <span class="tag">Offres 1, 3</span></div>
+    <div class="field"><label>Titre de l'analyse</label><input id="title" value="Analyse des non-conformités — Ligne 3" placeholder="Ex: NC par type de défaut, réclamations par cause..."></div>
+    <div class="field"><label>Unité de mesure</label><input id="unit" value="Nombre de NC" placeholder="Ex: Nombre, Coût (€), Fréquence..."></div>
+    <table class="data-table"><thead><tr><th>Catégorie (cause / défaut)</th><th style="width:140px">Valeur</th><th style="width:30px"></th></tr></thead><tbody id="tbody"></tbody></table>
+    <button class="add-row" onclick="addRow()">+ Ajouter une catégorie</button>
+    <div class="import-zone" onclick="document.getElementById('csv-in').click()">
+      <p>Ou importer un CSV (catégorie ; valeur)</p>
+      <input type="file" id="csv-in" accept=".csv" onchange="importCSV(event)">
+    </div>
+  </div>
+  <div id="results"></div>
+</div>
+
+<script>
+let rows=[
+  {cat:'Défaut dimensionnel',val:42},
+  {cat:'Rayure / aspect',val:28},
+  {cat:'Bavure',val:15},
+  {cat:'Défaut matière',val:8},
+  {cat:'Erreur d\'assemblage',val:5},
+  {cat:'Marquage absent',val:4},
+  {cat:'Autres',val:3}
+];
+
+function addRow(){rows.push({cat:'',val:0});render()}
+function delRow(i){rows.splice(i,1);render()}
+function upd(i,field,val){rows[i][field]=field==='val'?parseFloat(val)||0:val;renderChart()}
+
+function render(){
+  document.getElementById('tbody').innerHTML=rows.map((r,i)=>`<tr>
+    <td><input value="${r.cat}" oninput="upd(${i},'cat',this.value)" placeholder="Catégorie"></td>
+    <td><input type="number" value="${r.val}" oninput="upd(${i},'val',this.value)" min="0"></td>
+    <td class="del" onclick="delRow(${i})">×</td>
+  </tr>`).join('');
+  renderChart();
+}
+
+function renderChart(){
+  const data=rows.filter(r=>r.cat&&r.val>0).sort((a,b)=>b.val-a.val);
+  if(data.length<2){document.getElementById('results').innerHTML='';return}
+
+  const total=data.reduce((s,d)=>s+d.val,0);
+  let cumul=0;
+  data.forEach(d=>{cumul+=d.val;d.pct=d.val/total*100;d.cumPct=cumul/total*100});
+
+  // Find vital few (cumulative ≤ 80%)
+  const vitalCount=data.filter(d=>d.cumPct<=80).length||(data[0].pct>=80?1:1);
+  const vitalPct=data.slice(0,vitalCount).reduce((s,d)=>s+d.pct,0);
+
+  // SVG Chart
+  const W=800,H=380,pad={t:30,r:60,b:80,l:60};
+  const w=W-pad.l-pad.r,h=H-pad.t-pad.b;
+  const n=data.length;
+  const barW=Math.min(w/n*0.7,60);
+  const gap=(w-barW*n)/(n+1);
+
+  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;background:var(--s);border-radius:12px;border:1px solid var(--bl)">`;
+
+  // Y axis (left - values)
+  const maxVal=data[0].val*1.15;
+  for(let i=0;i<=5;i++){
+    const y=pad.t+h*i/5;const v=maxVal*(1-i/5);
+    svg+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+w}" y2="${y}" stroke="var(--bl)" stroke-width="1"/>`;
+    svg+=`<text x="${pad.l-8}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--t3)" font-family="var(--fh)">${Math.round(v)}</text>`;
+  }
+  // Y axis right (cumulative %)
+  for(let i=0;i<=5;i++){
+    const y=pad.t+h*i/5;const v=100*(1-i/5);
+    svg+=`<text x="${pad.l+w+8}" y="${y+4}" text-anchor="start" font-size="10" fill="var(--t3)" font-family="var(--fh)">${Math.round(v)}%</text>`;
+  }
+
+  // 80% line
+  const y80=pad.t+h*(1-80/100);
+  svg+=`<line x1="${pad.l}" y1="${y80}" x2="${pad.l+w}" y2="${y80}" stroke="var(--err)" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>`;
+  svg+=`<text x="${pad.l+w+8}" y="${y80+4}" font-size="10" fill="var(--err)" font-family="var(--fh)" font-weight="600">80%</text>`;
+
+  // Vital few zone
+  const vitalW=gap+(barW+gap)*vitalCount;
+  svg+=`<rect x="${pad.l}" y="${pad.t}" width="${vitalW}" height="${h}" fill="var(--err)" opacity="0.04" rx="4"/>`;
+  svg+=`<text x="${pad.l+vitalW/2}" y="${pad.t+12}" text-anchor="middle" font-size="10" fill="var(--err)" font-family="var(--fh)" font-weight="600" opacity="0.6">Vital Few (${vitalCount})</text>`;
+
+  // Bars
+  data.forEach((d,i)=>{
+    const x=pad.l+gap+(barW+gap)*i;
+    const bh=d.val/maxVal*h;
+    const y=pad.t+h-bh;
+    const isVital=i<vitalCount;
+    svg+=`<rect x="${x}" y="${y}" width="${barW}" height="${bh}" fill="${isVital?'var(--a)':'var(--info)'}" opacity="${isVital?0.85:0.4}" rx="3"/>`;
+    svg+=`<text x="${x+barW/2}" y="${y-6}" text-anchor="middle" font-size="10" fill="var(--t2)" font-family="var(--fh)" font-weight="500">${d.val}</text>`;
+    // X label (rotated)
+    svg+=`<text x="${x+barW/2}" y="${pad.t+h+14}" text-anchor="end" font-size="10" fill="var(--t2)" font-family="var(--fb)" transform="rotate(-35 ${x+barW/2} ${pad.t+h+14})">${d.cat.length>18?d.cat.substring(0,17)+'…':d.cat}</text>`;
+  });
+
+  // Cumulative curve
+  let path='M';
+  data.forEach((d,i)=>{
+    const x=pad.l+gap+(barW+gap)*i+barW/2;
+    const y=pad.t+h-d.cumPct/100*h;
+    path+=(i===0?'':' L')+` ${x} ${y}`;
+    svg+=`<circle cx="${x}" cy="${y}" r="4" fill="var(--ok)" stroke="var(--s)" stroke-width="2"/>`;
+    if(i===0||i===vitalCount-1||i===data.length-1){
+      svg+=`<text x="${x}" y="${y-10}" text-anchor="middle" font-size="10" fill="var(--ok)" font-family="var(--fh)" font-weight="600">${d.cumPct.toFixed(0)}%</text>`;
+    }
+  });
+  svg+=`<path d="${path}" fill="none" stroke="var(--ok)" stroke-width="2.5"/>`;
+
+  // Legend
+  svg+=`<rect x="${pad.l}" y="${H-16}" width="10" height="10" fill="var(--a)" rx="2" opacity="0.85"/><text x="${pad.l+14}" y="${H-7}" font-size="10" fill="var(--t2)" font-family="var(--fb)">Vital Few</text>`;
+  svg+=`<rect x="${pad.l+100}" y="${H-16}" width="10" height="10" fill="var(--info)" rx="2" opacity="0.4"/><text x="${pad.l+114}" y="${H-7}" font-size="10" fill="var(--t2)" font-family="var(--fb)">Trivial Many</text>`;
+  svg+=`<line x1="${pad.l+220}" y1="${H-11}" x2="${pad.l+240}" y2="${H-11}" stroke="var(--ok)" stroke-width="2.5"/><text x="${pad.l+244}" y="${H-7}" font-size="10" fill="var(--t2)" font-family="var(--fb)">% Cumulé</text>`;
+
+  svg+=`</svg>`;
+
+  // Results
+  const title=document.getElementById('title').value||'Analyse Pareto';
+  const unit=document.getElementById('unit').value||'Valeur';
+  document.getElementById('results').innerHTML=`
+    <div class="card"><div class="card-title">${title}</div>${svg}</div>
+    <div class="result-box"><div class="result-title">Résultat de l'analyse</div>
+      <div class="result-grid">
+        <div class="ri"><div class="ri-val ri-accent">${vitalCount}</div><div class="ri-label">Causes vitales</div></div>
+        <div class="ri"><div class="ri-val ri-warn">${(vitalCount/n*100).toFixed(0)}%</div><div class="ri-label">% des catégories</div></div>
+        <div class="ri"><div class="ri-val ri-ok">${vitalPct.toFixed(0)}%</div><div class="ri-label">% de l'impact total</div></div>
+        <div class="ri"><div class="ri-val">${total}</div><div class="ri-label">${unit} total</div></div>
+      </div>
+      <div class="guide"><strong>Principe de Pareto :</strong> ${vitalCount} cause${vitalCount>1?'s':''} sur ${n} (${(vitalCount/n*100).toFixed(0)}%) représente${vitalCount>1?'nt':''} ${vitalPct.toFixed(0)}% de l'impact total. Concentrez vos efforts sur : <strong>${data.slice(0,vitalCount).map(d=>d.cat).join(', ')}</strong>. Ce sont les "Vital Few" — les traiter en priorité donnera le maximum de résultat.</div>
+    </div>
+    <div class="result-box" style="margin-top:12px"><div class="result-title">Tableau détaillé</div>
+      <table class="data-table"><thead><tr><th>#</th><th>Catégorie</th><th>${unit}</th><th>%</th><th>% Cumulé</th><th>Zone</th></tr></thead><tbody>
+      ${data.map((d,i)=>`<tr style="${i<vitalCount?'background:rgba(176,118,66,.04)':''}"><td>${i+1}</td><td><strong>${d.cat}</strong></td><td>${d.val}</td><td>${d.pct.toFixed(1)}%</td><td>${d.cumPct.toFixed(1)}%</td><td>${i<vitalCount?'<span style="font-family:var(--fh);font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px">Vital Few</span>':'<span style="font-size:10px;color:var(--t3)">Trivial Many</span>'}</td></tr>`).join('')}
+      </tbody></table>
+    </div>
+  `;
+}
+
+function importCSV(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const lines=ev.target.result.split('\n').filter(l=>l.trim()&&!l.startsWith('Catégorie'));
+    const imported=[];
+    lines.forEach(l=>{const p=l.split(/[;,\t]/).map(s=>s.replace(/^"|"$/g,'').trim());if(p.length>=2&&p[0]){imported.push({cat:p[0],val:parseFloat(p[1])||0})}});
+    if(imported.length){rows=imported;render()}
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+function exportCSV(){
+  const data=rows.filter(r=>r.cat&&r.val>0).sort((a,b)=>b.val-a.val);
+  const total=data.reduce((s,d)=>s+d.val,0);
+  let cumul=0;
+  let csv=`Catégorie;Valeur;%;% Cumulé\n`;
+  data.forEach(d=>{cumul+=d.val;csv+=`"${d.cat}";${d.val};${(d.val/total*100).toFixed(1)};${(cumul/total*100).toFixed(1)}\n`});
+  csv+=`\nAnalyse;"${document.getElementById('title').value}"\nTotal;${total}\n`;
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`ASCALIS_pareto_${new Date().toISOString().split('T')[0]}.csv`;a.click();
+}
+
+render();
+</script>
+</body>
+</html>

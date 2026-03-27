@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIPOC — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--warn:#D97706;--err:#DC2626;--info:#2563EB;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px}.btn:hover{border-color:var(--a);color:var(--a)}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:26px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.45);max-width:600px}
+.container{max-width:1100px;margin:0 auto;padding:28px 24px}
+.meta-bar{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:16px 20px;margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap}
+.meta-bar .field{flex:1;min-width:200px;margin:0}
+.field label{font-family:var(--fh);font-size:11px;font-weight:500;color:var(--t3);display:block;margin-bottom:3px}
+.field input{width:100%;padding:8px 12px;border:1px solid var(--bd);border-radius:6px;font-size:14px;outline:none;background:var(--sa);font-family:var(--fb)}.field input:focus{border-color:var(--a)}
+.sipoc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;background:var(--s);border-radius:12px;border:1px solid var(--bl);overflow:hidden}
+.sipoc-col{border-right:1px solid var(--bl);min-height:300px;display:flex;flex-direction:column}
+.sipoc-col:last-child{border-right:none}
+.col-hd{padding:14px 12px;text-align:center;color:var(--s);font-family:var(--fh);font-size:13px;font-weight:600;letter-spacing:.03em;position:relative}
+.col-hd .arrow{position:absolute;right:-12px;top:50%;transform:translateY(-50%);z-index:2;font-size:16px;color:var(--t3)}
+.col-body{flex:1;padding:10px}
+.col-item{display:flex;gap:4px;align-items:center;margin-bottom:6px}
+.col-item input{flex:1;padding:6px 8px;border:1px solid var(--bd);border-radius:4px;font-size:12px;outline:none;background:var(--sa);font-family:var(--fb)}.col-item input:focus{border-color:var(--a)}
+.col-del{color:var(--t3);cursor:pointer;font-size:13px;width:18px;text-align:center;flex-shrink:0}.col-del:hover{color:var(--err)}
+.col-add{width:100%;padding:5px;border:1px dashed var(--bd);background:none;border-radius:4px;font-size:11px;color:var(--t3);cursor:pointer;font-family:var(--fb);margin-top:4px}.col-add:hover{border-color:var(--a);color:var(--a)}
+
+.flow-container{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:20px;margin-top:20px;overflow-x:auto}
+.flow-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:16px}
+.process-flow{display:flex;align-items:center;gap:0;flex-wrap:nowrap;min-width:max-content;padding:10px 0}
+.pf-step{background:var(--sa);border:2px solid var(--info);border-radius:8px;padding:10px 16px;font-family:var(--fh);font-size:12px;font-weight:500;color:var(--info);min-width:120px;text-align:center;flex-shrink:0}
+.pf-arrow{color:var(--t3);font-size:20px;margin:0 4px;flex-shrink:0}
+.pf-start,.pf-end{background:var(--p);color:var(--al);border-radius:20px;padding:8px 16px;font-family:var(--fh);font-size:11px;font-weight:600;flex-shrink:0}
+@media(max-width:800px){.sipoc-grid{grid-template-columns:1fr}.sipoc-col{border-right:none;border-bottom:1px solid var(--bl)}.col-hd .arrow{display:none}.meta-bar{flex-direction:column}}
+@media print{.hd,.col-add,.col-del,.btn{display:none!important}body{background:white}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="window.print()">Imprimer</button><a href="index.html" class="btn">← Retour</a></div>
+</div>
+<div class="hero"><h1>SIPOC — Vue macro du processus</h1><p>Suppliers → Inputs → Process → Outputs → Customers. Cartographiez votre processus en 5 colonnes pour comprendre le périmètre et les interfaces.</p></div>
+
+<div class="container">
+  <div class="meta-bar">
+    <div class="field"><label>Nom du processus</label><input id="proc-name" value="Fabrication pièce aéronautique" placeholder="Ex: Processus de production, traitement commande..."></div>
+    <div class="field"><label>Périmètre</label><input id="proc-scope" value="De la réception matière à l'expédition client" placeholder="De... à..."></div>
+    <div class="field"><label>Responsable</label><input id="proc-owner" value="" placeholder="Process owner"></div>
+  </div>
+
+  <div class="sipoc-grid" id="sipoc"></div>
+
+  <div class="flow-container">
+    <div class="flow-title">Flux du processus (Level 1)</div>
+    <div id="process-flow"></div>
+  </div>
+</div>
+
+<script>
+const COLS=[
+  {key:'S',name:'Suppliers',fullName:'Fournisseurs',color:'#2563EB',items:['Fournisseur matière','Fournisseur outillage','Sous-traitant traitement de surface']},
+  {key:'I',name:'Inputs',fullName:'Entrées',color:'#7C3AED',items:['Matière première (alu, titane)','Plan de fabrication','OF (Ordre de fabrication)','Gamme opératoire']},
+  {key:'P',name:'Process',fullName:'Processus',color:'#059669',items:['Réception & contrôle matière','Découpe / Débit','Usinage','Traitement de surface','Contrôle final','Emballage & expédition']},
+  {key:'O',name:'Outputs',fullName:'Sorties',color:'#D97706',items:['Pièce conforme','Certificat de conformité','PV de contrôle','Bon de livraison']},
+  {key:'C',name:'Customers',fullName:'Clients',color:'#DC2626',items:['Client final (donneur d\'ordre)','Stock produits finis','Service qualité (interne)']}
+];
+
+function addItem(ci){COLS[ci].items.push('');render()}
+function delItem(ci,ii){COLS[ci].items.splice(ii,1);render()}
+function updItem(ci,ii,val){COLS[ci].items[ii]=val;renderFlow()}
+
+function render(){
+  document.getElementById('sipoc').innerHTML=COLS.map((c,ci)=>`
+    <div class="sipoc-col">
+      <div class="col-hd" style="background:${c.color}">
+        ${c.key} — ${c.fullName}
+        ${ci<4?'<span class="arrow">→</span>':''}
+      </div>
+      <div class="col-body">
+        ${c.items.map((item,ii)=>`<div class="col-item"><input value="${item}" oninput="updItem(${ci},${ii},this.value)" placeholder="${c.fullName}..."><span class="col-del" onclick="delItem(${ci},${ii})">×</span></div>`).join('')}
+        <button class="col-add" onclick="addItem(${ci})">+ Ajouter</button>
+      </div>
+    </div>
+  `).join('');
+  renderFlow();
+}
+
+function renderFlow(){
+  const steps=COLS[2].items.filter(x=>x);
+  if(steps.length===0){document.getElementById('process-flow').innerHTML='<div style="color:var(--t3);font-size:13px">Ajoutez des étapes dans la colonne Process.</div>';return}
+  let html='<div class="process-flow">';
+  html+='<div class="pf-start">Début</div>';
+  steps.forEach((step,i)=>{
+    html+=`<span class="pf-arrow">→</span><div class="pf-step">${step}</div>`;
+  });
+  html+='<span class="pf-arrow">→</span><div class="pf-end">Fin</div>';
+  html+='</div>';
+  document.getElementById('process-flow').innerHTML=html;
+}
+
+function exportCSV(){
+  const maxLen=Math.max(...COLS.map(c=>c.items.length));
+  let csv='Suppliers;Inputs;Process;Outputs;Customers\n';
+  for(let i=0;i<maxLen;i++){
+    csv+=COLS.map(c=>`"${c.items[i]||''}"`).join(';')+'\n';
+  }
+  csv+=`\nProcessus;"${document.getElementById('proc-name').value}"\n`;
+  csv+=`Périmètre;"${document.getElementById('proc-scope').value}"\n`;
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`ASCALIS_sipoc_${new Date().toISOString().split('T')[0]}.csv`;a.click();
+}
+
+render();
+</script>
+</body>
+</html>

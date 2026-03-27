@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto-Diagnostic Dirigeant — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--pl:#1B3A4B;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--warnbg:#FFFBEB;--err:#DC2626;--info:#2563EB;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px}.btn:hover{border-color:var(--a);color:var(--a)}.btn-p{background:var(--p);color:var(--sa);border-color:var(--p)}.btn-p:hover{background:var(--pl)}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:26px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.45);max-width:540px}
+.container{max-width:1000px;margin:0 auto;padding:28px 24px}
+.layout{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+.domains{display:flex;flex-direction:column;gap:12px}
+.domain{background:var(--s);border-radius:12px;border:1px solid var(--bl);overflow:hidden}
+.dom-hd{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}.dom-hd:hover{background:rgba(0,0,0,.01)}
+.dom-title{display:flex;align-items:center;gap:8px;font-family:var(--fh);font-size:14px;font-weight:600}
+.dom-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.dom-score{font-family:var(--fh);font-size:12px;font-weight:600;padding:3px 10px;border-radius:10px}
+.ds-ok{background:var(--okbg);color:var(--ok)}.ds-warn{background:var(--warnbg);color:var(--warn)}.ds-err{background:#FEF2F2;color:var(--err)}
+.dom-toggle{font-size:14px;color:var(--t3);transition:transform .2s}
+.domain.open .dom-toggle{transform:rotate(180deg)}
+.dom-body{display:none;padding:0 16px 14px;border-top:1px solid var(--bl)}.domain.open .dom-body{display:block}
+.q{padding:10px 0;border-bottom:1px solid rgba(0,0,0,.03)}
+.q:last-child{border:none}
+.q-label{font-size:13px;color:var(--t2);margin-bottom:6px;line-height:1.5}
+.q-row{display:flex;align-items:center;gap:10px}
+.q-slider{flex:1;-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;background:var(--bl);outline:none;cursor:pointer}
+.q-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--a);cursor:pointer;border:2px solid var(--s);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.q-val{font-family:var(--fh);font-size:12px;font-weight:600;min-width:28px;text-align:center;padding:3px 0;border-radius:4px}
+.qv-1,.qv-2{color:var(--err);background:#FEF2F2}.qv-3{color:var(--warn);background:var(--warnbg)}.qv-4{color:var(--info);background:#EFF6FF}.qv-5{color:var(--ok);background:var(--okbg)}
+
+.panel{position:sticky;top:70px;display:flex;flex-direction:column;gap:16px}
+.panel-card{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:20px}
+.panel-title{font-family:var(--fh);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--a);margin-bottom:12px}
+.global-score{text-align:center;padding:20px;background:linear-gradient(135deg,var(--p),var(--pl));border-radius:12px;color:var(--sa);margin-bottom:16px}
+.gs-val{font-family:var(--fd);font-size:48px;color:var(--al);line-height:1}
+.gs-label{font-size:11px;color:rgba(248,250,252,.4);margin-top:4px}
+.gs-level{font-size:12px;margin-top:8px;padding:4px 14px;border-radius:12px;display:inline-block}
+.gl-ok{background:rgba(5,150,105,.2);color:#5DCAA5}.gl-warn{background:rgba(217,119,6,.2);color:var(--al)}.gl-err{background:rgba(220,38,38,.2);color:#F09595}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);margin-bottom:5px}
+.legend-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.legend-item .lscore{margin-left:auto;font-family:var(--fh);font-weight:600;color:var(--t)}
+.synth-section{margin-top:14px}
+.synth-title{font-family:var(--fh);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.synth-item{font-size:12px;color:var(--t2);padding:4px 0 4px 14px;position:relative;line-height:1.5}
+.synth-item::before{content:'';position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%}
+.synth-item.strong::before{background:var(--ok)}.synth-item.weak::before{background:var(--err)}
+.deleg{font-size:12px;color:var(--t2);padding:6px 0;border-bottom:1px solid var(--bl);display:flex;justify-content:space-between}
+.deleg:last-child{border:none}
+.deleg-action{font-family:var(--fh);font-size:11px;padding:2px 8px;border-radius:999px}
+.da-delegate{background:var(--okbg);color:var(--ok)}.da-develop{background:var(--warnbg);color:var(--warn)}.da-keep{background:#EFF6FF;color:var(--info)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.panel{position:static}}
+@media print{.hd{display:none}body{background:white}.domain.open .dom-body{display:block!important}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="window.print()">Imprimer</button><a href="index.html" class="btn">← Retour</a></div>
+</div>
+<div class="hero"><h1>Auto-Diagnostic Dirigeant</h1><p>Évaluez vos forces et vos zones de délégation sur 7 domaines. Votre radar de profil vous montre où concentrer votre énergie — et ce que vous devez confier.</p></div>
+
+<div class="container"><div class="layout"><div class="domains" id="domains"></div><div class="panel" id="panel"></div></div></div>
+
+<script>
+const DOMAINS=[
+{name:'Leadership & vision',color:'#2563EB',questions:[
+'Je communique clairement la vision et les priorités à mon équipe',
+'Je délègue efficacement — je ne fais pas tout moi-même',
+'Je prends des décisions rapidement sans tout centraliser',
+'Je consacre du temps à la stratégie plutôt qu\'aux urgences du quotidien'
+]},
+{name:'Pilotage financier',color:'#059669',questions:[
+'Je connais mon seuil de rentabilité et mes marges par produit/service',
+'Je suis ma trésorerie prévisionnelle à 3 mois minimum',
+'Je dispose d\'un tableau de bord avec mes indicateurs clés',
+'J\'analyse mes écarts budget vs. réel chaque mois'
+]},
+{name:'Commercial & vente',color:'#D97706',questions:[
+'J\'ai un processus commercial structuré (de la prospection à la fidélisation)',
+'Mes prix sont fixés rationnellement (pas au doigt mouillé)',
+'J\'utilise un CRM ou un suivi client organisé',
+'Je mesure mon taux de conversion et mon coût d\'acquisition client'
+]},
+{name:'Opérations & qualité',color:'#DC2626',questions:[
+'Mes processus clés sont documentés et suivis par des indicateurs',
+'Les non-conformités sont tracées et traitées à la racine',
+'J\'ai un plan de contrôle ou de surveillance en place',
+'Mon système qualité est auditable (ISO 9001, EN 9100...)'
+]},
+{name:'Ressources humaines',color:'#7C3AED',questions:[
+'Les rôles et responsabilités sont clairement définis et communiqués',
+'J\'ai des rituels de management réguliers (points hebdo, entretiens)',
+'Les compétences critiques sont identifiées et sécurisées (pas de personne clé unique)',
+'J\'ai un processus d\'intégration structuré pour les nouveaux arrivants'
+]},
+{name:'Maturité digitale',color:'#0369A1',questions:[
+'Mes données sont centralisées et accessibles (pas dans des Excel éparpillés)',
+'J\'ai automatisé au moins une tâche répétitive (relances, rapports, alertes)',
+'Mon équipe utilise des outils collaboratifs (pas que le mail)',
+'Je prends des décisions basées sur des données, pas uniquement sur l\'intuition'
+]},
+{name:'Développement & stratégie',color:'#B07642',questions:[
+'J\'ai un plan de développement formalisé à 12-24 mois',
+'Je connais mes options de financement (banque, BPI, aides)',
+'Je fais de la veille régulière (marché, concurrence, innovation)',
+'J\'ai identifié au moins un relais de croissance à activer'
+]}
+];
+
+const LABELS=['Inexistant','Faible','Moyen','Bon','Excellent'];
+let scores=DOMAINS.map(d=>d.questions.map(()=>3));
+
+function setScore(di,qi,val){scores[di][qi]=+val;render()}
+function domainAvg(di){const s=scores[di];return s.reduce((a,b)=>a+b,0)/s.length}
+function globalAvg(){return DOMAINS.map((_,i)=>domainAvg(i)).reduce((a,b)=>a+b,0)/DOMAINS.length}
+function scoreClass(v){return v>=4?'ds-ok':v>=3?'ds-warn':'ds-err'}
+
+function render(){
+  // Domains
+  document.getElementById('domains').innerHTML=DOMAINS.map((d,di)=>{
+    const avg=domainAvg(di);
+    const isOpen=document.querySelector(`.domain[data-d="${di}"]`)?.classList.contains('open');
+    return`<div class="domain${isOpen?' open':''}" data-d="${di}">
+      <div class="dom-hd" onclick="this.parentElement.classList.toggle('open')">
+        <div class="dom-title"><span class="dom-dot" style="background:${d.color}"></span>${d.name}</div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="dom-score ${scoreClass(avg)}">${avg.toFixed(1)} / 5</span><span class="dom-toggle">▾</span></div>
+      </div>
+      <div class="dom-body">${d.questions.map((q,qi)=>{
+        const v=scores[di][qi];
+        return`<div class="q"><div class="q-label">${q}</div><div class="q-row"><input type="range" class="q-slider" min="1" max="5" value="${v}" oninput="setScore(${di},${qi},this.value)"><span class="q-val qv-${v}">${v}</span></div></div>`;
+      }).join('')}</div>
+    </div>`;
+  }).join('');
+
+  // Panel
+  const g=globalAvg();
+  const avgs=DOMAINS.map((d,i)=>({name:d.name,avg:domainAvg(i),color:d.color}));
+
+  // Radar SVG
+  const cx=160,cy=130,maxR=100,n=DOMAINS.length;
+  const step=2*Math.PI/n,start=-Math.PI/2;
+  let radar='';
+  for(let l=1;l<=5;l++){const r=l/5*maxR;let pts=[];for(let i=0;i<n;i++){const a=start+i*step;pts.push(`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`)}radar+=`<polygon points="${pts.join(' ')}" fill="none" stroke="#E2E8F0" stroke-width="0.5"/>`}
+  for(let i=0;i<n;i++){const a=start+i*step;radar+=`<line x1="${cx}" y1="${cy}" x2="${cx+maxR*Math.cos(a)}" y2="${cy+maxR*Math.sin(a)}" stroke="#E2E8F0" stroke-width="0.5"/>`}
+  let dp=[];avgs.forEach((v,i)=>{const a=start+i*step,r=v.avg/5*maxR;dp.push(`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`)});
+  radar+=`<polygon points="${dp.join(' ')}" fill="rgba(176,118,66,0.12)" stroke="#B07642" stroke-width="2"/>`;
+  avgs.forEach((v,i)=>{const a=start+i*step,r=v.avg/5*maxR;radar+=`<circle cx="${cx+r*Math.cos(a)}" cy="${cy+r*Math.sin(a)}" r="4" fill="${v.color}"/>`});
+  avgs.forEach((v,i)=>{const a=start+i*step,lr=maxR+20,x=cx+lr*Math.cos(a),y=cy+lr*Math.sin(a);const anc=Math.abs(Math.cos(a))<.1?'middle':Math.cos(a)>0?'start':'end';radar+=`<text x="${x}" y="${y+4}" text-anchor="${anc}" font-family="var(--fh)" font-size="9" fill="var(--t3)">${v.name.split(' ')[0]}</text>`});
+
+  // Synthesis
+  const sorted=[...avgs].sort((a,b)=>a.avg-b.avg);
+  const strengths=sorted.filter(s=>s.avg>=3.5).slice(-3).reverse();
+  const weaknesses=sorted.filter(s=>s.avg<3.5).slice(0,3);
+
+  // Delegation matrix
+  const delegations=avgs.map(a=>{
+    if(a.avg>=4)return{name:a.name,action:'Conserver',cls:'da-keep',tip:'Votre force — continuez à piloter'};
+    if(a.avg>=3)return{name:a.name,action:'Développer',cls:'da-develop',tip:'À améliorer — formation ou accompagnement'};
+    return{name:a.name,action:'Déléguer',cls:'da-delegate',tip:'Pas votre force — confiez à un expert'};
+  });
+
+  const levelText=g>=4?'Dirigeant structuré':g>=3?'En progression':'À structurer d\'urgence';
+  const levelCls=g>=4?'gl-ok':g>=3?'gl-warn':'gl-err';
+
+  document.getElementById('panel').innerHTML=`
+    <div class="global-score"><div class="gs-val">${g.toFixed(1)}</div><div class="gs-label">Score global / 5</div><div class="gs-level ${levelCls}">${levelText}</div></div>
+    <div class="panel-card"><div class="panel-title">Radar de profil</div><svg viewBox="0 0 320 280" width="100%">${radar}</svg>
+      <div>${avgs.map(a=>`<div class="legend-item"><span class="dot" style="background:${a.color}"></span>${a.name}<span class="lscore">${a.avg.toFixed(1)}</span></div>`).join('')}</div>
+    </div>
+    <div class="panel-card"><div class="panel-title">Synthèse</div>
+      ${strengths.length?`<div class="synth-section"><div class="synth-title">Points forts</div>${strengths.map(s=>`<div class="synth-item strong">${s.name} (${s.avg.toFixed(1)})</div>`).join('')}</div>`:''}
+      ${weaknesses.length?`<div class="synth-section"><div class="synth-title">Axes de progrès</div>${weaknesses.map(s=>`<div class="synth-item weak">${s.name} (${s.avg.toFixed(1)})</div>`).join('')}</div>`:''}
+    </div>
+    <div class="panel-card"><div class="panel-title">Matrice de délégation</div>
+      ${delegations.map(d=>`<div class="deleg"><span>${d.name}</span><span class="deleg-action ${d.cls}">${d.action}</span></div>`).join('')}
+      <div style="font-size:11px;color:var(--t3);margin-top:10px;line-height:1.5">
+        <span class="deleg-action da-keep" style="font-size:10px">Conserver</span> = votre force, pilotez directement<br>
+        <span class="deleg-action da-develop" style="font-size:10px">Développer</span> = à améliorer (formation, outils, process)<br>
+        <span class="deleg-action da-delegate" style="font-size:10px">Déléguer</span> = confiez à un expert ou recrutez
+      </div>
+    </div>`;
+}
+
+function exportCSV(){
+  let csv='Domaine;Question;Score;Label\n';
+  DOMAINS.forEach((d,di)=>d.questions.forEach((q,qi)=>{
+    const v=scores[di][qi];csv+=`"${d.name}";"${q}";${v};"${LABELS[v-1]}"\n`;
+  }));
+  csv+=`\nScore global;${globalAvg().toFixed(2)}\n`;
+  DOMAINS.forEach((d,di)=>csv+=`${d.name};${domainAvg(di).toFixed(2)}\n`);
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`ASCALIS_diagnostic_dirigeant_${new Date().toISOString().split('T')[0]}.csv`;a.click();
+}
+
+render();
+</script>
+</body>
+</html>

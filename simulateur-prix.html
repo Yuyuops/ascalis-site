@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulateur Prix de Vente — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--pl:#1B3A4B;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--warnbg:#FFFBEB;--err:#DC2626;--info:#2563EB;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px}.btn:hover{border-color:var(--a);color:var(--a)}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:26px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.45);max-width:540px}
+.container{max-width:960px;margin:0 auto;padding:28px 24px}
+.methods{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.method{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:20px;transition:all .2s}
+.method:hover{border-color:var(--a);box-shadow:0 4px 12px rgba(0,0,0,.04)}
+.method-num{font-family:var(--fh);font-size:10px;font-weight:600;color:var(--a);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.method h3{font-family:var(--fh);font-size:15px;font-weight:600;margin-bottom:4px}
+.method .desc{font-size:12px;color:var(--t3);margin-bottom:14px;line-height:1.5}
+.field{margin-bottom:12px}
+.field label{font-family:var(--fh);font-size:11px;font-weight:500;color:var(--t3);display:block;margin-bottom:3px}
+.field input{width:100%;padding:9px 12px;border:1px solid var(--bd);border-radius:6px;font-size:14px;outline:none;background:var(--sa);font-family:var(--fb);transition:border-color .15s}
+.field input:focus{border-color:var(--a)}
+.price-result{text-align:center;padding:16px;background:var(--sa);border-radius:8px;margin-top:12px}
+.price-val{font-family:var(--fd);font-size:32px;color:var(--a);line-height:1}
+.price-label{font-size:11px;color:var(--t3);margin-top:2px}
+.price-detail{font-size:12px;color:var(--t2);margin-top:6px}
+
+.comparison{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:24px}
+.comp-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:16px}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.bar-label{font-family:var(--fh);font-size:12px;width:100px;flex-shrink:0;color:var(--t2)}
+.bar-track{flex:1;height:32px;background:var(--sa);border-radius:6px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-family:var(--fh);font-size:12px;font-weight:600;color:var(--s);transition:width .4s cubic-bezier(.16,1,.3,1);min-width:40px}
+.bar-cost{background:var(--err);opacity:.7}.bar-market{background:var(--info)}.bar-value{background:var(--ok)}
+.bar-marker{position:absolute;top:0;bottom:0;width:2px;background:var(--a);z-index:2}
+.bar-marker-label{position:absolute;top:-16px;font-family:var(--fh);font-size:9px;color:var(--a);white-space:nowrap}
+
+.reco{background:var(--okbg);border:1px solid #A7F3D0;border-radius:8px;padding:16px;margin-top:16px;font-size:13px;color:#065F46;line-height:1.7}
+.reco strong{font-family:var(--fh)}
+.reco-warn{background:var(--warnbg);border-color:#FDE68A;color:#92400E}
+
+.sim-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:16px}
+.sim-table th{background:var(--sa);padding:8px 10px;text-align:left;font-family:var(--fh);font-size:11px;font-weight:500;color:var(--t3);border-bottom:1px solid var(--bd)}
+.sim-table td{padding:8px 10px;border-bottom:1px solid var(--bl)}
+.sim-table tr:hover td{background:var(--sa)}
+
+@media(max-width:800px){.methods{grid-template-columns:1fr}}
+@media print{.hd{display:none}body{background:white}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="window.print()">Imprimer</button><a href="index.html" class="btn">← Retour</a></div>
+</div>
+<div class="hero"><h1>Simulateur Prix de Vente</h1><p>Trois méthodes pour fixer le juste prix : par les coûts, par le marché, par la valeur perçue. L'outil compare et recommande.</p></div>
+
+<div class="container">
+  <div class="methods">
+    <div class="method">
+      <div class="method-num">Méthode 1</div>
+      <h3>Prix coût majoré</h3>
+      <div class="desc">Coût de revient + marge souhaitée. La base de tout pricing.</div>
+      <div class="field"><label>Coût matière (€/unité)</label><input type="number" id="c-mat" value="15" step="0.5" oninput="calc()"></div>
+      <div class="field"><label>Coût main d'œuvre (€/unité)</label><input type="number" id="c-mo" value="8" step="0.5" oninput="calc()"></div>
+      <div class="field"><label>Frais généraux (€/unité)</label><input type="number" id="c-fg" value="5" step="0.5" oninput="calc()"></div>
+      <div class="field"><label>Marge souhaitée (%)</label><input type="number" id="c-marge" value="30" step="1" oninput="calc()"></div>
+      <div class="price-result" id="r-cost"></div>
+    </div>
+
+    <div class="method">
+      <div class="method-num">Méthode 2</div>
+      <h3>Prix marché</h3>
+      <div class="desc">Positionnement par rapport à la concurrence.</div>
+      <div class="field"><label>Prix concurrent bas (€)</label><input type="number" id="m-low" value="35" step="0.5" oninput="calc()"></div>
+      <div class="field"><label>Prix concurrent moyen (€)</label><input type="number" id="m-mid" value="42" step="0.5" oninput="calc()"></div>
+      <div class="field"><label>Prix concurrent haut (€)</label><input type="number" id="m-high" value="55" step="0.5" oninput="calc()"></div>
+      <div class="field"><label>Votre positionnement</label><select id="m-pos" onchange="calc()"><option value="low">Entrée de gamme (-10%)</option><option value="mid" selected>Milieu de marché</option><option value="high">Premium (+15%)</option></select></div>
+      <div class="price-result" id="r-market"></div>
+    </div>
+
+    <div class="method">
+      <div class="method-num">Méthode 3</div>
+      <h3>Prix valeur perçue</h3>
+      <div class="desc">Ce que le client est prêt à payer pour les bénéfices reçus.</div>
+      <div class="field"><label>Économie générée pour le client (€)</label><input type="number" id="v-eco" value="200" step="10" oninput="calc()"></div>
+      <div class="field"><label>Part de la valeur capturée (%)</label><input type="number" id="v-part" value="25" step="5" oninput="calc()"></div>
+      <div class="field"><label>Consentement à payer estimé (€)</label><input type="number" id="v-wtp" value="60" step="1" oninput="calc()"></div>
+      <div class="price-result" id="r-value"></div>
+    </div>
+  </div>
+
+  <div class="comparison" id="comparison"></div>
+</div>
+
+<script>
+function fmt(n){return new Intl.NumberFormat('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n)}
+
+function calc(){
+  // Method 1: Cost-plus
+  const mat=parseFloat(document.getElementById('c-mat').value)||0;
+  const mo=parseFloat(document.getElementById('c-mo').value)||0;
+  const fg=parseFloat(document.getElementById('c-fg').value)||0;
+  const margeP=parseFloat(document.getElementById('c-marge').value)||0;
+  const cout=mat+mo+fg;
+  const prixCout=cout*(1+margeP/100);
+  document.getElementById('r-cost').innerHTML=`<div class="price-val">${fmt(prixCout)}€</div><div class="price-label">Prix coût majoré</div><div class="price-detail">Coût de revient : ${fmt(cout)}€ + marge ${margeP}%</div>`;
+
+  // Method 2: Market
+  const low=parseFloat(document.getElementById('m-low').value)||0;
+  const mid=parseFloat(document.getElementById('m-mid').value)||0;
+  const high=parseFloat(document.getElementById('m-high').value)||0;
+  const pos=document.getElementById('m-pos').value;
+  const prixMarche=pos==='low'?mid*0.9:pos==='high'?mid*1.15:mid;
+  const margeMarche=cout>0?((prixMarche-cout)/prixMarche*100):0;
+  document.getElementById('r-market').innerHTML=`<div class="price-val">${fmt(prixMarche)}€</div><div class="price-label">Prix marché (${pos==='low'?'entrée':pos==='high'?'premium':'milieu'})</div><div class="price-detail">Marge réelle : ${margeMarche.toFixed(1)}% | Fourchette : ${fmt(low)}-${fmt(high)}€</div>`;
+
+  // Method 3: Value
+  const eco=parseFloat(document.getElementById('v-eco').value)||0;
+  const part=parseFloat(document.getElementById('v-part').value)||0;
+  const wtp=parseFloat(document.getElementById('v-wtp').value)||0;
+  const prixValeur=eco*part/100;
+  const prixValeurFinal=Math.min(prixValeur,wtp);
+  const margeValeur=cout>0?((prixValeurFinal-cout)/prixValeurFinal*100):0;
+  document.getElementById('r-value').innerHTML=`<div class="price-val">${fmt(prixValeurFinal)}€</div><div class="price-label">Prix valeur perçue</div><div class="price-detail">${part}% de ${fmt(eco)}€ d'économie client | Marge : ${margeValeur.toFixed(1)}%</div>`;
+
+  // Comparison
+  const prices=[{name:'Coût majoré',val:prixCout,color:'var(--err)',cls:'bar-cost'},{name:'Marché',val:prixMarche,color:'var(--info)',cls:'bar-market'},{name:'Valeur perçue',val:prixValeurFinal,color:'var(--ok)',cls:'bar-value'}];
+  const maxP=Math.max(...prices.map(p=>p.val))*1.2;
+  const recommended=prices.reduce((best,p)=>p.val>cout&&p.val>=prixCout?(!best||p.val>best.val?p:best):best,null)||prices[0];
+
+  let html=`<div class="comp-title">Comparaison des 3 méthodes</div>`;
+  prices.forEach(p=>{
+    const pct=maxP>0?(p.val/maxP*100):0;
+    const margeP2=cout>0?((p.val-cout)/p.val*100):0;
+    html+=`<div class="bar-row"><span class="bar-label">${p.name}</span><div class="bar-track"><div class="bar-fill ${p.cls}" style="width:${pct}%">${fmt(p.val)}€</div>${cout>0?`<div class="bar-marker" style="left:${cout/maxP*100}%"><span class="bar-marker-label" style="left:-20px">Coût</span></div>`:''}</div><span style="font-family:var(--fh);font-size:12px;width:60px;text-align:right;color:${margeP2>0?'var(--ok)':'var(--err)'}">${margeP2.toFixed(0)}%</span></div>`;
+  });
+
+  // Recommendation
+  const allAboveCost=prices.every(p=>p.val>cout);
+  const spread=Math.max(...prices.map(p=>p.val))-Math.min(...prices.map(p=>p.val));
+  const avgPrice=prices.reduce((s,p)=>s+p.val,0)/3;
+
+  if(prixCout>prixMarche){
+    html+=`<div class="reco reco-warn"><strong>Alerte :</strong> votre prix coût majoré (${fmt(prixCout)}€) est supérieur au prix marché (${fmt(prixMarche)}€). Soit vous réduisez vos coûts, soit vous justifiez un premium par une valeur ajoutée supérieure.</div>`;
+  }else if(spread<maxP*0.15){
+    html+=`<div class="reco"><strong>Bonne cohérence :</strong> les 3 méthodes convergent autour de ${fmt(avgPrice)}€ (écart ${fmt(spread)}€). C'est un signe que votre prix est bien calibré. Recommandation : <strong>${fmt(Math.max(prixCout,prixMarche))}€</strong>.</div>`;
+  }else{
+    html+=`<div class="reco"><strong>Recommandation :</strong> fixez votre prix entre ${fmt(prixCout)}€ (plancher coût) et ${fmt(Math.min(prixValeurFinal,high))}€ (plafond marché/valeur). Le sweet spot est autour de <strong>${fmt((prixCout+prixMarche)/2)}€</strong> — il assure la marge tout en restant compétitif.</div>`;
+  }
+
+  // Simulation table
+  html+=`<table class="sim-table"><thead><tr><th>Prix de vente</th><th>Marge unitaire</th><th>Taux de marge</th><th>Seuil (si CF=100k€)</th><th>Positionnement</th></tr></thead><tbody>`;
+  [prixCout*0.9,prixCout,prixMarche,(prixCout+prixMarche)/2,prixValeurFinal,high].sort((a,b)=>a-b).forEach(p=>{
+    const m=p-cout;const tm=p>0?(m/p*100):0;const seuil=m>0?Math.ceil(100000/m):Infinity;
+    const position=p<low?'Sous le marché':p<=mid?'Entrée/Milieu':p<=high?'Milieu/Haut':'Au-dessus du marché';
+    html+=`<tr><td><strong>${fmt(p)}€</strong></td><td style="color:${m>0?'var(--ok)':'var(--err)'}">${fmt(m)}€</td><td>${tm.toFixed(1)}%</td><td>${seuil<Infinity?new Intl.NumberFormat('fr-FR').format(seuil)+' u.':'∞'}</td><td style="font-size:12px;color:var(--t3)">${position}</td></tr>`;
+  });
+  html+=`</tbody></table>`;
+
+  document.getElementById('comparison').innerHTML=html;
+}
+
+calc();
+</script>
+</body>
+</html>

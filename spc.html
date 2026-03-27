@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPC — Cartes de Contrôle — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--warnbg:#FFFBEB;--err:#DC2626;--info:#2563EB;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px}.btn:hover{border-color:var(--a);color:var(--a)}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:26px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.45);max-width:600px}
+.container{max-width:960px;margin:0 auto;padding:28px 24px}
+.card{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:24px;margin-bottom:20px}
+.card-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.field{margin-bottom:14px}.field label{font-family:var(--fh);font-size:12px;font-weight:500;color:var(--t3);display:block;margin-bottom:4px}.field input,.field textarea,.field select{width:100%;padding:10px 14px;border:1px solid var(--bd);border-radius:6px;font-size:14px;outline:none;background:var(--sa);font-family:var(--fb)}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--a)}.field textarea{resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.result-box{background:var(--sa);border-radius:12px;padding:20px;border:1px solid var(--bl);margin-top:16px}
+.result-title{font-family:var(--fh);font-size:12px;font-weight:600;color:var(--a);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.ri{text-align:center;padding:12px;background:var(--s);border-radius:8px;border:1px solid var(--bl)}.ri-val{font-family:var(--fd);font-size:22px;line-height:1}.ri-label{font-size:10px;color:var(--t3);margin-top:3px}
+.ri-ok{color:var(--ok)}.ri-warn{color:var(--warn)}.ri-err{color:var(--err)}.ri-info{color:var(--info)}.ri-accent{color:var(--a)}
+.guide{border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.7;margin-top:12px}
+.guide-ok{background:var(--okbg);border:1px solid #A7F3D0;color:#065F46}
+.guide-warn{background:var(--warnbg);border:1px solid #FDE68A;color:#92400E}
+.guide-info{background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF}
+.status-badge{display:inline-flex;align-items:center;gap:4px;font-family:var(--fh);font-size:11px;padding:3px 10px;border-radius:999px;font-weight:500}
+.sb-ok{background:var(--okbg);color:var(--ok)}.sb-err{background:#FEF2F2;color:var(--err)}
+.rules-list{margin-top:12px;font-size:12px;color:var(--t2);line-height:1.8}
+.rule-fail{color:var(--err);font-weight:500}
+.import-zone{border:2px dashed var(--bd);border-radius:8px;padding:16px;text-align:center;cursor:pointer;margin:12px 0;transition:border-color .2s}.import-zone:hover{border-color:var(--a)}.import-zone p{font-size:12px;color:var(--t3)}.import-zone input{display:none}
+@media(max-width:768px){.row{grid-template-columns:1fr}.result-grid{grid-template-columns:1fr 1fr}}
+@media print{.hd,.btn{display:none!important}body{background:white}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="window.print()">Imprimer</button><a href="index.html" class="btn">← Retour</a></div>
+</div>
+<div class="hero"><h1>SPC — Cartes de Contrôle Statistique</h1><p>Surveillez votre processus en temps réel. Détectez les causes spéciales avant qu'elles ne produisent des défauts. L'outil choisit la bonne carte selon vos données.</p></div>
+
+<div class="container">
+  <div class="card">
+    <div class="card-title">Configuration <span class="tag">Offres 3, 5</span></div>
+    <div class="guide guide-info" style="margin-top:0;margin-bottom:16px"><strong>Quelle carte choisir ?</strong><br>
+      <strong>I-MR</strong> : mesures individuelles (1 pièce à la fois). Le plus courant.<br>
+      <strong>X̄-R</strong> : sous-groupes de n pièces (ex: 5 pièces toutes les heures). Plus sensible.<br>
+      <strong>p-chart</strong> : proportions (% défectueux par lot). Pour les données attributaires.</div>
+    <div class="row">
+      <div class="field"><label>Type de carte</label><select id="chart-type" onchange="renderForm()"><option value="imr">I-MR (mesures individuelles)</option><option value="xbarr">X̄-R (sous-groupes)</option><option value="pchart">p-chart (proportions)</option></select></div>
+      <div class="field"><label>Caractéristique mesurée</label><input id="charac" value="Cote Ø 25 mm" placeholder="Ex: Cote, poids, temps..."></div>
+    </div>
+    <div id="data-input"></div>
+  </div>
+  <div id="results"></div>
+</div>
+
+<script>
+/* Stats helpers */
+const mean=d=>d.reduce((a,b)=>a+b,0)/d.length;
+const stdev=d=>{const m=mean(d);return Math.sqrt(d.reduce((a,v)=>a+(v-m)**2,0)/(d.length-1))};
+const range=d=>Math.max(...d)-Math.min(...d);
+
+function chart(data,center,ucl,lcl,title,zones,W=780,H=260){
+  const pad={t:24,r:50,b:30,l:55};const w=W-pad.l-pad.r,h=H-pad.t-pad.b;
+  const all=[...data,ucl,lcl];const yMin=Math.min(...all)-Math.abs(ucl-lcl)*.15;const yMax=Math.max(...all)+Math.abs(ucl-lcl)*.15;const yR=yMax-yMin||1;
+  const scX=i=>pad.l+i/(data.length-1||1)*w;const scY=v=>pad.t+h-(v-yMin)/yR*h;
+
+  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">`;
+  svg+=`<text x="${pad.l}" y="14" font-size="11" fill="var(--t2)" font-family="var(--fh)" font-weight="600">${title}</text>`;
+
+  // Zones (±1σ, ±2σ)
+  if(zones){
+    const sigma=(ucl-center)/3;
+    for(let z=1;z<=2;z++){
+      const y1=scY(center+z*sigma),y2=scY(center-z*sigma);
+      const yh=Math.abs(y2-y1);
+      svg+=`<rect x="${pad.l}" y="${Math.min(y1,y2)}" width="${w}" height="${yh}" fill="${z===1?'var(--ok)':'var(--warn)'}" opacity="0.04"/>`;
+    }
+  }
+
+  // UCL/LCL/CL
+  svg+=`<line x1="${pad.l}" y1="${scY(ucl)}" x2="${pad.l+w}" y2="${scY(ucl)}" stroke="var(--err)" stroke-width="1" stroke-dasharray="6,3"/>`;
+  svg+=`<text x="${pad.l+w+4}" y="${scY(ucl)+4}" font-size="9" fill="var(--err)" font-family="var(--fh)">UCL=${ucl.toFixed(3)}</text>`;
+  svg+=`<line x1="${pad.l}" y1="${scY(lcl)}" x2="${pad.l+w}" y2="${scY(lcl)}" stroke="var(--err)" stroke-width="1" stroke-dasharray="6,3"/>`;
+  svg+=`<text x="${pad.l+w+4}" y="${scY(lcl)+4}" font-size="9" fill="var(--err)" font-family="var(--fh)">LCL=${lcl.toFixed(3)}</text>`;
+  svg+=`<line x1="${pad.l}" y1="${scY(center)}" x2="${pad.l+w}" y2="${scY(center)}" stroke="var(--ok)" stroke-width="1.5"/>`;
+  svg+=`<text x="${pad.l+w+4}" y="${scY(center)+4}" font-size="9" fill="var(--ok)" font-family="var(--fh)">CL=${center.toFixed(3)}</text>`;
+
+  // Data line + points
+  let path='M';
+  data.forEach((v,i)=>{path+=(i===0?'':' L')+` ${scX(i)} ${scY(v)}`});
+  svg+=`<path d="${path}" fill="none" stroke="var(--p)" stroke-width="1.5"/>`;
+  data.forEach((v,i)=>{
+    const ooc=v>ucl||v<lcl;
+    svg+=`<circle cx="${scX(i)}" cy="${scY(v)}" r="${ooc?5:3}" fill="${ooc?'var(--err)':'var(--info)'}" stroke="${ooc?'var(--err)':'none'}" stroke-width="${ooc?2:0}"/>`;
+  });
+
+  // Y axis
+  for(let i=0;i<=4;i++){const y=pad.t+h*i/4;const v=yMax-(yMax-yMin)*i/4;svg+=`<text x="${pad.l-6}" y="${y+4}" text-anchor="end" font-size="9" fill="var(--t3)" font-family="var(--fh)">${v.toFixed(2)}</text>`}
+  // X axis
+  const step=Math.max(1,Math.floor(data.length/12));
+  for(let i=0;i<data.length;i+=step){svg+=`<text x="${scX(i)}" y="${pad.t+h+18}" text-anchor="middle" font-size="9" fill="var(--t3)" font-family="var(--fh)">${i+1}</text>`}
+  svg+=`</svg>`;
+  return svg;
+}
+
+/* Western Electric Rules */
+function checkRules(data,center,ucl,lcl){
+  const sigma=(ucl-center)/3;
+  const violations=[];
+  const n=data.length;
+
+  // Rule 1: Point beyond ±3σ
+  const r1=data.filter((v,i)=>v>ucl||v<lcl);
+  if(r1.length)violations.push({rule:'Règle 1',desc:`${r1.length} point(s) au-delà de ±3σ (hors limites)`,fail:true});
+
+  // Rule 2: 9 points consécutifs du même côté
+  for(let i=0;i<=n-9;i++){
+    const seg=data.slice(i,i+9);
+    if(seg.every(v=>v>center)||seg.every(v=>v<center)){violations.push({rule:'Règle 2',desc:`9+ points consécutifs du même côté de la moyenne (à partir du point ${i+1})`,fail:true});break}
+  }
+
+  // Rule 3: 6 points consécutifs en tendance
+  for(let i=0;i<=n-6;i++){
+    let up=true,down=true;
+    for(let j=i;j<i+5;j++){if(data[j+1]<=data[j])up=false;if(data[j+1]>=data[j])down=false}
+    if(up||down){violations.push({rule:'Règle 3',desc:`6+ points consécutifs en tendance ${up?'croissante':'décroissante'} (à partir du point ${i+1})`,fail:true});break}
+  }
+
+  // Rule 4: 2 of 3 beyond ±2σ
+  for(let i=0;i<=n-3;i++){
+    const seg=data.slice(i,i+3);
+    const beyond2=seg.filter(v=>v>center+2*sigma||v<center-2*sigma).length;
+    if(beyond2>=2){violations.push({rule:'Règle 4',desc:`2 points sur 3 au-delà de ±2σ (à partir du point ${i+1})`,fail:true});break}
+  }
+
+  if(violations.length===0)violations.push({rule:'OK',desc:'Aucune violation des règles de Western Electric détectée',fail:false});
+  return violations;
+}
+
+function renderForm(){
+  const type=document.getElementById('chart-type').value;
+  let html='';
+  if(type==='imr'){
+    html=`<div class="field"><label>Données (mesures individuelles, séparées par virgules ou retours à la ligne)</label><textarea id="spc-data" rows="4" placeholder="25.02, 24.98, 25.01, 25.05, 24.97, 25.03, 25.08, 24.95, 25.00, 24.99, 25.04, 25.02, 24.96, 25.01, 25.07, 24.98, 25.03, 25.00, 24.97, 25.05">25.02, 24.98, 25.01, 25.05, 24.97, 25.03, 25.08, 24.95, 25.00, 24.99, 25.04, 25.02, 24.96, 25.01, 25.07, 24.98, 25.03, 25.00, 24.97, 25.05</textarea></div>`;
+  }else if(type==='xbarr'){
+    html=`<div class="field"><label>Sous-groupes (une ligne = un sous-groupe, valeurs séparées par virgules)</label><textarea id="spc-data" rows="6" placeholder="25.02, 24.98, 25.01, 25.05, 24.97\n25.03, 25.08, 24.95, 25.00, 24.99\n...">25.02, 24.98, 25.01, 25.05, 24.97\n25.03, 25.08, 24.95, 25.00, 24.99\n25.04, 25.02, 24.96, 25.01, 25.07\n24.98, 25.03, 25.00, 24.97, 25.05\n25.01, 25.04, 24.99, 25.02, 25.00\n25.06, 24.97, 25.03, 25.01, 24.98</textarea></div>`;
+  }else{
+    html=`<div class="field"><label>Données p-chart (une ligne = "nb inspecté, nb défectueux")</label><textarea id="spc-data" rows="6" placeholder="100, 3\n100, 5\n100, 2\n100, 4\n100, 6\n100, 1">100, 3\n100, 5\n100, 2\n100, 4\n100, 6\n100, 1\n100, 3\n100, 2\n100, 7\n100, 4</textarea></div>`;
+  }
+  html+=`<button class="btn btn-p" onclick="runSPC()" style="background:var(--p);color:var(--sa);border-color:var(--p)">Générer les cartes de contrôle</button>`;
+  html+=`<div class="import-zone" onclick="document.getElementById('csv-in').click()"><p>Ou importer un CSV</p><input type="file" id="csv-in" accept=".csv" onchange="importCSV(event)"></div>`;
+  document.getElementById('data-input').innerHTML=html;
+}
+
+function parseData(){return(document.getElementById('spc-data')?.value||'').split(/[\n,;\t]+/).map(s=>parseFloat(s.trim())).filter(n=>!isNaN(n))}
+
+function runSPC(){
+  const type=document.getElementById('chart-type').value;
+  const charac=document.getElementById('charac').value||'Y';
+  const raw=document.getElementById('spc-data')?.value||'';
+  let html='';
+
+  if(type==='imr'){
+    const d=raw.split(/[\n,;\t]+/).map(s=>parseFloat(s.trim())).filter(n=>!isNaN(n));
+    if(d.length<5){document.getElementById('results').innerHTML='<div class="guide guide-warn">Minimum 5 observations.</div>';return}
+    const mr=[];for(let i=1;i<d.length;i++)mr.push(Math.abs(d[i]-d[i-1]));
+    const xBar=mean(d),mrBar=mean(mr);
+    const uclX=xBar+2.66*mrBar,lclX=xBar-2.66*mrBar;
+    const uclMR=3.267*mrBar;
+    const ooc=d.filter(v=>v>uclX||v<lclX).length;
+    const rules=checkRules(d,xBar,uclX,lclX);
+    const inControl=ooc===0&&rules.every(r=>!r.fail);
+    const badge=inControl?'<span class="status-badge sb-ok">Sous contrôle statistique</span>':'<span class="status-badge sb-err">Hors contrôle</span>';
+
+    html+=`<div class="result-box"><div class="result-title">Carte I (Individuelles) — ${charac} ${badge}</div>
+      ${chart(d,xBar,uclX,lclX,'Carte I — '+charac,true)}
+      <div class="result-grid" style="margin-top:12px">
+        <div class="ri"><div class="ri-val ri-info">${xBar.toFixed(3)}</div><div class="ri-label">X̄ (centre)</div></div>
+        <div class="ri"><div class="ri-val ri-err">${uclX.toFixed(3)}</div><div class="ri-label">UCL</div></div>
+        <div class="ri"><div class="ri-val ri-ok">${lclX.toFixed(3)}</div><div class="ri-label">LCL</div></div>
+        <div class="ri"><div class="ri-val">${stdev(d).toFixed(4)}</div><div class="ri-label">σ estimé</div></div>
+        <div class="ri"><div class="ri-val ${ooc===0?'ri-ok':'ri-err'}">${ooc}</div><div class="ri-label">Points hors limites</div></div>
+        <div class="ri"><div class="ri-val">${d.length}</div><div class="ri-label">n (observations)</div></div>
+      </div>
+    </div>`;
+
+    html+=`<div class="result-box"><div class="result-title">Carte MR (Moving Range)</div>
+      ${chart(mr,mrBar,uclMR,0,'Carte MR',false)}
+      <div class="result-grid" style="margin-top:12px">
+        <div class="ri"><div class="ri-val">${mrBar.toFixed(3)}</div><div class="ri-label">MR̄</div></div>
+        <div class="ri"><div class="ri-val">${uclMR.toFixed(3)}</div><div class="ri-label">UCL (MR)</div></div>
+      </div>
+    </div>`;
+
+    html+=`<div class="result-box"><div class="result-title">Règles de Western Electric</div>
+      <div class="rules-list">${rules.map(r=>`<div class="${r.fail?'rule-fail':''}">• <strong>${r.rule}</strong> : ${r.desc}</div>`).join('')}</div>
+      <div class="guide ${inControl?'guide-ok':'guide-warn'}" style="margin-top:12px">${inControl?'Le processus est sous contrôle statistique. Seules des causes communes de variation sont présentes. Vous pouvez calculer la capabilité de manière fiable.':'Le processus montre des signes de causes spéciales. Identifiez et éliminez ces causes avant de calculer la capabilité. Utilisez l\'Ishikawa ou la Fiche 8D pour investiguer.'}</div>
+    </div>`;
+
+  }else if(type==='xbarr'){
+    const lines=raw.split('\n').filter(l=>l.trim());
+    const sg=lines.map(l=>l.split(/[,;\t]+/).map(s=>parseFloat(s.trim())).filter(n=>!isNaN(n))).filter(g=>g.length>=2);
+    if(sg.length<5){document.getElementById('results').innerHTML='<div class="guide guide-warn">Minimum 5 sous-groupes.</div>';return}
+    const n=sg[0].length;
+    const means=sg.map(g=>mean(g)),ranges=sg.map(g=>range(g));
+    const xBarBar=mean(means),rBar=mean(ranges);
+    const A2=[0,0,1.880,1.023,0.729,0.577,0.483,0.419];
+    const D3=[0,0,0,0,0,0,0,0.076];
+    const D4=[0,0,3.267,2.575,2.282,2.115,2.004,1.924];
+    const a2=n<=7?A2[n]:0.5,d3=n<=7?D3[n]:0,d4=n<=7?D4[n]:2;
+    const uclX=xBarBar+a2*rBar,lclX=xBarBar-a2*rBar;
+    const uclR=d4*rBar,lclR=d3*rBar;
+
+    html+=`<div class="result-box"><div class="result-title">Carte X̄ (Moyennes) — ${charac}</div>
+      ${chart(means,xBarBar,uclX,lclX,'Carte X̄ — '+charac,true)}
+      <div class="result-grid" style="margin-top:12px">
+        <div class="ri"><div class="ri-val ri-info">${xBarBar.toFixed(3)}</div><div class="ri-label">X̿</div></div>
+        <div class="ri"><div class="ri-val ri-err">${uclX.toFixed(3)}</div><div class="ri-label">UCL</div></div>
+        <div class="ri"><div class="ri-val ri-ok">${lclX.toFixed(3)}</div><div class="ri-label">LCL</div></div>
+      </div>
+    </div>`;
+    html+=`<div class="result-box"><div class="result-title">Carte R (Étendues)</div>
+      ${chart(ranges,rBar,uclR,lclR,'Carte R',false)}
+      <div class="result-grid" style="margin-top:12px">
+        <div class="ri"><div class="ri-val">${rBar.toFixed(3)}</div><div class="ri-label">R̄</div></div>
+        <div class="ri"><div class="ri-val">${uclR.toFixed(3)}</div><div class="ri-label">UCL (R)</div></div>
+        <div class="ri"><div class="ri-val">${lclR.toFixed(3)}</div><div class="ri-label">LCL (R)</div></div>
+        <div class="ri"><div class="ri-val">${sg.length}</div><div class="ri-label">Sous-groupes</div></div>
+        <div class="ri"><div class="ri-val">${n}</div><div class="ri-label">Taille (n)</div></div>
+      </div>
+    </div>`;
+
+  }else{// p-chart
+    const lines=raw.split('\n').filter(l=>l.trim());
+    const lots=lines.map(l=>{const p=l.split(/[,;\t]+/).map(s=>parseInt(s.trim()));return p.length>=2?{n:p[0],d:p[1]}:null}).filter(Boolean);
+    if(lots.length<5){document.getElementById('results').innerHTML='<div class="guide guide-warn">Minimum 5 lots.</div>';return}
+    const proportions=lots.map(l=>l.d/l.n);
+    const totalN=lots.reduce((s,l)=>s+l.n,0);
+    const totalD=lots.reduce((s,l)=>s+l.d,0);
+    const pBar=totalD/totalN;
+    const nAvg=totalN/lots.length;
+    const uclP=pBar+3*Math.sqrt(pBar*(1-pBar)/nAvg);
+    const lclP=Math.max(0,pBar-3*Math.sqrt(pBar*(1-pBar)/nAvg));
+
+    html+=`<div class="result-box"><div class="result-title">Carte p (Proportions) — ${charac}</div>
+      ${chart(proportions,pBar,uclP,lclP,'Carte p — % défectueux',true)}
+      <div class="result-grid" style="margin-top:12px">
+        <div class="ri"><div class="ri-val ri-info">${(pBar*100).toFixed(2)}%</div><div class="ri-label">p̄ (proportion moy.)</div></div>
+        <div class="ri"><div class="ri-val ri-err">${(uclP*100).toFixed(2)}%</div><div class="ri-label">UCL</div></div>
+        <div class="ri"><div class="ri-val ri-ok">${(lclP*100).toFixed(2)}%</div><div class="ri-label">LCL</div></div>
+        <div class="ri"><div class="ri-val">${totalD}</div><div class="ri-label">Défauts totaux</div></div>
+        <div class="ri"><div class="ri-val">${totalN}</div><div class="ri-label">Inspectés total</div></div>
+        <div class="ri"><div class="ri-val">${lots.length}</div><div class="ri-label">Lots</div></div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('results').innerHTML=html;
+}
+
+function importCSV(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{document.getElementById('spc-data').value=ev.target.result;runSPC()};
+  reader.readAsText(file,'UTF-8');
+}
+
+function exportCSV(){
+  const type=document.getElementById('chart-type').value;
+  const raw=document.getElementById('spc-data')?.value||'';
+  let csv='';
+  if(type==='imr'){csv='Observation;Valeur\n';const d=raw.split(/[\n,;\t]+/).map(s=>parseFloat(s.trim())).filter(n=>!isNaN(n));d.forEach((v,i)=>csv+=`${i+1};${v}\n`)}
+  else{csv=raw}
+  csv+=`\nCaractéristique;"${document.getElementById('charac').value}"\nType;${type}\n`;
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`ASCALIS_spc_${new Date().toISOString().split('T')[0]}.csv`;a.click();
+}
+
+renderForm();
+</script>
+</body>
+</html>

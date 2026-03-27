@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagramme d'Ishikawa — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--warn:#D97706;--err:#DC2626;--info:#2563EB;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px}.btn:hover{border-color:var(--a);color:var(--a)}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:26px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.45);max-width:600px}
+.container{max-width:1100px;margin:0 auto;padding:28px 24px}
+.effect-bar{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.effect-bar label{font-family:var(--fh);font-size:13px;font-weight:600;flex-shrink:0}
+.effect-bar input{flex:1;padding:10px 14px;border:1px solid var(--bd);border-radius:6px;font-size:15px;outline:none;background:var(--sa);font-family:var(--fd);font-weight:400;color:var(--err)}
+.effect-bar input:focus{border-color:var(--a)}
+.fish-container{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:20px;margin-bottom:20px;overflow-x:auto}
+.branches{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.branch{background:var(--sa);border-radius:10px;padding:16px;border:1px solid var(--bl);transition:border-color .2s}
+.branch:hover{border-color:var(--a)}
+.br-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.br-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.br-name{font-family:var(--fh);font-size:13px;font-weight:600}
+.br-count{font-family:var(--fh);font-size:10px;color:var(--t3);margin-left:auto}
+.cause-item{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.cause-item input{flex:1;padding:6px 10px;border:1px solid var(--bd);border-radius:4px;font-size:12px;outline:none;background:var(--s);font-family:var(--fb)}.cause-item input:focus{border-color:var(--a)}
+.cause-del{color:var(--t3);cursor:pointer;font-size:14px;width:20px;text-align:center;flex-shrink:0}.cause-del:hover{color:var(--err)}
+.cause-add{width:100%;padding:5px;border:1px dashed var(--bd);background:none;border-radius:4px;font-size:11px;color:var(--t3);cursor:pointer;font-family:var(--fb);margin-top:4px}.cause-add:hover{border-color:var(--a);color:var(--a)}
+.summary{background:var(--s);border-radius:12px;border:1px solid var(--bl);padding:20px}
+.summary-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:12px}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:16px}
+.sg-item{text-align:center;padding:10px;background:var(--sa);border-radius:8px}
+.sg-val{font-family:var(--fd);font-size:22px;line-height:1}.sg-label{font-size:10px;color:var(--t3);margin-top:2px}
+@media(max-width:768px){.branches{grid-template-columns:1fr}}
+@media print{.hd,.cause-add,.cause-del,.btn{display:none!important}body{background:white}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="window.print()">Imprimer</button><a href="index.html" class="btn">← Retour</a></div>
+</div>
+<div class="hero"><h1>Diagramme d'Ishikawa (5M+1)</h1><p>Identifiez toutes les causes possibles d'un problème, classées par catégorie. Y = f(x₁, x₂, ...) — chaque branche explore une famille de causes.</p></div>
+
+<div class="container">
+  <div class="effect-bar"><label>Effet (Y) :</label><input id="effect" value="Taux de NC > 4% sur ligne 3" placeholder="Décrivez le problème / l'effet à analyser" oninput="renderFish()"></div>
+
+  <div class="branches" id="branches"></div>
+
+  <div class="fish-container"><div id="fishbone"></div></div>
+
+  <div class="summary" id="summary"></div>
+</div>
+
+<script>
+const CATS=[
+  {name:'Milieu',color:'#2563EB',desc:'Environnement, conditions',causes:['Température atelier variable','Éclairage insuffisant au poste','Poussière / contamination']},
+  {name:'Matière',color:'#D97706',desc:'Matière première, composants',causes:['Lot fournisseur non conforme','Variation d\'épaisseur matière','Stockage non maîtrisé']},
+  {name:'Méthode',color:'#059669',desc:'Process, gamme, procédure',causes:['Gamme opératoire obsolète','Paramètres non standardisés','Séquence d\'opérations variable']},
+  {name:'Machine',color:'#DC2626',desc:'Équipement, outillage',causes:['Usure outil non suivie','Jeu dans la broche','Maintenance préventive en retard']},
+  {name:'Main d\'œuvre',color:'#7C3AED',desc:'Compétence, formation',causes:['Formation insuffisante','Opérateur intérimaire non qualifié','Fatigue (poste de nuit)']},
+  {name:'Mesure',color:'#B07642',desc:'Métrologie, indicateurs',causes:['Pied à coulisse non étalonné','Fréquence de contrôle trop faible','Critère d\'acceptation ambigu']}
+];
+
+function addCause(ci){CATS[ci].causes.push('');render()}
+function delCause(ci,ki){CATS[ci].causes.splice(ki,1);render()}
+function updCause(ci,ki,val){CATS[ci].causes[ki]=val;renderFish();renderSummary()}
+
+function render(){
+  // Branches
+  document.getElementById('branches').innerHTML=CATS.map((c,ci)=>`
+    <div class="branch">
+      <div class="br-hd"><span class="br-dot" style="background:${c.color}"></span><span class="br-name">${c.name}</span><span class="br-count">${c.causes.filter(x=>x).length} cause${c.causes.filter(x=>x).length>1?'s':''}</span></div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:8px">${c.desc}</div>
+      ${c.causes.map((k,ki)=>`<div class="cause-item"><input value="${k}" oninput="updCause(${ci},${ki},this.value)" placeholder="Cause..."><span class="cause-del" onclick="delCause(${ci},${ki})">×</span></div>`).join('')}
+      <button class="cause-add" onclick="addCause(${ci})">+ Ajouter une cause</button>
+    </div>
+  `).join('');
+  renderFish();
+  renderSummary();
+}
+
+function renderFish(){
+  const effect=document.getElementById('effect').value||'Effet';
+  const W=900,H=400;
+  const spineY=H/2,spineX1=60,spineX2=W-120;
+  const headX=spineX2+10;
+
+  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">`;
+
+  // Spine
+  svg+=`<line x1="${spineX1}" y1="${spineY}" x2="${spineX2}" y2="${spineY}" stroke="var(--p)" stroke-width="3"/>`;
+
+  // Head (effect)
+  svg+=`<polygon points="${headX},${spineY-30} ${W-10},${spineY} ${headX},${spineY+30}" fill="var(--err)" opacity="0.15" stroke="var(--err)" stroke-width="1.5"/>`;
+  svg+=`<text x="${headX+10}" y="${spineY+5}" font-family="var(--fh)" font-size="11" fill="var(--err)" font-weight="600">${effect.length>30?effect.substring(0,29)+'…':effect}</text>`;
+
+  // Branches
+  const topCats=[0,1,2];// Milieu, Matière, Méthode
+  const botCats=[3,4,5];// Machine, Main d'œuvre, Mesure
+  const branchSpacing=(spineX2-spineX1-40)/(3);
+
+  function drawBranch(ci,idx,isTop){
+    const c=CATS[ci];
+    const causes=c.causes.filter(x=>x);
+    const bx=spineX1+40+idx*branchSpacing;
+    const by=isTop?spineY-120:spineY+120;
+    const dir=isTop?-1:1;
+
+    // Main branch line
+    svg+=`<line x1="${bx}" y1="${spineY}" x2="${bx}" y2="${by}" stroke="${c.color}" stroke-width="2" opacity="0.6"/>`;
+
+    // Category label
+    svg+=`<rect x="${bx-40}" y="${isTop?by-24:by+6}" width="80" height="20" rx="4" fill="${c.color}" opacity="0.12"/>`;
+    svg+=`<text x="${bx}" y="${isTop?by-10:by+20}" text-anchor="middle" font-family="var(--fh)" font-size="11" fill="${c.color}" font-weight="600">${c.name}</text>`;
+
+    // Cause lines
+    causes.forEach((cause,ki)=>{
+      const cy=spineY+dir*(25+ki*22);
+      const cx=bx+(ki%2===0?-1:1)*8;
+      svg+=`<line x1="${bx}" y1="${cy}" x2="${bx+(ki%2===0?-80:80)}" y2="${cy+dir*12}" stroke="${c.color}" stroke-width="1" opacity="0.3"/>`;
+      svg+=`<text x="${bx+(ki%2===0?-84:84)}" y="${cy+dir*12+4}" text-anchor="${ki%2===0?'end':'start'}" font-size="9" fill="var(--t2)" font-family="var(--fb)">${cause.length>25?cause.substring(0,24)+'…':cause}</text>`;
+    });
+  }
+
+  topCats.forEach((ci,i)=>drawBranch(ci,i,true));
+  botCats.forEach((ci,i)=>drawBranch(ci,i,false));
+
+  // Title
+  svg+=`<text x="${W/2}" y="18" text-anchor="middle" font-family="var(--fh)" font-size="12" fill="var(--t3)">Y = f(x₁, x₂, ...) — Diagramme causes-effet</text>`;
+
+  svg+=`</svg>`;
+  document.getElementById('fishbone').innerHTML=svg;
+}
+
+function renderSummary(){
+  const totalCauses=CATS.reduce((s,c)=>s+c.causes.filter(x=>x).length,0);
+  const byCat=CATS.map(c=>({name:c.name,count:c.causes.filter(x=>x).length,color:c.color})).sort((a,b)=>b.count-a.count);
+
+  document.getElementById('summary').innerHTML=`
+    <div class="summary-title">Synthèse : ${totalCauses} causes identifiées sur 6 catégories</div>
+    <div class="summary-grid">
+      ${byCat.map(c=>`<div class="sg-item"><div class="sg-val" style="color:${c.color}">${c.count}</div><div class="sg-label">${c.name}</div></div>`).join('')}
+      <div class="sg-item"><div class="sg-val" style="color:var(--p)">${totalCauses}</div><div class="sg-label">Total causes</div></div>
+    </div>
+    <div style="font-size:12px;color:var(--t2);line-height:1.7">
+      <strong>Prochaine étape :</strong> priorisez les causes identifiées avec une <a href="matrice-priorisation.html" style="color:var(--a)">Matrice Impact/Effort</a>, puis validez statistiquement les causes vitales dans le <a href="dmaic-navigator.html" style="color:var(--a)">DMAIC Navigator</a> (phase Analyze).
+    </div>
+  `;
+}
+
+function exportCSV(){
+  let csv='Catégorie;Cause\n';
+  CATS.forEach(c=>c.causes.filter(x=>x).forEach(k=>csv+=`"${c.name}";"${k}"\n`));
+  csv+=`\nEffet;"${document.getElementById('effect').value}"\n`;
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`ASCALIS_ishikawa_${new Date().toISOString().split('T')[0]}.csv`;a.click();
+}
+
+render();
+</script>
+</body>
+</html>
