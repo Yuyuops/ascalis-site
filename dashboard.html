@@ -212,6 +212,11 @@ const NAV_ADMIN=[
   {id:'tool-audit',label:'Grille d\'audit',icon:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',link:'grille-audit.html'},
   {id:'tool-ctrl',label:'Plan de contrôle',icon:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/>',link:'plan-controle.html'},
   {id:'tool-dmaic',label:'DMAIC Navigator',icon:'<path d="M2 17l10-10 4 4 6-6"/><path d="M17 5h5v5"/>',link:'dmaic-navigator.html',badge:'NEW'},
+  {id:'tool-pareto',label:'Pareto interactif',icon:'<path d="M18 20V10M12 20V4M6 20v-6"/>',link:'pareto.html',badge:'NEW'},
+  {id:'tool-vsm',label:'VSM — Cartographie',icon:'<path d="M3 6h18M3 12h15M3 18h10"/>',link:'vsm.html',badge:'NEW'},
+  {id:'tool-sipoc',label:'SIPOC',icon:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18"/>',link:'sipoc.html',badge:'NEW'},
+  {id:'tool-ishikawa',label:'Ishikawa interactif',icon:'<path d="M12 5v14M5 12h7M19 9l-7 3M19 15l-7-3"/>',link:'ishikawa.html',badge:'NEW'},
+  {id:'tool-spc',label:'SPC / Cartes contrôle',icon:'<path d="M3 12h4l3-9 4 18 3-9h4"/>',link:'spc.html',badge:'NEW'},
   {section:'Outils Gratuits'},
   {id:'tool-cnq',label:'Calculateur CNQ',icon:'<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',link:'calculateur-cnq.html'},
   {id:'tool-check',label:'Checklist pré-audit',icon:'<path d="M9 11l3 3L22 4"/>',link:'checklist-audit.html'},
@@ -268,11 +273,11 @@ function renderDashboard(){
     {name:'Fiche 8D',desc:'Résolution de problème 8 disciplines',status:'built',icon:'green',link:'fiche-8d.html'},
     {name:'Grille d\'audit à blanc',desc:'ISO 9001 / EN 9100',status:'built',icon:'green',link:'grille-audit.html',admin:true},
     {name:'Plan de contrôle',desc:'Tableau éditable + export CSV',status:'built',icon:'green',link:'plan-controle.html',admin:true},
-    {name:'Pareto interactif',desc:'Analyse fréquence / impact',status:'soon',icon:'amber'},
-    {name:'VSM — Cartographie',desc:'Chaîne de valeur interactive',status:'soon',icon:'amber'},
-    {name:'SIPOC',desc:'Vue macro processus',status:'soon',icon:'amber'},
-    {name:'Ishikawa interactif',desc:'5M+1 standalone',status:'soon',icon:'amber'},
-    {name:'SPC / Cartes de contrôle',desc:'Contrôle statistique',status:'soon',icon:'amber'},
+    {name:'Pareto interactif',desc:'Analyse fréquence / impact',status:'built',icon:'green',link:'pareto.html'},
+    {name:'VSM — Cartographie',desc:'Chaîne de valeur interactive',status:'built',icon:'green',link:'vsm.html'},
+    {name:'SIPOC',desc:'Vue macro processus',status:'built',icon:'green',link:'sipoc.html'},
+    {name:'Ishikawa interactif',desc:'5M+1 standalone',status:'built',icon:'green',link:'ishikawa.html'},
+    {name:'SPC / Cartes de contrôle',desc:'Contrôle statistique',status:'built',icon:'green',link:'spc.html'},
   ];
 
   const TOOLS_FREE=[
@@ -281,9 +286,9 @@ function renderDashboard(){
     {name:'Matrice priorisation',desc:'Impact vs. Effort',status:'built',icon:'copper',link:'matrice-priorisation.html'},
     {name:'Score documentaire',desc:'Maturité documentaire',status:'built',icon:'copper',link:'score-documentaire.html'},
     {name:'Simulateur ROI',desc:'ROI automatisation qualité',status:'built',icon:'copper',link:'simulateur-roi.html'},
-    {name:'Seuil de rentabilité',desc:'Point mort & volume min',status:'soon',icon:'blue'},
-    {name:'Simulateur prix',desc:'Prix de vente optimal',status:'soon',icon:'blue'},
-    {name:'Diagnostic dirigeant',desc:'Radar de profil',status:'soon',icon:'blue'},
+    {name:'Seuil de rentabilité',desc:'Point mort & volume min',status:'built',icon:'copper',link:'seuil-rentabilite.html'},
+    {name:'Simulateur prix',desc:'Prix de vente optimal',status:'built',icon:'copper',link:'simulateur-prix.html'},
+    {name:'Diagnostic dirigeant',desc:'Radar de profil',status:'built',icon:'copper',link:'diagnostic-dirigeant.html'},
     {name:'Dashboard dirigeant',desc:'KPI essentiels PME',status:'soon',icon:'blue'},
   ];
 

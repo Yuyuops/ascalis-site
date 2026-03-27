@@ -105,8 +105,9 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 .hero { min-height: 100dvh; display: flex; align-items: center; background: var(--color-surface); position: relative; padding: var(--space-14) var(--space-8) var(--space-12); }
 .hero::after { content: ''; position: absolute; top: 0; right: 0; width: 45%; height: 100%; background: linear-gradient(135deg, var(--color-surface-alt) 0%, transparent 70%); pointer-events: none; }
 .hero-inner { max-width: var(--container-max); margin: 0 auto; width: 100%; position: relative; z-index: 1; }
-.hero-tag { display: inline-flex; align-items: center; gap: var(--space-2); font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: var(--space-7); }
-.hero-tag::before { content: ''; width: 24px; height: 2px; background: var(--color-accent); border-radius: 1px; }
+.hero-tag { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: var(--space-7); }
+.hero-tag::before { content: ''; width: 32px; height: 2px; flex-shrink: 0; background: var(--color-accent); border-radius: 1px; }
+.hero-tag::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(176,118,66,.35), transparent); border-radius: 1px; }
 .hero h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.5rem, 5.5vw, var(--font-size-5xl)); line-height: 1.1; color: var(--color-primary); max-width: 720px; margin-bottom: var(--space-6); }
 .hero h1 em { font-style: italic; color: var(--color-accent); }
 .hero-sub { font-size: var(--font-size-lg); line-height: 1.7; color: var(--color-on-surface-secondary); max-width: 540px; margin-bottom: var(--space-9); }
@@ -257,31 +258,17 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 .r-label { font-size: var(--font-size-sm); color: rgba(248,250,252,.6); margin-top: var(--space-2); line-height: 1.4; }
 
 /* ═══ OFFRES ═══ */
-.offres { background: var(--color-surface); }
+.offres { background: var(--color-surface-alt); }
 .offres-grid { max-width: var(--container-max); margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
-.offre-card { border-radius: var(--radius-lg); padding: var(--space-7); transition: transform var(--duration-normal) var(--ease-spring), box-shadow var(--duration-normal); position: relative; overflow: hidden; }
-.offre-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--color-accent); opacity: 0; transition: opacity var(--duration-fast); }
-.oc-light { background: var(--color-surface-alt); border: 1px solid var(--color-border-light); color: var(--color-on-surface); }
-.oc-dark { background: var(--color-primary); border: 1px solid rgba(248,250,252,.06); color: var(--color-on-primary); }
-.oc-teal { background: var(--color-primary-light); border: 1px solid rgba(248,250,252,.06); color: var(--color-on-primary); }
-.oc-accent { background: linear-gradient(135deg, var(--color-accent), #C4875A); border: none; color: #fff; }
-.offre-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-.oc-light:hover::before { opacity: 1; }
-.oc-dark::before, .oc-teal::before, .oc-accent::before { display: none; }
-.offre-num { font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 600; letter-spacing: .08em; margin-bottom: var(--space-2); }
-.oc-light .offre-num { color: var(--color-accent); }
-.oc-dark .offre-num, .oc-teal .offre-num { color: var(--color-accent-light); }
-.oc-accent .offre-num { color: rgba(255,255,255,.7); }
-.offre-card h3 { font-family: var(--font-heading); font-size: var(--font-size-base); font-weight: 600; margin-bottom: var(--space-2); line-height: 1.3; }
-.offre-card .pitch { font-size: var(--font-size-sm); line-height: 1.6; font-style: italic; margin-bottom: var(--space-4); }
-.oc-light .pitch { color: var(--color-on-surface-secondary); }
-.oc-dark .pitch, .oc-teal .pitch { color: rgba(248,250,252,.55); }
-.oc-accent .pitch { color: rgba(255,255,255,.75); }
-.offre-meta { display: flex; gap: var(--space-4); font-size: var(--font-size-xs); flex-wrap: wrap; }
-.oc-light .offre-meta { color: var(--color-on-surface-muted); }
-.oc-dark .offre-meta, .oc-teal .offre-meta { color: rgba(248,250,252,.35); }
-.oc-accent .offre-meta { color: rgba(255,255,255,.6); }
-.offre-card.featured { grid-column: 1 / -1; }
+.offre-card { background: var(--color-surface); border: 1px solid var(--color-border-light); border-left: 3px solid var(--color-accent); border-radius: var(--radius-lg); padding: var(--space-7); transition: transform var(--duration-normal) var(--ease-spring), box-shadow var(--duration-normal), border-color var(--duration-normal); position: relative; overflow: hidden; }
+.offre-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-left-color: var(--color-primary); }
+.offre-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-3); }
+.offre-num { font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 700; letter-spacing: .1em; color: var(--color-accent); background: rgba(176,118,66,.08); border: 1px solid rgba(176,118,66,.2); padding: 2px var(--space-3); border-radius: var(--radius-full); white-space: nowrap; }
+.offre-badge-strat { font-family: var(--font-heading); font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--color-primary); background: var(--color-surface-alt); border: 1px solid var(--color-border-light); padding: 2px var(--space-2); border-radius: var(--radius-full); white-space: nowrap; }
+.offre-card h3 { font-family: var(--font-heading); font-size: var(--font-size-base); font-weight: 600; margin-bottom: var(--space-3); line-height: 1.35; color: var(--color-on-surface); }
+.offre-card .pitch { font-size: var(--font-size-sm); line-height: 1.65; font-style: italic; color: var(--color-on-surface-secondary); margin-bottom: var(--space-5); }
+.offre-meta { display: flex; gap: var(--space-3); font-family: var(--font-heading); font-size: var(--font-size-xs); font-weight: 500; color: var(--color-on-surface-muted); flex-wrap: wrap; border-top: 1px solid var(--color-border-light); padding-top: var(--space-4); }
+.offre-meta span::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--color-accent); vertical-align: middle; margin-right: var(--space-1); opacity: .6; }
 
 /* ═══ PARCOURS ═══ */
 .parcours { background: var(--color-surface-alt); }
@@ -323,17 +310,18 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 .rb-btp { background: var(--color-warning-bg); color: var(--color-warning); }
 .rb-transport { background: var(--color-success-bg); color: var(--color-success); }
 
-/* ═══ SECTEURS ═══ */
-.secteurs { background: var(--color-surface); }
-.secteurs-grid { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
-.secteur-card { padding: var(--space-7); border-radius: var(--radius-lg); border: 1px solid var(--color-border-light); background: var(--color-surface-alt); transition: all var(--duration-normal) var(--ease-spring); }
-.secteur-card:hover { border-color: var(--color-accent-light); transform: translateY(-2px); }
-.secteur-card h3 { font-family: var(--font-heading); font-size: var(--font-size-base); font-weight: 600; margin: var(--space-4) 0 var(--space-2); }
-.secteur-card p { font-size: var(--font-size-sm); color: var(--color-on-surface-secondary); line-height: 1.7; }
-.secteur-refs { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-top: var(--space-3); }
-.secteur-ref { font-family: var(--font-heading); font-size: 10px; font-weight: 500; padding: 2px var(--space-2); border-radius: var(--radius-full); background: var(--color-surface); border: 1px solid var(--color-border-light); color: var(--color-on-surface-muted); }
-/* SVG sector icons */
-.secteur-svg { width: 36px; height: 36px; color: var(--color-accent); }
+/* ═══ POUR QUI ═══ */
+.secteurs { background: var(--color-primary); color: var(--color-on-primary); }
+.secteurs .section-tag { color: var(--color-accent-light); }
+.secteurs .section-tag::before, .secteurs .section-tag::after { background: var(--color-accent-light); }
+.secteurs .section-header h2 { color: var(--color-on-primary); }
+.secteurs .section-header p { color: rgba(248,250,252,.6); }
+.cible-grid { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
+.cible-card { padding: var(--space-7); border-radius: var(--radius-lg); border: 1px solid rgba(248,250,252,.08); background: rgba(248,250,252,.04); transition: all var(--duration-normal) var(--ease-spring); }
+.cible-card:hover { border-color: rgba(176,118,66,.4); background: rgba(248,250,252,.07); }
+.cible-icon { width: 40px; height: 40px; color: var(--color-accent-light); margin-bottom: var(--space-4); }
+.cible-card h3 { font-family: var(--font-heading); font-size: var(--font-size-base); font-weight: 600; margin-bottom: var(--space-2); color: var(--color-on-primary); }
+.cible-card p { font-size: var(--font-size-sm); color: rgba(248,250,252,.55); line-height: 1.7; }
 
 /* ═══ TOOLBOX ═══ */
 .toolbox { background: var(--color-primary); color: var(--color-on-primary); }
@@ -450,11 +438,10 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 .ref-quote { transition: border-left-width var(--duration-fast), border-left-color var(--duration-fast); }
 .ref-card:hover .ref-quote { border-left-width: 3px; border-left-color: var(--color-accent); }
 
-/* Secteur — SVG bounce + color shift */
-.secteur-card { transition: border-color var(--duration-normal) var(--ease-spring), transform var(--duration-normal) var(--ease-spring), box-shadow var(--duration-normal); }
-.secteur-card:hover { border-color: var(--color-accent-light); box-shadow: var(--shadow-sm); }
-.secteur-svg { transition: color var(--duration-normal) var(--ease-spring), transform var(--duration-normal) var(--ease-bounce); }
-.secteur-card:hover .secteur-svg { color: var(--color-primary); transform: scale(1.1); }
+/* Cible card hover */
+.cible-card { transition: border-color var(--duration-normal) var(--ease-spring), background var(--duration-normal), transform var(--duration-normal) var(--ease-spring); }
+.cible-icon { transition: color var(--duration-normal) var(--ease-spring), transform var(--duration-normal) var(--ease-bounce); }
+.cible-card:hover .cible-icon { transform: scale(1.1); }
 
 /* Offre light — subtle warmth gradient on hover */
 .oc-light:hover { background: linear-gradient(160deg, var(--color-surface) 0%, var(--color-surface-alt) 80%); }
@@ -497,7 +484,7 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 
 /* ═══ RESPONSIVE (Mobile-first breakpoints: 375/768/1024/1440) ═══ */
 @media (max-width: 1024px) {
-  .pillars-grid, .secteurs-grid, .ref-grid, .tools-grid, .tools-grid-2 { grid-template-columns: 1fr; }
+  .pillars-grid, .cible-grid, .ref-grid, .tools-grid, .tools-grid-2 { grid-template-columns: 1fr; }
   .offres-grid { grid-template-columns: 1fr; }
   .offre-card.featured { grid-column: 1; }
   .results-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-7); }
@@ -632,14 +619,14 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 <section class="section offres" id="offres" aria-labelledby="offres-heading">
   <div class="section-header"><div class="section-tag">Offres</div><h2 id="offres-heading">Huit offres, une logique terrain</h2><p>Chaque offre part d'une douleur identifiée et débouche sur un résultat mesurable. Elles sont modulaires et combinables.</p></div>
   <div class="offres-grid">
-    <article class="offre-card oc-light reveal"><div class="offre-num">OFFRE 01</div><h3>Diagnostic Flash Qualité</h3><p class="pitch">En une semaine, vous savez exactement où sont vos failles qualité et par quoi commencer.</p><div class="offre-meta"><span>3-5 jours</span><span>3-5 k€ HT</span></div></article>
-    <article class="offre-card oc-dark reveal"><div class="offre-num">OFFRE 02</div><h3>Remise en conformité documentaire</h3><p class="pitch">Vos documents reflètent enfin ce que vous faites vraiment — et vos équipes savent les maintenir.</p><div class="offre-meta"><span>10-20 jours</span><span>8-20 k€ HT</span></div></article>
-    <article class="offre-card oc-teal reveal"><div class="offre-num">OFFRE 03</div><h3>NC récurrentes : traitement à la racine</h3><p class="pitch">Vos 5 défauts les plus coûteux identifiés, traités à la racine, et surveillés automatiquement.</p><div class="offre-meta"><span>10-15 jours</span><span>8-15 k€ HT</span></div></article>
-    <article class="offre-card oc-light reveal"><div class="offre-num">OFFRE 04</div><h3>Structuration du SMQ</h3><p class="pitch">Un système qualité qui tient la route pour la certification — et que vos équipes utilisent vraiment.</p><div class="offre-meta"><span>20-40 jours</span><span>18-40 k€ HT</span></div></article>
-    <article class="offre-card oc-dark reveal"><div class="offre-num">OFFRE 05</div><h3>Automatisation des processus qualité</h3><p class="pitch">Vos process qualité tournent tout seuls — votre responsable qualité retourne enfin sur le terrain.</p><div class="offre-meta"><span>5-15 jours</span><span>5-15 k€ HT</span></div></article>
-    <article class="offre-card oc-light reveal"><div class="offre-num">OFFRE 06</div><h3>Accompagnement performance continue</h3><p class="pitch">Un copilote terrain qui maintient la dynamique qualité jusqu'à ce que vos équipes volent seules.</p><div class="offre-meta"><span>1-2 j/mois</span><span>1-2 k€/mois</span></div></article>
-    <article class="offre-card oc-accent featured reveal"><div class="offre-num">OFFRE 07 — POINT D'ENTRÉE STRATÉGIQUE</div><h3>Diagnostic Performance & Maturité Numérique</h3><p class="pitch">En une semaine, vous voyez votre performance réelle sur un radar — et vous savez où chaque euro investi aura le plus d'impact.</p><div class="offre-meta"><span>3-8 jours</span><span>2,5-8 k€ HT</span><span>2 formats disponibles</span></div></article>
-    <article class="offre-card oc-teal featured reveal"><div class="offre-num">OFFRE 08 — STRUCTURATION PME</div><h3>Structuration opérationnelle PME</h3><p class="pitch">Vous avez grandi vite. On structure votre pilotage pour que vous puissiez continuer à grandir — sans que tout repose sur vous.</p><div class="offre-meta"><span>15-30 jours</span><span>12-30 k€ HT</span><span>Pilotage, commercial, achats, com</span></div></article>
+    <article class="offre-card reveal"><div class="offre-card-header"><div class="offre-num">01</div></div><h3>Diagnostic Flash Qualité</h3><p class="pitch">En une semaine, vous savez exactement où sont vos failles qualité et par quoi commencer.</p><div class="offre-meta"><span>3–5 jours</span><span>3–5 k€ HT</span></div></article>
+    <article class="offre-card reveal"><div class="offre-card-header"><div class="offre-num">02</div></div><h3>Remise en conformité documentaire</h3><p class="pitch">Vos documents reflètent enfin ce que vous faites vraiment — et vos équipes savent les maintenir.</p><div class="offre-meta"><span>10–20 jours</span><span>8–20 k€ HT</span></div></article>
+    <article class="offre-card reveal"><div class="offre-card-header"><div class="offre-num">03</div></div><h3>NC récurrentes : traitement à la racine</h3><p class="pitch">Vos 5 défauts les plus coûteux identifiés, traités à la racine, et surveillés automatiquement.</p><div class="offre-meta"><span>10–15 jours</span><span>8–15 k€ HT</span></div></article>
+    <article class="offre-card reveal"><div class="offre-card-header"><div class="offre-num">04</div></div><h3>Structuration du SMQ</h3><p class="pitch">Un système qualité qui tient la route pour la certification — et que vos équipes utilisent vraiment.</p><div class="offre-meta"><span>20–40 jours</span><span>18–40 k€ HT</span></div></article>
+    <article class="offre-card reveal"><div class="offre-card-header"><div class="offre-num">05</div></div><h3>Automatisation des processus qualité</h3><p class="pitch">Vos process qualité tournent tout seuls — votre responsable qualité retourne enfin sur le terrain.</p><div class="offre-meta"><span>5–15 jours</span><span>5–15 k€ HT</span></div></article>
+    <article class="offre-card reveal"><div class="offre-card-header"><div class="offre-num">06</div></div><h3>Accompagnement performance continue</h3><p class="pitch">Un copilote terrain qui maintient la dynamique qualité jusqu'à ce que vos équipes volent seules.</p><div class="offre-meta"><span>1–2 j/mois</span><span>1–2 k€/mois</span></div></article>
+    <article class="offre-card reveal"><div class="offre-card-header"><div class="offre-num">07</div><span class="offre-badge-strat">Point d'entrée</span></div><h3>Diagnostic Performance & Maturité Numérique</h3><p class="pitch">En une semaine, vous voyez votre performance réelle sur un radar — et vous savez où chaque euro investi aura le plus d'impact.</p><div class="offre-meta"><span>3–8 jours</span><span>2,5–8 k€ HT</span><span>2 formats</span></div></article>
+    <article class="offre-card reveal"><div class="offre-card-header"><div class="offre-num">08</div><span class="offre-badge-strat">Structuration PME</span></div><h3>Structuration opérationnelle PME</h3><p class="pitch">Vous avez grandi vite. On structure votre pilotage pour que vous puissiez continuer à grandir — sans que tout repose sur vous.</p><div class="offre-meta"><span>15–30 jours</span><span>12–30 k€ HT</span></div></article>
   </div>
 </section>
 
@@ -668,10 +655,20 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
     <div class="about-content">
       <h3>Votre prénom Nom</h3>
       <div class="about-role">Consultant Amélioration Continue & Performance Qualité</div>
-      <p class="about-text">Ingénieur qualité de formation, j'ai passé plus de 8 ans sur le terrain — en atelier, sur les lignes de production, au contact des opérateurs et des responsables qualité. J'ai travaillé dans l'aéronautique (traitement de surface, peinture), le BTP et le transport.</p>
+      <p class="about-text">Ingénieur qualité de formation, j'ai passé plus de 8 ans sur le terrain — en atelier, sur les lignes de production, au contact des opérateurs et des responsables qualité. J'interviens dans l'industrie manufacturière, le BTP et le transport & logistique.</p>
       <div class="about-diff"><div class="about-diff-title">Ce qui me différencie d'un cabinet</div><p>Vous travaillez avec moi directement, pas avec un junior envoyé par un cabinet. Pas de couche commerciale, pas de rapport de 80 pages. Un interlocuteur unique qui connaît votre terrain et qui s'engage sur des résultats. Mon objectif : me rendre inutile en 6 à 12 mois.</p></div>
-      <div class="about-stats"><div><div class="about-stat-val">8+</div><div class="about-stat-label">Années terrain</div></div><div><div class="about-stat-val">3</div><div class="about-stat-label">Secteurs maîtrisés</div></div><div><div class="about-stat-val">100%</div><div class="about-stat-label">Transfert de compétences</div></div></div>
-      <div class="about-tags"><span class="about-tag">SMQ / ISO 9001</span><span class="about-tag">EN 9100</span><span class="about-tag">Lean terrain</span><span class="about-tag">Power Automate</span><span class="about-tag">SharePoint</span><span class="about-tag">Power BI</span></div>
+      <div class="about-stats"><div><div class="about-stat-val">8+</div><div class="about-stat-label">Années terrain</div></div><div><div class="about-stat-val">3</div><div class="about-stat-label">Secteurs industriels</div></div><div><div class="about-stat-val">100%</div><div class="about-stat-label">Transfert de compétences</div></div></div>
+      <div class="about-tags">
+        <span class="about-tag">Mastère Spé. CESI — Management QSE</span>
+        <span class="about-tag">Black Belt Six Sigma</span>
+        <span class="about-tag">Outils digitaux & IA (Claude Code, Power Automate, BI)</span>
+        <span class="about-tag">SMQ / ISO 9001</span>
+        <span class="about-tag">EN 9100</span>
+        <span class="about-tag">Lean terrain</span>
+        <span class="about-tag">Aéronautique</span>
+        <span class="about-tag">BTP / Construction</span>
+        <span class="about-tag">Transport & Logistique</span>
+      </div>
     </div>
   </div>
 </section>
@@ -686,13 +683,25 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   </div>
 </section>
 
-<!-- SECTEURS -->
+<!-- POUR QUI -->
 <section class="section secteurs" id="secteurs" aria-labelledby="secteurs-heading">
-  <div class="section-header"><div class="section-tag">Secteurs</div><h2 id="secteurs-heading">Trois secteurs, un même ADN terrain</h2><p>Les offres se déclinent sur chaque secteur en changeant le vocabulaire et les référentiels.</p></div>
-  <div class="secteurs-grid">
-    <article class="secteur-card reveal"><svg class="secteur-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 17l10-10 4 4 6-6"/><path d="M17 5h5v5"/></svg><h3>Aéronautique</h3><p>EN 9100, NADCAP, gammes opératoires, FAI, traitement de surface, peinture, MRO.</p><div class="secteur-refs"><span class="secteur-ref">EN 9100</span><span class="secteur-ref">NADCAP</span><span class="secteur-ref">FAI</span><span class="secteur-ref">MRO</span></div></article>
-    <article class="secteur-card reveal"><svg class="secteur-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 20h20M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg><h3>BTP / Construction</h3><p>DOE, réserves chantier, OPR, fiches d'autocontrôle, PPSPS, ISO 9001.</p><div class="secteur-refs"><span class="secteur-ref">ISO 9001</span><span class="secteur-ref">DOE</span><span class="secteur-ref">OPR</span><span class="secteur-ref">PPSPS</span></div></article>
-    <article class="secteur-card reveal"><svg class="secteur-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><h3>Transport & Logistique</h3><p>Litiges transport, taux de service, traçabilité, OTD, OTIF, ISO 9001.</p><div class="secteur-refs"><span class="secteur-ref">ISO 9001</span><span class="secteur-ref">OTD/OTIF</span><span class="secteur-ref">CMR</span></div></article>
+  <div class="section-header"><div class="section-tag">Pour qui</div><h2 id="secteurs-heading">Les PME et ETI industrielles qui veulent performer</h2><p>10 à 250 personnes, une production à tenir, des exigences clients qui montent. Je travaille avec des entreprises qui font des choses concrètes.</p></div>
+  <div class="cible-grid">
+    <article class="cible-card reveal">
+      <svg class="cible-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 20h20M5 20V8l7-5 7 5v12"/><path d="M9 20v-5h6v5"/><path d="M9 8h6"/></svg>
+      <h3>Vous produisez quelque chose</h3>
+      <p>Pièces, ouvrages, livraisons — votre qualité se voit sur le terrain. Les problèmes coûtent cher et se répètent.</p>
+    </article>
+    <article class="cible-card reveal">
+      <svg class="cible-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <h3>Vous avez des exigences à tenir</h3>
+      <p>Clients grands comptes, certifications ISO, audits de surveillance — la conformité n'est pas une option.</p>
+    </article>
+    <article class="cible-card reveal">
+      <svg class="cible-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <h3>Vous n'avez pas de temps à perdre</h3>
+      <p>Pas de grand projet à 18 mois. Des résultats mesurables rapidement, sans mobiliser toute votre équipe.</p>
+    </article>
   </div>
 </section>
 
@@ -709,9 +718,9 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
     <a href="simulateur-roi.html" class="tool-card reveal" aria-label="Simulateur ROI automatisation"><span class="tool-badge">Offre 5</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><h3>Simulateur ROI automatisation</h3><p>Temps et argent récupérables en automatisant vos tâches qualité.</p><span class="tool-link-text">Calculer mon ROI</span></a>
   </div>
   <div class="tools-grid" style="margin-top:var(--space-5)">
-    <a href="#outils" class="tool-card tool-card--soon reveal" aria-label="Calculateur seuil de rentabilité — en construction" aria-disabled="true" tabindex="-1"><span class="tool-badge">Offre 8</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 17l10-10 4 4 6-6"/><path d="M17 5h5v5"/></svg><h3>Calculateur seuil de rentabilité</h3><p>À partir de quel chiffre d'affaires votre entreprise gagne-t-elle de l'argent ?</p><span class="tool-link-text">Calculer mon seuil</span></a>
-    <a href="#outils" class="tool-card tool-card--soon reveal" aria-label="Simulateur prix de vente — en construction" aria-disabled="true" tabindex="-1"><span class="tool-badge">Offre 8</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4M2 11h20"/></svg><h3>Simulateur prix de vente</h3><p>Coûts, marge, concurrence — trouvez le prix juste pour votre offre.</p><span class="tool-link-text">Simuler mon prix</span></a>
-    <a href="#outils" class="tool-card tool-card--soon reveal" aria-label="Auto-diagnostic dirigeant — en construction" aria-disabled="true" tabindex="-1"><span class="tool-badge">Offres 7, 8</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><h3>Auto-diagnostic dirigeant</h3><p>Radar de profil : forces, zones de délégation, axes de développement.</p><span class="tool-link-text">Évaluer mon profil</span></a>
+    <a href="seuil-rentabilite.html" class="tool-card reveal" aria-label="Calculateur seuil de rentabilité"><span class="tool-badge">Offre 8</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 17l10-10 4 4 6-6"/><path d="M17 5h5v5"/></svg><h3>Calculateur seuil de rentabilité</h3><p>À partir de quel chiffre d'affaires votre entreprise gagne-t-elle de l'argent ?</p><span class="tool-link-text">Calculer mon seuil</span></a>
+    <a href="simulateur-prix.html" class="tool-card reveal" aria-label="Simulateur prix de vente"><span class="tool-badge">Offre 8</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4M2 11h20"/></svg><h3>Simulateur prix de vente</h3><p>Coûts, marge, concurrence — trouvez le prix juste pour votre offre.</p><span class="tool-link-text">Simuler mon prix</span></a>
+    <a href="diagnostic-dirigeant.html" class="tool-card reveal" aria-label="Auto-diagnostic dirigeant"><span class="tool-badge">Offres 7, 8</span><svg class="tool-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><h3>Auto-diagnostic dirigeant</h3><p>Radar de profil : forces, zones de délégation, axes de développement.</p><span class="tool-link-text">Évaluer mon profil</span></a>
   </div>
 </section>
 
