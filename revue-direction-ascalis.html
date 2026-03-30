@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Revue de direction — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p:#0F1A2E; --a:#B07642; --al:#D4956A; --abg:rgba(176,118,66,.08);
+  --s:#FFFFFF; --sa:#F8FAFC; --w:#FAF9F6; --t:#020617; --t2:#475569; --t3:#94A3B8;
+  --bd:#E2E8F0; --bl:#F1F5F9; --ok:#059669; --warn:#D97706; --err:#DC2626; --info:#2563EB;
+  --okbg:#ECFDF5; --warnbg:#FFFBEB; --errbg:#FEF2F2; --infobg:#EFF6FF;
+  --fh:'Lexend',sans-serif; --fb:'Source Sans 3',sans-serif; --fd:'Instrument Serif',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:40}
+.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:8px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:.2s;min-height:38px}
+.btn:hover{border-color:var(--a);color:var(--a)}
+.btn.primary{background:var(--p);border-color:var(--p);color:#fff}
+.btn.primary:hover{background:#162540;color:#fff}
+.hero{background:var(--p);padding:34px 28px;color:var(--sa)}
+.hero h1{font-family:var(--fd);font-size:30px;font-weight:400;margin-bottom:8px}
+.hero p{font-size:14px;color:rgba(248,250,252,.72);max-width:980px;line-height:1.55}
+.container{max-width:1380px;margin:0 auto;padding:28px 24px 48px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+@media(max-width:1100px){.grid{grid-template-columns:1fr}}
+.card{background:var(--s);border:1px solid var(--bl);border-radius:14px;padding:20px;margin-bottom:18px}
+.card-title{font-family:var(--fh);font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.sub{font-size:12px;color:var(--t3);line-height:1.55}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.meta{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.meta{grid-template-columns:1fr}}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.kpi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.kpi-grid{grid-template-columns:1fr}}
+.field label{display:block;font-size:11px;font-family:var(--fh);text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:6px}
+input[type=text],input[type=number],input[type=date],select,textarea{
+  width:100%;border:1px solid var(--bd);background:var(--s);border-radius:10px;padding:10px 12px;font:inherit;color:var(--t);outline:none;transition:.2s;
+}
+textarea{min-height:94px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(176,118,66,.12)}
+.item-list{display:flex;flex-direction:column;gap:10px}
+.item{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--sa)}
+.item-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.item-title{font-family:var(--fh);font-size:13px;font-weight:600}
+.item-id{font-size:10px;padding:2px 8px;background:var(--abg);color:var(--a);border-radius:999px;font-family:var(--fh)}
+.item-tools{display:flex;gap:8px}
+.iconbtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--bd);background:#fff;cursor:pointer;color:var(--t2)}
+.iconbtn:hover{border-color:var(--a);color:var(--a)}
+.panel{position:sticky;top:76px}
+@media(max-width:1100px){.panel{position:static}}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat{border:1px solid var(--bl);background:var(--sa);padding:14px;border-radius:12px}
+.stat .k{font-size:11px;color:var(--t3);font-family:var(--fh);text-transform:uppercase;letter-spacing:.06em}
+.stat .v{font-family:var(--fd);font-size:30px;color:var(--p);line-height:1.05;margin-top:6px}
+.notice{padding:12px 14px;border-radius:10px;font-size:12px;line-height:1.6}
+.notice.info{background:var(--infobg);color:#1D4ED8;border:1px solid #BFDBFE}
+.notice.warn{background:var(--warnbg);color:#9A6708;border:1px solid #FDE68A}
+.empty{padding:18px;border:1px dashed var(--bd);border-radius:12px;color:var(--t3);font-size:12px;background:var(--sa)}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.footer-note{font-size:11px;color:var(--t3);margin-top:12px;line-height:1.5}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:999px;padding:0 8px;font-size:11px;font-family:var(--fh);font-weight:700}
+.badge.high{background:rgba(220,38,38,.14);color:var(--err)}
+.badge.mid{background:rgba(217,119,6,.16);color:var(--warn)}
+.badge.low{background:rgba(5,150,105,.14);color:var(--ok)}
+.table-wrap{overflow:auto;border:1px solid var(--bl);border-radius:12px}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{padding:10px;border-bottom:1px solid var(--bl);font-size:12px;text-align:left;vertical-align:top}
+th{background:var(--sa);font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3)}
+tr:last-child td{border-bottom:none}
+@media print{.hd,.btn,.iconbtn{display:none!important}body{background:white}.container{padding:0}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none">
+    <path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text>
+  </svg>
+  <div class="hd-a">
+    <button class="btn" onclick="loadDemo()">Exemple</button>
+    <button class="btn" onclick="exportJSON()">Export JSON</button>
+    <button class="btn" onclick="exportCurrentCSV()">Export CSV</button>
+    <button class="btn" onclick="window.print()">Imprimer</button>
+    <button class="btn primary" onclick="persist()">Sauvegarder</button>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Revue de direction</h1>
+  <p>La revue de direction consolide la vision globale du système qualité. Elle agrège la synthèse des revues de processus, les résultats, les audits, les réclamations, les ressources, les risques et les décisions à prendre au niveau direction.</p>
+</div>
+
+<div class="container">
+  <div class="grid">
+    <main>
+      <div class="card">
+        <div class="card-title">Cadrage global <span class="tag">direction</span></div>
+        <div class="meta">
+          <div class="field"><label>Organisation</label><input id="org"></div>
+          <div class="field"><label>Période</label><input id="period"></div>
+          <div class="field"><label>Date revue</label><input id="date" type="date"></div>
+          <div class="field"><label>Président de séance</label><input id="chair"></div>
+        </div>
+        <div class="field" style="margin-top:12px">
+          <label>Participants</label>
+          <textarea id="participants"></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Axes de revue <span class="tag">système global</span></div>
+        <div class="item-list">
+          <div class="item">
+            <div class="item-title">1. Politique / objectifs / contexte</div>
+            <div class="field" style="margin-top:10px"><label>Synthèse</label><textarea id="ax1"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">2. Satisfaction client / réclamations</div>
+            <div class="field" style="margin-top:10px"><label>Synthèse</label><textarea id="ax2"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">3. Performance des processus / tableau de bord</div>
+            <div class="field" style="margin-top:10px"><label>Synthèse</label><textarea id="ax3"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">4. Audits internes / externes / conformité</div>
+            <div class="field" style="margin-top:10px"><label>Synthèse</label><textarea id="ax4"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">5. Non-conformités / actions correctives / opportunités</div>
+            <div class="field" style="margin-top:10px"><label>Synthèse</label><textarea id="ax5"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">6. Ressources / compétences / moyens</div>
+            <div class="field" style="margin-top:10px"><label>Synthèse</label><textarea id="ax6"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">7. Décisions / orientations</div>
+            <div class="field" style="margin-top:10px"><label>Synthèse</label><textarea id="ax7"></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="card-title" style="margin-bottom:4px">Décisions & actions validées</div>
+            <div class="sub">La revue sert à arbitrer, allouer des ressources et valider les évolutions. Pas à collectionner les constats.</div>
+          </div>
+          <button class="btn" onclick="addAction()">+ Ajouter</button>
+        </div>
+        <div id="actions" class="item-list"></div>
+        <div class="footer-note">Une bonne revue de direction se voit dans les arbitrages pris après, pas dans la longueur du compte rendu.</div>
+      </div>
+    </main>
+
+    <aside class="panel">
+      <div class="card">
+        <div class="card-title">Pilotage</div>
+        <div class="stat-grid">
+          <div class="stat"><div class="k">Décisions</div><div class="v" id="sAct">0</div></div>
+          <div class="stat"><div class="k">Haute priorité</div><div class="v" id="sHigh">0</div></div>
+          <div class="stat"><div class="k">Ressources</div><div class="v" id="sRes">0</div></div>
+          <div class="stat"><div class="k">Échéances proches</div><div class="v" id="sSoon">0</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Rappel</div>
+        <div class="notice info">La revue de direction regarde le système qualité dans sa globalité. Elle s’appuie sur les synthèses de revues de processus et valide les propositions d’évolution.</div>
+        <div style="height:8px"></div>
+        <div class="notice warn">Si la direction écoute sans arbitrer, la revue devient une cérémonie. Si elle arbitre sans données, elle devient politique. Il faut les deux.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Vue synthétique</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Priorité</th><th>Nb décisions</th></tr></thead>
+            <tbody id="prioTbl"></tbody>
+          </table>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+function esc(s=''){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function uid(prefix){return prefix + Math.random().toString(36).slice(2,6).toUpperCase()}
+function save(key, state){localStorage.setItem(key, JSON.stringify(state))}
+function load(key, fallback){const raw=localStorage.getItem(key); if(!raw) return fallback; try{ return Object.assign(fallback, JSON.parse(raw)); }catch(e){ return fallback; }}
+function download(name, content, type='text/plain;charset=utf-8'){const blob=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function exportCSV(rows, filename){
+  const csv='\uFEFF'+rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n');
+  download(filename,csv,'text/csv;charset=utf-8');
+}
+
+const KEY='ascalis_revue_direction_v1';
+let state=load(KEY,{
+  meta:{
+    org:'ASCALIS',
+    period:'Année 2026',
+    date:new Date().toISOString().slice(0,10),
+    chair:'Direction Générale',
+    participants:'DG, responsables processus, qualité, opérations, achats'
+  },
+  axes:{
+    ax1:'Objectifs maintenus, ajustement sur deux priorités majeures.',
+    ax2:'Satisfaction stable, retards encore trop visibles pour les clients.',
+    ax3:'2 processus sous tension, tableau de bord partiellement au vert.',
+    ax4:'Audits réalisés, écarts mineurs majoritairement clos.',
+    ax5:'Baisse des NC critiques, opportunité forte sur standardisation.',
+    ax6:'Besoin de renfort ponctuel qualité et formation managers.',
+    ax7:'Valider plan d’actions central et ressources associées.'
+  },
+  actions:[
+    {id:'DG1',title:'Allouer 15 jh support qualité sur PR-01',owner:'DG',due:'2026-05-15',priority:'Haute',resources:'15 jh',status:'Validée'},
+    {id:'DG2',title:'Valider mise à jour procédure validation initiale',owner:'Direction Qualité',due:'2026-04-30',priority:'Moyenne',resources:'2 jh',status:'Validée'}
+  ]
+});
+
+function persist(){
+  ['org','period','date','chair','participants'].forEach(id=>state.meta[id]=document.getElementById(id).value);
+  ['ax1','ax2','ax3','ax4','ax5','ax6','ax7'].forEach(id=>state.axes[id]=document.getElementById(id).value);
+  save(KEY,state);
+  render();
+}
+function loadDemo(){
+  localStorage.removeItem(KEY);
+  location.reload();
+}
+function exportJSON(){
+  download('revue-direction-ascalis.json', JSON.stringify(state,null,2),'application/json');
+}
+function exportCurrentCSV(){
+  const rows=[
+    ['Champ','Valeur'],
+    ['Organisation',state.meta.org],
+    ['Période',state.meta.period],
+    ['Date',state.meta.date],
+    ['Président',state.meta.chair],
+    ['Participants',state.meta.participants],
+    ['1 Politique/objectifs',state.axes.ax1],
+    ['2 Satisfaction client',state.axes.ax2],
+    ['3 Performance processus',state.axes.ax3],
+    ['4 Audits',state.axes.ax4],
+    ['5 NC/actions',state.axes.ax5],
+    ['6 Ressources',state.axes.ax6],
+    ['7 Décisions',state.axes.ax7],
+    [],
+    ['Actions validées','','','','','','']
+  ];
+  state.actions.forEach(a=>rows.push([a.id,a.title,a.owner,a.due,a.priority,a.resources,a.status]));
+  exportCSV(rows,'ASCALIS_revue-direction.csv');
+}
+function addAction(){
+  state.actions.push({
+    id:uid('DG'),
+    title:'Nouvelle décision',
+    owner:'',
+    due:'',
+    priority:'Moyenne',
+    resources:'',
+    status:'Validée'
+  });
+  persist();
+}
+function edit(id,field,val){
+  const x=state.actions.find(i=>i.id===id);
+  if(x) x[field]=val;
+  persist();
+}
+function del(id){
+  state.actions=state.actions.filter(x=>x.id!==id);
+  persist();
+}
+function prioBadge(v){
+  if(v==='Haute') return '<span class="badge high">Haute</span>';
+  if(v==='Moyenne') return '<span class="badge mid">Moyenne</span>';
+  return '<span class="badge low">Basse</span>';
+}
+function render(){
+  ['org','period','date','chair','participants'].forEach(id=>document.getElementById(id).value=state.meta[id]||'');
+  ['ax1','ax2','ax3','ax4','ax5','ax6','ax7'].forEach(id=>document.getElementById(id).value=state.axes[id]||'');
+
+  document.getElementById('actions').innerHTML=state.actions.length ? state.actions.map(a=>`
+    <div class="item">
+      <div class="item-top">
+        <div>
+          <div class="item-title">${esc(a.title)}</div>
+          <div style="margin-top:6px">${prioBadge(a.priority)}</div>
+        </div>
+        <div class="item-tools">
+          <span class="item-id">${a.id}</span>
+          <button class="iconbtn" onclick="del('${a.id}')">✕</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="field"><label>Décision / action</label><input value="${esc(a.title)}" oninput="edit('${a.id}','title',this.value)"></div>
+        <div class="field"><label>Pilote</label><input value="${esc(a.owner||'')}" oninput="edit('${a.id}','owner',this.value)"></div>
+        <div class="field"><label>Échéance</label><input type="date" value="${esc(a.due||'')}" oninput="edit('${a.id}','due',this.value)"></div>
+        <div class="field"><label>Priorité</label>
+          <select onchange="edit('${a.id}','priority',this.value)">
+            ${['Haute','Moyenne','Basse'].map(v=>`<option ${a.priority===v?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+
+      <div class="kpi-grid" style="margin-top:10px">
+        <div class="field"><label>Ressources</label><input value="${esc(a.resources||'')}" oninput="edit('${a.id}','resources',this.value)"></div>
+        <div class="field"><label>Statut</label>
+          <select onchange="edit('${a.id}','status',this.value)">
+            ${['Validée','En cours','Terminée','Suspendue'].map(v=>`<option ${a.status===v?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+  `).join('') : `<div class="empty">Aucune décision.</div>`;
+
+  const now=new Date();
+  const soon=state.actions.filter(a=>a.due && ((new Date(a.due)-now)/(1000*3600*24))<=30 && a.status!=='Terminée').length;
+  document.getElementById('sAct').textContent=state.actions.length;
+  document.getElementById('sHigh').textContent=state.actions.filter(a=>a.priority==='Haute').length;
+  document.getElementById('sRes').textContent=state.actions.filter(a=>(a.resources||'').trim()).length;
+  document.getElementById('sSoon').textContent=soon;
+
+  const p = ['Haute','Moyenne','Basse'];
+  document.getElementById('prioTbl').innerHTML = p.map(level => {
+    const n = state.actions.filter(a=>a.priority===level).length;
+    return `<tr><td>${level}</td><td>${n}</td></tr>`;
+  }).join('');
+}
+render();
+</script>
+</body>
+</html>

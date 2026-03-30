@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parcours client — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--warnbg:#FFFBEB;--err:#DC2626;--errbg:#FEF2F2;--info:#2563EB;--infobg:#EFF6FF;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn:hover{border-color:var(--a);color:var(--a)}.btn-pri{background:var(--p);border-color:var(--p);color:var(--sa)}.btn-pri:hover{background:#162543;color:var(--sa);border-color:#162543}.btn-soft{background:var(--abg);border-color:transparent;color:var(--a)}.btn-soft:hover{border-color:var(--a)}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:28px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.58);max-width:860px;line-height:1.5}
+.container{max-width:1360px;margin:0 auto;padding:28px 24px}
+.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:20px;align-items:start}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{background:var(--s);border:1px solid var(--bl);border-radius:14px;padding:18px}.card + .card{margin-top:16px}.title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}.eyebrow{font-family:var(--fh);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--a);margin-bottom:10px}.muted{color:var(--t2)}.small{font-size:12px;color:var(--t2);line-height:1.5}
+.kpi{padding:14px;border:1px solid var(--bl);border-radius:12px;background:linear-gradient(180deg,var(--s),var(--sa))}.kpi .label{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--fh)}.kpi .val{font-family:var(--fd);font-size:34px;line-height:1.05;margin-top:6px}.kpi .sub{font-size:12px;color:var(--t2);margin-top:2px}
+label{display:block;font-size:12px;color:var(--t2);margin-bottom:6px;font-family:var(--fh)}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--s);font:inherit;color:var(--t)}
+textarea{min-height:84px;resize:vertical} input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px var(--abg)}
+.row{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.c12{grid-column:span 12}.c9{grid-column:span 9}.c8{grid-column:span 8}.c7{grid-column:span 7}.c6{grid-column:span 6}.c5{grid-column:span 5}.c4{grid-column:span 4}.c3{grid-column:span 3}.c2{grid-column:span 2}
+.table-wrap{overflow:auto;border:1px solid var(--bl);border-radius:12px}.table{width:100%;border-collapse:collapse;min-width:980px}.table th,.table td{padding:10px 12px;border-bottom:1px solid var(--bl);text-align:left;font-size:13px;vertical-align:top}.table th{font-family:var(--fh);font-size:12px;color:var(--t2);background:var(--sa);position:sticky;top:0}.table tr:hover td{background:#fcfcfd}
+.badge{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:11px;font-family:var(--fh);font-weight:600}.b-ok{background:var(--okbg);color:var(--ok)}.b-warn{background:var(--warnbg);color:var(--warn)}.b-err{background:var(--errbg);color:var(--err)}.b-info{background:var(--infobg);color:var(--info)}.b-soft{background:var(--abg);color:var(--a)}
+.list{display:flex;flex-direction:column;gap:10px}.item{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--s)}.item h4{font-size:15px;margin-bottom:6px}.item .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.item .meta span{font-size:11px;border-radius:999px;padding:3px 8px;background:var(--sa);color:var(--t2);font-family:var(--fh)}
+.timeline{position:relative;padding-left:18px}.timeline:before{content:'';position:absolute;left:4px;top:0;bottom:0;width:2px;background:var(--bl)}.step{position:relative;margin-bottom:12px}.step:before{content:'';position:absolute;left:-18px;top:18px;width:10px;height:10px;border-radius:50%;background:var(--a);box-shadow:0 0 0 4px var(--abg)}
+.chart{width:100%;height:360px;border:1px solid var(--bl);border-radius:14px;background:linear-gradient(180deg,#fff,#fafafa)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.legend span{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--sa);color:var(--t2);font-family:var(--fh)}
+.progress{height:8px;border-radius:999px;background:var(--bl);overflow:hidden}.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--al));border-radius:999px}
+.note{padding:12px 14px;border:1px solid #BFDBFE;background:#EFF6FF;color:#1E40AF;border-radius:12px;font-size:12px;line-height:1.6}
+.hr{height:1px;background:var(--bl);margin:16px 0}
+@media(max-width:1100px){.grid,.grid-3,.grid-2{grid-template-columns:1fr}.row{grid-template-columns:1fr}.c2,.c3,.c4,.c5,.c6,.c7,.c8,.c9,.c12{grid-column:span 1}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="Lexend, sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a">
+    <button class="btn" onclick="exportJSON()">Export JSON</button>
+    <button class="btn" onclick="exportCSV()">Export CSV</button>
+    <label class="btn" for="importFile">Importer JSON</label><input id="importFile" type="file" accept="application/json" style="display:none">
+    <button class="btn btn-soft" onclick="resetData()">Réinitialiser</button>
+  </div>
+</div>
+
+<section class="hero"><h1>Parcours client</h1><p>Outil de cartographie du cheminement client, des étapes vécues, des attentes, des moments de vérité et des risques associés. La logique suit la vue externe : ce que vit le client, ce qu’il voit, ce qu’il entend, ce qui façonne son jugement.</p></section>
+<div class="container">
+  <div class="grid-3">
+    <div class="kpi"><div class="label">Étapes du parcours</div><div class="val" id="kpiSteps">0</div><div class="sub">phases décrites</div></div>
+    <div class="kpi"><div class="label">Moments de vérité</div><div class="val" id="kpiTruth">0</div><div class="sub">points de contact critiques</div></div>
+    <div class="kpi"><div class="label">Risque moyen</div><div class="val" id="kpiRisk">0/5</div><div class="sub">impact perçu sur l’expérience</div></div>
+  </div>
+
+  <div class="grid" style="margin-top:18px">
+    <div>
+      <div class="card">
+        <div class="eyebrow">Construction</div>
+        <div class="title">Ajouter ou modifier une étape</div>
+        <div class="row">
+          <div class="c2"><label>Ordre</label><input id="f-order" type="number" min="1" step="1"></div>
+          <div class="c4"><label>Phase</label><input id="f-phase" placeholder="Ex. Découverte"></div>
+          <div class="c3"><label>Statut</label><select id="f-status"><option>À analyser</option><option>À sécuriser</option><option>Maîtrisé</option></select></div>
+          <div class="c3"><label>Émotion client</label><select id="f-emotion"><option value="1">1 — très négative</option><option value="2">2 — négative</option><option value="3">3 — neutre</option><option value="4">4 — positive</option><option value="5">5 — très positive</option></select></div>
+          <div class="c6"><label>Ce que vit / fait le client</label><textarea id="f-action" placeholder="Recherche, demande de devis, signature, utilisation…"></textarea></div>
+          <div class="c6"><label>Point(s) de contact</label><textarea id="f-touch" placeholder="Site web, téléphone, commercial, support, intervention terrain…"></textarea></div>
+          <div class="c6"><label>Attente principale</label><textarea id="f-expect" placeholder="Rapidité, clarté, fiabilité, réassurance, transparence…"></textarea></div>
+          <div class="c6"><label>Moment de vérité / jugement du client</label><textarea id="f-truth" placeholder="Ce qui laisse un bon ou mauvais souvenir."></textarea></div>
+          <div class="c3"><label>Moment de vérité ?</label><select id="f-istruth"><option value="oui">Oui</option><option value="non">Non</option></select></div>
+          <div class="c3"><label>Risque (1 à 5)</label><select id="f-risk"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+          <div class="c3"><label>Canal de feedback</label><input id="f-feedback" placeholder="NPS, appel, email…"></div>
+          <div class="c3"><label>Indicateur clé</label><input id="f-kpi" placeholder="Délai, taux de réponse…"></div>
+          <div class="c6"><label>Standard de service attendu</label><textarea id="f-standard" placeholder="Ex. accusé de réception sous 4h, devis sous 48h…"></textarea></div>
+          <div class="c6"><label>Risque / scénario catastrophe</label><textarea id="f-failure" placeholder="Ex. absence de réponse, message contradictoire, attente trop longue…"></textarea></div>
+          <div class="c4"><label>Responsable</label><input id="f-owner" placeholder="Ex. ADV / Commercial / Support"></div>
+          <div class="c4"><label>Intervention fournisseur</label><input id="f-supplier" placeholder="Oui / Non / sous-traitant…"></div>
+          <div class="c4"><label>Identifiant</label><input id="f-id" disabled placeholder="auto"></div>
+        </div>
+        <div class="hd-a" style="margin-top:14px"><button class="btn btn-pri" onclick="saveStage()">Enregistrer l’étape</button><button class="btn" onclick="clearForm()">Vider</button></div>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow">Vision client</div>
+        <div class="title">Chronologie du parcours</div>
+        <div id="timeline" class="timeline"></div>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow">Pilotage</div>
+        <div class="title">Tableau détaillé</div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Ordre</th><th>Phase</th><th>Client</th><th>Attente</th><th>Moment de vérité</th><th>Risque</th><th>KPI</th><th>Statut</th><th></th></tr></thead><tbody id="tbody"></tbody></table></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="eyebrow">Moments de vérité</div>
+        <div class="title">Synthèse ciblée</div>
+        <div id="truthList" class="list"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Analyse terrain</div>
+        <div class="title">Points d’attention</div>
+        <div id="riskList" class="list"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Usage</div>
+        <div class="note">L’outil sert à décrire ce que vit réellement le client, étape par étape. Chaque phase doit être associée à une attente, à des standards de service, à un risque, et surtout à ce qui forge le jugement final : les moments de vérité. Utilise-le comme base de client mystère, de revue d’expérience client, ou de plan d’actions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const STORAGE_KEY='ascalis_parcours_client_v1';
+const seed=[
+{id:'j1',order:1,phase:'Découverte',status:'À analyser',emotion:3,action:'Recherche d’informations sur le site et prise de contact.',touch:'Site web, formulaire, téléphone',expect:'Comprendre rapidement l’offre et la valeur ajoutée.',truth:'Clarté du site et rapidité du premier retour.',istruth:'oui',risk:3,feedback:'Formulaire / NPS découverte',kpi:'Délai de rappel',standard:'Réponse initiale sous 4h ouvrées.',failure:'Aucune réponse ou réponse floue.',owner:'Commercial',supplier:'Non'},
+{id:'j2',order:2,phase:'Qualification',status:'À sécuriser',emotion:3,action:'Échange avec un interlocuteur pour cadrer le besoin.',touch:'Visio, téléphone, email',expect:'Être compris sans devoir se répéter.',truth:'Qualité des questions posées et reformulation du besoin.',istruth:'oui',risk:4,feedback:'Compte-rendu appel',kpi:'Taux de besoins qualifiés',standard:'Compte-rendu envoyé le jour même.',failure:'Besoin mal compris, promesse trop large.',owner:'Commercial',supplier:'Non'},
+{id:'j3',order:3,phase:'Proposition',status:'À sécuriser',emotion:4,action:'Réception d’une offre / devis.',touch:'Email, document commercial',expect:'Lisibilité, délai, périmètre clair, pas de jargon creux.',truth:'Lecture du devis et perception du sérieux.',istruth:'oui',risk:5,feedback:'Retour client sur devis',kpi:'Taux de transformation',standard:'Offre structurée, prix et hypothèses explicites.',failure:'Offre ambiguë ou trop lente.',owner:'ADV / Commercial',supplier:'Possible'},
+{id:'j4',order:4,phase:'Réalisation',status:'À sécuriser',emotion:3,action:'Exécution de la prestation et échanges de suivi.',touch:'Chef de projet, support, terrain',expect:'Tenue des engagements et visibilité sur l’avancement.',truth:'Respect des délais et qualité des points de suivi.',istruth:'oui',risk:4,feedback:'Bilans jalons',kpi:'OTD / taux de conformité',standard:'Point d’avancement hebdomadaire.',failure:'Silence radio, écarts non expliqués.',owner:'Chef de projet',supplier:'Sous-traitant possible'},
+{id:'j5',order:5,phase:'Clôture',status:'À analyser',emotion:4,action:'Réception, facture, demande d’avis, suite éventuelle.',touch:'Facturation, enquête, support',expect:'Fin propre, simple et mémorable.',truth:'Fluidité de la clôture et envie de recommander.',istruth:'oui',risk:2,feedback:'NPS / retour à chaud',kpi:'NPS / taux de réachat',standard:'Facture conforme et feedback collecté.',failure:'Clôture froide, facture litigieuse.',owner:'ADV',supplier:'Non'}
+];
+let data=load(); let editId=null;
+const $=s=>document.querySelector(s);
+function load(){try{const raw=localStorage.getItem(STORAGE_KEY); if(raw) return JSON.parse(raw)}catch(e){} return seed}
+function persist(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}
+function uid(){return 'j'+Math.random().toString(36).slice(2,9)}
+function esc(v=''){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function clearForm(){editId=null; ['order','phase','status','emotion','action','touch','expect','truth','istruth','risk','feedback','kpi','standard','failure','owner','supplier','id'].forEach(k=>$('#f-'+k).value=''); $('#f-status').value='À analyser'; $('#f-emotion').value='3'; $('#f-istruth').value='oui'; $('#f-risk').value='3';}
+function fillForm(it){editId=it.id; Object.entries(it).forEach(([k,v])=>{const el=$('#f-'+k); if(el) el.value=v});}
+function saveStage(){const obj={id:editId||uid(),order:Number($('#f-order').value||data.length+1),phase:$('#f-phase').value.trim(),status:$('#f-status').value,emotion:Number($('#f-emotion').value),action:$('#f-action').value.trim(),touch:$('#f-touch').value.trim(),expect:$('#f-expect').value.trim(),truth:$('#f-truth').value.trim(),istruth:$('#f-istruth').value,risk:Number($('#f-risk').value),feedback:$('#f-feedback').value.trim(),kpi:$('#f-kpi').value.trim(),standard:$('#f-standard').value.trim(),failure:$('#f-failure').value.trim(),owner:$('#f-owner').value.trim(),supplier:$('#f-supplier').value.trim()};
+ if(!obj.phase) return alert('Renseigne au moins la phase.');
+ const ix=data.findIndex(x=>x.id===obj.id); if(ix>=0)data[ix]=obj; else data.push(obj); persist(); clearForm(); render();}
+function delStage(id){if(!confirm('Supprimer cette étape ?')) return; data=data.filter(x=>x.id!==id); persist(); render();}
+function badgeStatus(v){return v==='Maîtrisé'?'b-ok':v==='À sécuriser'?'b-warn':'b-info'}
+function riskBadge(v){return v>=4?'b-err':v===3?'b-warn':'b-ok'}
+function emotionTxt(v){return ['','Très négative','Négative','Neutre','Positive','Très positive'][v]}
+function render(){data.sort((a,b)=>a.order-b.order);
+ $('#kpiSteps').textContent=data.length; $('#kpiTruth').textContent=data.filter(x=>x.istruth==='oui').length; const avg=(data.reduce((s,x)=>s+x.risk,0)/(data.length||1)).toFixed(1); $('#kpiRisk').textContent=avg+'/5';
+ $('#timeline').innerHTML=data.map(it=>`<div class="step"><div class="item"><div class="meta"><span>#${it.order}</span><span>${esc(it.phase)}</span><span class="badge ${badgeStatus(it.status)}">${esc(it.status)}</span><span class="badge ${riskBadge(it.risk)}">Risque ${it.risk}/5</span><span>Émotion ${it.emotion}/5</span></div><h4>${esc(it.phase)}</h4><p class="small"><strong>Client :</strong> ${esc(it.action)}</p><p class="small"><strong>Contacts :</strong> ${esc(it.touch)||'—'}</p><p class="small"><strong>Attente :</strong> ${esc(it.expect)||'—'}</p><p class="small"><strong>Moment de vérité :</strong> ${esc(it.truth)||'—'}</p><p class="small"><strong>Standard :</strong> ${esc(it.standard)||'—'}</p><div class="hd-a" style="margin-top:10px"><button class="btn" onclick="fillForm(data.find(x=>x.id==='${it.id}'))">Modifier</button><button class="btn" onclick="delStage('${it.id}')">Supprimer</button></div></div></div>`).join('');
+ $('#tbody').innerHTML=data.map(it=>`<tr><td>${it.order}</td><td>${esc(it.phase)}</td><td>${esc(it.action)}</td><td>${esc(it.expect)}</td><td>${esc(it.truth)}</td><td><span class="badge ${riskBadge(it.risk)}">${it.risk}/5</span></td><td>${esc(it.kpi)||'—'}</td><td><span class="badge ${badgeStatus(it.status)}">${esc(it.status)}</span></td><td><button class="btn" onclick="fillForm(data.find(x=>x.id==='${it.id}'))">Éditer</button></td></tr>`).join('');
+ const truth=data.filter(x=>x.istruth==='oui'); $('#truthList').innerHTML=truth.length?truth.map(it=>`<div class="item"><h4>${esc(it.phase)}</h4><div class="meta"><span>${esc(it.owner||'Sans pilote')}</span><span>${esc(it.kpi||'Sans KPI')}</span></div><p class="small"><strong>Jugement du client :</strong> ${esc(it.truth)}</p><p class="small"><strong>Attente :</strong> ${esc(it.expect)}</p></div>`).join(''):`<div class="small muted">Aucun moment de vérité identifié.</div>`;
+ const risky=[...data].sort((a,b)=>b.risk-a.risk).slice(0,5); $('#riskList').innerHTML=risky.map(it=>`<div class="item"><div class="meta"><span class="badge ${riskBadge(it.risk)}">Risque ${it.risk}/5</span><span>${emotionTxt(it.emotion)}</span></div><h4>${esc(it.phase)}</h4><p class="small"><strong>Scénario catastrophe :</strong> ${esc(it.failure||'Non renseigné')}</p><p class="small"><strong>Action attendue :</strong> ${esc(it.standard||'Non renseigné')}</p></div>`).join('');
+ }
+function exportJSON(){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); download(blob,'parcours-client-ascalis.json')}
+function exportCSV(){const headers=['ordre','phase','statut','emotion','action_client','touchpoints','attente','moment_verite','moment_verite_oui_non','risque','feedback','kpi','standard','scenario_catastrophe','responsable','intervention_fournisseur']; const rows=data.map(it=>[it.order,it.phase,it.status,it.emotion,it.action,it.touch,it.expect,it.truth,it.istruth,it.risk,it.feedback,it.kpi,it.standard,it.failure,it.owner,it.supplier]); const csv=[headers,...rows].map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n'); download(new Blob([csv],{type:'text/csv;charset=utf-8'}),'parcours-client-ascalis.csv')}
+function download(blob,name){const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); URL.revokeObjectURL(a.href)}
+function resetData(){if(!confirm('Revenir au jeu d’exemple ?')) return; data=JSON.parse(JSON.stringify(seed)); persist(); clearForm(); render()}
+$('#importFile').addEventListener('change',e=>{const f=e.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{try{const arr=JSON.parse(reader.result); if(!Array.isArray(arr)) throw new Error(); data=arr; persist(); render();}catch(err){alert('JSON invalide')} e.target.value=''}; reader.readAsText(f)});
+clearForm(); render();
+</script></body></html>

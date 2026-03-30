@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fiche d’identité processus — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p:#0F1A2E; --a:#B07642; --al:#D4956A; --abg:rgba(176,118,66,.08);
+  --s:#FFFFFF; --sa:#F8FAFC; --w:#FAF9F6; --t:#020617; --t2:#475569; --t3:#94A3B8;
+  --bd:#E2E8F0; --bl:#F1F5F9; --ok:#059669; --warn:#D97706; --err:#DC2626; --info:#2563EB;
+  --okbg:#ECFDF5; --warnbg:#FFFBEB; --errbg:#FEF2F2; --infobg:#EFF6FF;
+  --fh:'Lexend',sans-serif; --fb:'Source Sans 3',sans-serif; --fd:'Instrument Serif',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:40}
+.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:8px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:.2s;min-height:38px}
+.btn:hover{border-color:var(--a);color:var(--a)}
+.btn.primary{background:var(--p);border-color:var(--p);color:#fff}
+.btn.primary:hover{background:#162540;color:#fff}
+.hero{background:var(--p);padding:34px 28px;color:var(--sa)}
+.hero h1{font-family:var(--fd);font-size:30px;font-weight:400;margin-bottom:8px}
+.hero p{font-size:14px;color:rgba(248,250,252,.72);max-width:880px;line-height:1.55}
+.container{max-width:1380px;margin:0 auto;padding:28px 24px 48px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+@media(max-width:1100px){.grid{grid-template-columns:1fr}}
+.card{background:var(--s);border:1px solid var(--bl);border-radius:14px;padding:20px;margin-bottom:18px}
+.card-title{font-family:var(--fh);font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.sub{font-size:12px;color:var(--t3);line-height:1.55}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.meta{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.meta{grid-template-columns:1fr}}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.kpi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.kpi-grid{grid-template-columns:1fr}}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.field label{display:block;font-size:11px;font-family:var(--fh);text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:6px}
+input[type=text],input[type=number],input[type=date],select,textarea{
+  width:100%;border:1px solid var(--bd);background:var(--s);border-radius:10px;padding:10px 12px;font:inherit;color:var(--t);outline:none;transition:.2s;
+}
+textarea{min-height:88px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(176,118,66,.12)}
+.item-list{display:flex;flex-direction:column;gap:10px}
+.item{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--sa)}
+.item-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.item-title{font-family:var(--fh);font-size:13px;font-weight:600}
+.item-id{font-size:10px;padding:2px 8px;background:var(--abg);color:var(--a);border-radius:999px;font-family:var(--fh)}
+.item-tools{display:flex;gap:8px}
+.iconbtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--bd);background:#fff;cursor:pointer;color:var(--t2)}
+.iconbtn:hover{border-color:var(--a);color:var(--a)}
+.panel{position:sticky;top:76px}
+@media(max-width:1100px){.panel{position:static}}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat{border:1px solid var(--bl);background:var(--sa);padding:14px;border-radius:12px}
+.stat .k{font-size:11px;color:var(--t3);font-family:var(--fh);text-transform:uppercase;letter-spacing:.06em}
+.stat .v{font-family:var(--fd);font-size:30px;color:var(--p);line-height:1.05;margin-top:6px}
+.notice{padding:12px 14px;border-radius:10px;font-size:12px;line-height:1.6}
+.notice.info{background:var(--infobg);color:#1D4ED8;border:1px solid #BFDBFE}
+.notice.warn{background:var(--warnbg);color:#9A6708;border:1px solid #FDE68A}
+.empty{padding:18px;border:1px dashed var(--bd);border-radius:12px;color:var(--t3);font-size:12px;background:var(--sa)}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.footer-note{font-size:11px;color:var(--t3);margin-top:12px;line-height:1.5}
+@media print{.hd,.btn,.iconbtn{display:none!important}body{background:white}.container{padding:0}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none">
+    <path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text>
+  </svg>
+  <div class="hd-a">
+    <button class="btn" onclick="loadDemo()">Exemple</button>
+    <button class="btn" onclick="exportJSON()">Export JSON</button>
+    <button class="btn" onclick="window.print()">Imprimer</button>
+    <button class="btn primary" onclick="persist()">Sauvegarder</button>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Fiche d’identité processus</h1>
+  <p>La fiche d’identité décrit le processus, sa finalité, ses entrées, ses sorties, ses clients, ses ressources, ses étapes, ses indicateurs et ses risques. Elle sert de base au pilotage, à la revue de processus et à l’amélioration.</p>
+</div>
+
+<div class="container">
+  <div class="grid">
+    <main>
+      <div class="card">
+        <div class="card-title">Identification <span class="tag">version pilotable</span></div>
+        <div class="meta">
+          <div class="field"><label>Processus</label><input id="name"></div>
+          <div class="field"><label>Code</label><input id="code"></div>
+          <div class="field"><label>Pilote</label><input id="owner"></div>
+          <div class="field"><label>Périodicité de revue</label>
+            <select id="cadence">
+              <option>Mensuelle</option>
+              <option>Trimestrielle</option>
+              <option>Semestrielle</option>
+              <option>Annuelle</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="cols" style="margin-top:12px">
+          <div class="field"><label>Finalité</label><textarea id="purpose"></textarea></div>
+          <div class="field"><label>Périmètre / frontières</label><textarea id="scope"></textarea></div>
+        </div>
+
+        <div class="cols" style="margin-top:12px">
+          <div class="field"><label>Clients du processus</label><textarea id="customers"></textarea></div>
+          <div class="field"><label>Fournisseurs / entrées majeures</label><textarea id="suppliers"></textarea></div>
+        </div>
+
+        <div class="cols" style="margin-top:12px">
+          <div class="field"><label>Sorties / livrables</label><textarea id="outputs"></textarea></div>
+          <div class="field"><label>Ressources / moyens</label><textarea id="resources"></textarea></div>
+        </div>
+
+        <div class="footer-note">Bonne pratique : garde une fiche synthétique. Si la lecture prend 20 minutes, elle ne sera pas utilisée en revue.</div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="card-title" style="margin-bottom:4px">Étapes clés</div>
+            <div class="sub">Découpe le processus de façon utile. Pas 27 micro-étapes pour faire sérieux.</div>
+          </div>
+          <button class="btn" onclick="addStep()">+ Ajouter</button>
+        </div>
+        <div id="steps" class="item-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="card-title" style="margin-bottom:4px">Indicateurs</div>
+            <div class="sub">Définis l’indicateur, l’objectif, la périodicité et le seuil d’alerte.</div>
+          </div>
+          <button class="btn" onclick="addKpi()">+ Ajouter</button>
+        </div>
+        <div id="kpis" class="item-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="card-title" style="margin-bottom:4px">Risques / points sensibles</div>
+            <div class="sub">Les revues sont meilleures quand les risques sont nommés avant la crise.</div>
+          </div>
+          <button class="btn" onclick="addRisk()">+ Ajouter</button>
+        </div>
+        <div id="risks" class="item-list"></div>
+      </div>
+    </main>
+
+    <aside class="panel">
+      <div class="card">
+        <div class="card-title">Résumé</div>
+        <div class="stat-grid">
+          <div class="stat"><div class="k">Étapes</div><div class="v" id="sSteps">0</div></div>
+          <div class="stat"><div class="k">KPI</div><div class="v" id="sKpis">0</div></div>
+          <div class="stat"><div class="k">Risques</div><div class="v" id="sRisks">0</div></div>
+          <div class="stat"><div class="k">Revue</div><div class="v" id="sCad">-</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Usage</div>
+        <div class="notice info">Cette fiche alimente la revue de processus : identité à jour, objectifs, indicateurs, incidents, audits, actions.</div>
+        <div style="height:8px"></div>
+        <div class="notice.warn notice warn">Une fiche incomplète rend la revue bavarde. Une fiche vivante rend la revue utile.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+function esc(s=''){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function uid(prefix){return prefix + Math.random().toString(36).slice(2,6).toUpperCase()}
+function save(key, state){localStorage.setItem(key, JSON.stringify(state))}
+function load(key, fallback){const raw=localStorage.getItem(key); if(!raw) return fallback; try{ return Object.assign(fallback, JSON.parse(raw)); }catch(e){ return fallback; }}
+function download(name, content, type='text/plain;charset=utf-8'){const blob=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+
+const KEY='ascalis_fiche_processus_v1';
+let state=load(KEY,{
+  meta:{
+    name:'Produire / délivrer',
+    code:'PR-01',
+    owner:'Resp. production',
+    cadence:'Trimestrielle',
+    purpose:'Transformer les exigences en produit / prestation conforme.',
+    scope:'Du lancement à la livraison.',
+    customers:'Clients, ADV, direction',
+    suppliers:'Achats, méthodes, fournisseurs',
+    outputs:'Produit conforme, dossiers, livraisons',
+    resources:'Équipe, machines, ERP, standards'
+  },
+  steps:[
+    {id:'E1',name:'Préparer',desc:'Valider disponibilité et dossier'},
+    {id:'E2',name:'Exécuter',desc:'Réaliser selon standards'},
+    {id:'E3',name:'Contrôler / livrer',desc:'Vérifier conformité et expédier'}
+  ],
+  kpis:[
+    {id:'K1',name:'OTD',target:'95%',freq:'Mensuel',alert:'<90%',owner:'Production'},
+    {id:'K2',name:'NC internes',target:'<2%',freq:'Mensuel',alert:'>3%',owner:'Qualité'}
+  ],
+  risks:[
+    {id:'R1',name:'Dossier incomplet',impact:'Retard / erreur',control:'Revue de lancement'},
+    {id:'R2',name:'Variation process',impact:'NC / rebut',control:'Autocontrôle + plan de contrôle'}
+  ]
+});
+
+function persist(){
+  ['name','code','owner','cadence','purpose','scope','customers','suppliers','outputs','resources'].forEach(id=>state.meta[id]=document.getElementById(id).value);
+  save(KEY,state);
+  render();
+}
+function loadDemo(){localStorage.removeItem(KEY); location.reload();}
+function exportJSON(){download('fiche-identite-processus-ascalis.json', JSON.stringify(state,null,2),'application/json')}
+
+function edit(arr,id,field,val){
+  const x=state[arr].find(i=>i.id===id);
+  if(x) x[field]=val;
+  persist();
+}
+function del(arr,id){
+  state[arr]=state[arr].filter(x=>x.id!==id);
+  persist();
+}
+function addStep(){
+  state.steps.push({id:uid('E'),name:'Nouvelle étape',desc:''});
+  persist();
+}
+function addKpi(){
+  state.kpis.push({id:uid('K'),name:'Nouvel indicateur',target:'',freq:'Mensuel',alert:'',owner:''});
+  persist();
+}
+function addRisk(){
+  state.risks.push({id:uid('R'),name:'Nouveau risque',impact:'',control:''});
+  persist();
+}
+
+function renderSteps(){
+  const el=document.getElementById('steps');
+  el.innerHTML=state.steps.length ? state.steps.map(x=>`
+    <div class="item">
+      <div class="item-top">
+        <div class="item-title">${esc(x.name)}</div>
+        <div class="item-tools">
+          <span class="item-id">${x.id}</span>
+          <button class="iconbtn" onclick="del('steps','${x.id}')">✕</button>
+        </div>
+      </div>
+      <div class="cols">
+        <div class="field"><label>Étape</label><input value="${esc(x.name)}" oninput="edit('steps','${x.id}','name',this.value)"></div>
+        <div class="field"><label>Description</label><input value="${esc(x.desc||'')}" oninput="edit('steps','${x.id}','desc',this.value)"></div>
+      </div>
+    </div>
+  `).join('') : `<div class="empty">Aucune étape.</div>`;
+}
+function renderKpis(){
+  const el=document.getElementById('kpis');
+  el.innerHTML=state.kpis.length ? state.kpis.map(x=>`
+    <div class="item">
+      <div class="item-top">
+        <div class="item-title">${esc(x.name)}</div>
+        <div class="item-tools">
+          <span class="item-id">${x.id}</span>
+          <button class="iconbtn" onclick="del('kpis','${x.id}')">✕</button>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <div class="field"><label>Indicateur</label><input value="${esc(x.name)}" oninput="edit('kpis','${x.id}','name',this.value)"></div>
+        <div class="field"><label>Objectif</label><input value="${esc(x.target||'')}" oninput="edit('kpis','${x.id}','target',this.value)"></div>
+        <div class="field"><label>Périodicité</label><input value="${esc(x.freq||'')}" oninput="edit('kpis','${x.id}','freq',this.value)"></div>
+        <div class="field"><label>Seuil d'alerte</label><input value="${esc(x.alert||'')}" oninput="edit('kpis','${x.id}','alert',this.value)"></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Responsable donnée</label><input value="${esc(x.owner||'')}" oninput="edit('kpis','${x.id}','owner',this.value)"></div>
+    </div>
+  `).join('') : `<div class="empty">Aucun indicateur.</div>`;
+}
+function renderRisks(){
+  const el=document.getElementById('risks');
+  el.innerHTML=state.risks.length ? state.risks.map(x=>`
+    <div class="item">
+      <div class="item-top">
+        <div class="item-title">${esc(x.name)}</div>
+        <div class="item-tools">
+          <span class="item-id">${x.id}</span>
+          <button class="iconbtn" onclick="del('risks','${x.id}')">✕</button>
+        </div>
+      </div>
+      <div class="cols">
+        <div class="field"><label>Risque / point sensible</label><input value="${esc(x.name)}" oninput="edit('risks','${x.id}','name',this.value)"></div>
+        <div class="field"><label>Impact</label><input value="${esc(x.impact||'')}" oninput="edit('risks','${x.id}','impact',this.value)"></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Prévention / surveillance</label><input value="${esc(x.control||'')}" oninput="edit('risks','${x.id}','control',this.value)"></div>
+    </div>
+  `).join('') : `<div class="empty">Aucun risque.</div>`;
+}
+
+function render(){
+  Object.keys(state.meta).forEach(k=>{
+    const el=document.getElementById(k);
+    if(el) el.value=state.meta[k]||'';
+  });
+  renderSteps();
+  renderKpis();
+  renderRisks();
+  document.getElementById('sSteps').textContent=state.steps.length;
+  document.getElementById('sKpis').textContent=state.kpis.length;
+  document.getElementById('sRisks').textContent=state.risks.length;
+  document.getElementById('sCad').textContent=state.meta.cadence || '-';
+}
+render();
+</script>
+</body>
+</html>

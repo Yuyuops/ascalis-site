@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tableau de bord qualité — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p:#0F1A2E; --a:#B07642; --al:#D4956A; --abg:rgba(176,118,66,.08);
+  --s:#FFFFFF; --sa:#F8FAFC; --w:#FAF9F6; --t:#020617; --t2:#475569; --t3:#94A3B8;
+  --bd:#E2E8F0; --bl:#F1F5F9; --ok:#059669; --warn:#D97706; --err:#DC2626; --info:#2563EB;
+  --okbg:#ECFDF5; --warnbg:#FFFBEB; --errbg:#FEF2F2; --infobg:#EFF6FF;
+  --fh:'Lexend',sans-serif; --fb:'Source Sans 3',sans-serif; --fd:'Instrument Serif',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:40}
+.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:8px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:.2s;min-height:38px}
+.btn:hover{border-color:var(--a);color:var(--a)}
+.btn.primary{background:var(--p);border-color:var(--p);color:#fff}
+.btn.primary:hover{background:#162540;color:#fff}
+.hero{background:var(--p);padding:34px 28px;color:var(--sa)}
+.hero h1{font-family:var(--fd);font-size:30px;font-weight:400;margin-bottom:8px}
+.hero p{font-size:14px;color:rgba(248,250,252,.72);max-width:900px;line-height:1.55}
+.container{max-width:1380px;margin:0 auto;padding:28px 24px 48px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+@media(max-width:1100px){.grid{grid-template-columns:1fr}}
+.card{background:var(--s);border:1px solid var(--bl);border-radius:14px;padding:20px;margin-bottom:18px}
+.card-title{font-family:var(--fh);font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.sub{font-size:12px;color:var(--t3);line-height:1.55}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.meta{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.meta{grid-template-columns:1fr}}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.kpi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.kpi-grid{grid-template-columns:1fr}}
+.field label{display:block;font-size:11px;font-family:var(--fh);text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:6px}
+input[type=text],input[type=number],input[type=date],select,textarea{
+  width:100%;border:1px solid var(--bd);background:var(--s);border-radius:10px;padding:10px 12px;font:inherit;color:var(--t);outline:none;transition:.2s;
+}
+textarea{min-height:88px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(176,118,66,.12)}
+.item-list{display:flex;flex-direction:column;gap:10px}
+.item{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--sa)}
+.item-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.item-title{font-family:var(--fh);font-size:13px;font-weight:600}
+.item-id{font-size:10px;padding:2px 8px;background:var(--abg);color:var(--a);border-radius:999px;font-family:var(--fh)}
+.item-tools{display:flex;gap:8px}
+.iconbtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--bd);background:#fff;cursor:pointer;color:var(--t2)}
+.iconbtn:hover{border-color:var(--a);color:var(--a)}
+.panel{position:sticky;top:76px}
+@media(max-width:1100px){.panel{position:static}}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat{border:1px solid var(--bl);background:var(--sa);padding:14px;border-radius:12px}
+.stat .k{font-size:11px;color:var(--t3);font-family:var(--fh);text-transform:uppercase;letter-spacing:.06em}
+.stat .v{font-family:var(--fd);font-size:30px;color:var(--p);line-height:1.05;margin-top:6px}
+.notice{padding:12px 14px;border-radius:10px;font-size:12px;line-height:1.6}
+.notice.info{background:var(--infobg);color:#1D4ED8;border:1px solid #BFDBFE}
+.notice.warn{background:var(--warnbg);color:#9A6708;border:1px solid #FDE68A}
+.empty{padding:18px;border:1px dashed var(--bd);border-radius:12px;color:var(--t3);font-size:12px;background:var(--sa)}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:999px;padding:0 8px;font-size:11px;font-family:var(--fh);font-weight:700}
+.badge.ok{background:rgba(5,150,105,.14);color:var(--ok)}
+.badge.warn{background:rgba(217,119,6,.16);color:var(--warn)}
+.badge.err{background:rgba(220,38,38,.14);color:var(--err)}
+.table-wrap{overflow:auto;border:1px solid var(--bl);border-radius:12px}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{padding:10px;border-bottom:1px solid var(--bl);font-size:12px;text-align:left;vertical-align:top}
+th{background:var(--sa);font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3)}
+tr:last-child td{border-bottom:none}
+.small{font-size:11px;color:var(--t3)}
+.footer-note{font-size:11px;color:var(--t3);margin-top:12px;line-height:1.5}
+@media print{.hd,.btn,.iconbtn{display:none!important}body{background:white}.container{padding:0}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none">
+    <path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text>
+  </svg>
+  <div class="hd-a">
+    <button class="btn" onclick="loadDemo()">Exemple</button>
+    <button class="btn" onclick="exportJSON()">Export JSON</button>
+    <button class="btn" onclick="exportCurrentCSV()">Export CSV</button>
+    <button class="btn" onclick="window.print()">Imprimer</button>
+    <button class="btn primary" onclick="persist()">Sauvegarder</button>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Tableau de bord qualité</h1>
+  <p>Le tableau de bord doit couvrir les rubriques clés : clients, fournisseurs, processus, produits, coûts et dynamique d’amélioration. Il mesure les résultats du plan d’action, aide à la décision et crédibilise la démarche qualité.</p>
+</div>
+
+<div class="container">
+  <div class="grid">
+    <main>
+      <div class="card">
+        <div class="card-title">Périmètre <span class="tag">boussole qualité</span></div>
+        <div class="meta">
+          <div class="field"><label>Organisation</label><input id="org"></div>
+          <div class="field"><label>Période</label><input id="period"></div>
+          <div class="field"><label>Responsable</label><input id="owner"></div>
+          <div class="field"><label>Date de revue</label><input id="reviewDate" type="date"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="card-title" style="margin-bottom:4px">Indicateurs</div>
+            <div class="sub">Associe chaque indicateur à une cible claire. Sinon il informe, mais il ne pilote pas.</div>
+          </div>
+          <button class="btn" onclick="addKpi()">+ Ajouter</button>
+        </div>
+        <div id="kpis" class="item-list"></div>
+        <div class="footer-note">Bonne pratique : limite le nombre d’indicateurs. Un tableau de bord qui essaie de tout montrer finit par ne plus rien montrer.</div>
+      </div>
+    </main>
+
+    <aside class="panel">
+      <div class="card">
+        <div class="card-title">Synthèse</div>
+        <div class="stat-grid">
+          <div class="stat"><div class="k">Au vert</div><div class="v" id="greenN">0</div></div>
+          <div class="stat"><div class="k">Alerte</div><div class="v" id="amberN">0</div></div>
+          <div class="stat"><div class="k">Hors cible</div><div class="v" id="redN">0</div></div>
+          <div class="stat"><div class="k">Total KPI</div><div class="v" id="totN">0</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Vue agrégée</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Rubrique</th><th>Nb KPI</th><th>Vert</th><th>Alerte</th><th>Hors cible</th></tr></thead>
+            <tbody id="agg"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Rappel</div>
+        <div class="notice info">Le tableau de bord est un outil de communication, diagnostic, motivation et aide à la décision. L’exploitation des données est la partie difficile.</div>
+        <div style="height:8px"></div>
+        <div class="notice warn">Un KPI sans cible, sans propriétaire ou sans décision possible est du décor numérique.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+function esc(s=''){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function save(key, state){localStorage.setItem(key, JSON.stringify(state))}
+function load(key, fallback){const raw=localStorage.getItem(key); if(!raw) return fallback; try{ return Object.assign(fallback, JSON.parse(raw)); }catch(e){ return fallback; }}
+function uid(prefix){return prefix + Math.random().toString(36).slice(2,6).toUpperCase()}
+function download(name, content, type='text/plain;charset=utf-8'){const blob=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function exportCSV(rows, filename){
+  const csv='\uFEFF'+rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n');
+  download(filename,csv,'text/csv;charset=utf-8');
+}
+
+const KEY='ascalis_tdb_qualite_v1';
+let state=load(KEY,{
+  meta:{
+    org:'ASCALIS',
+    period:'T2 2026',
+    owner:'Responsable Qualité',
+    reviewDate:new Date().toISOString().slice(0,10)
+  },
+  kpis:[
+    {id:'K1',name:'CSAT clients',group:'Clients',target:'>=90%',current:'92%',status:'Vert',trend:'↑',comment:'Bonne dynamique'},
+    {id:'K2',name:'OTIF fournisseurs',group:'Fournisseurs',target:'>=95%',current:'89%',status:'Hors cible',trend:'↓',comment:'2 fournisseurs critiques'},
+    {id:'K3',name:'Coût de non-qualité',group:'Coûts',target:'<=300k€',current:'340k€',status:'Alerte',trend:'→',comment:'Plan en cours'},
+    {id:'K4',name:'NC internes',group:'Processus',target:'<2%',current:'1.8%',status:'Vert',trend:'↑',comment:''}
+  ]
+});
+
+function persist(){
+  ['org','period','owner','reviewDate'].forEach(id=>state.meta[id]=document.getElementById(id).value);
+  save(KEY,state);
+  render();
+}
+function loadDemo(){
+  localStorage.removeItem(KEY);
+  location.reload();
+}
+function exportJSON(){
+  download('tableau-bord-qualite-ascalis.json', JSON.stringify(state,null,2),'application/json');
+}
+function exportCurrentCSV(){
+  const rows=[['ID','Indicateur','Rubrique','Cible','Actuel','Statut','Tendance','Commentaire']];
+  state.kpis.forEach(x=>rows.push([x.id,x.name,x.group,x.target,x.current,x.status,x.trend,x.comment]));
+  exportCSV(rows,'ASCALIS_tableau-bord-qualite.csv');
+}
+function addKpi(){
+  state.kpis.unshift({
+    id:uid('K'),
+    name:'Nouvel indicateur',
+    group:'Processus',
+    target:'',
+    current:'',
+    status:'Vert',
+    trend:'→',
+    comment:''
+  });
+  persist();
+}
+function del(id){
+  state.kpis=state.kpis.filter(x=>x.id!==id);
+  persist();
+}
+function edit(id,field,val){
+  const x=state.kpis.find(i=>i.id===id);
+  if(x) x[field]=val;
+  persist();
+}
+function badge(st){
+  if(st==='Vert') return '<span class="badge ok">Vert</span>';
+  if(st==='Alerte') return '<span class="badge warn">Alerte</span>';
+  return '<span class="badge err">Hors cible</span>';
+}
+function render(){
+  Object.keys(state.meta).forEach(k=>document.getElementById(k).value=state.meta[k]||'');
+
+  document.getElementById('kpis').innerHTML=state.kpis.length ? state.kpis.map(x=>`
+    <div class="item">
+      <div class="item-top">
+        <div>
+          <div class="item-title">${esc(x.name)}</div>
+          <div style="margin-top:6px">${badge(x.status)} <span class="small">${esc(x.group)} • tendance ${esc(x.trend)}</span></div>
+        </div>
+        <div class="item-tools">
+          <span class="item-id">${x.id}</span>
+          <button class="iconbtn" onclick="del('${x.id}')">✕</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="field"><label>Indicateur</label><input value="${esc(x.name)}" oninput="edit('${x.id}','name',this.value)"></div>
+        <div class="field"><label>Rubrique</label>
+          <select onchange="edit('${x.id}','group',this.value)">
+            ${['Clients','Fournisseurs','Processus','Produits','Coûts','Dynamique'].map(v=>`<option ${x.group===v?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>Cible</label><input value="${esc(x.target||'')}" oninput="edit('${x.id}','target',this.value)"></div>
+        <div class="field"><label>Actuel</label><input value="${esc(x.current||'')}" oninput="edit('${x.id}','current',this.value)"></div>
+      </div>
+
+      <div class="kpi-grid" style="margin-top:10px">
+        <div class="field"><label>Statut</label>
+          <select onchange="edit('${x.id}','status',this.value)">
+            ${['Vert','Alerte','Hors cible'].map(v=>`<option ${x.status===v?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>Tendance</label>
+          <select onchange="edit('${x.id}','trend',this.value)">
+            ${['↑','→','↓'].map(v=>`<option ${x.trend===v?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field" style="grid-column:span 2"><label>Commentaire</label><input value="${esc(x.comment||'')}" oninput="edit('${x.id}','comment',this.value)"></div>
+      </div>
+    </div>
+  `).join('') : `<div class="empty">Aucun indicateur.</div>`;
+
+  const green=state.kpis.filter(x=>x.status==='Vert').length;
+  const amber=state.kpis.filter(x=>x.status==='Alerte').length;
+  const red=state.kpis.filter(x=>x.status==='Hors cible').length;
+  document.getElementById('greenN').textContent=green;
+  document.getElementById('amberN').textContent=amber;
+  document.getElementById('redN').textContent=red;
+  document.getElementById('totN').textContent=state.kpis.length;
+
+  const groups=[...new Set(state.kpis.map(x=>x.group))];
+  document.getElementById('agg').innerHTML=groups.map(g=>{
+    const arr=state.kpis.filter(x=>x.group===g);
+    return `<tr>
+      <td><strong>${esc(g)}</strong></td>
+      <td>${arr.length}</td>
+      <td>${arr.filter(x=>x.status==='Vert').length}</td>
+      <td>${arr.filter(x=>x.status==='Alerte').length}</td>
+      <td>${arr.filter(x=>x.status==='Hors cible').length}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="5">Aucune donnée.</td></tr>';
+}
+render();
+</script>
+</body>
+</html>

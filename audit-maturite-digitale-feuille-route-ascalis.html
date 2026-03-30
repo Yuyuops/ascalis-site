@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit maturité digitale + feuille de route — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--warnbg:#FFFBEB;--err:#DC2626;--errbg:#FEF2F2;--info:#2563EB;--infobg:#EFF6FF;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn:hover{border-color:var(--a);color:var(--a)}.btn-pri{background:var(--p);border-color:var(--p);color:var(--sa)}.btn-pri:hover{background:#162543;color:var(--sa);border-color:#162543}.btn-soft{background:var(--abg);border-color:transparent;color:var(--a)}.btn-soft:hover{border-color:var(--a)}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:28px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.58);max-width:860px;line-height:1.5}
+.container{max-width:1360px;margin:0 auto;padding:28px 24px}
+.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:20px;align-items:start}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{background:var(--s);border:1px solid var(--bl);border-radius:14px;padding:18px}.card + .card{margin-top:16px}.title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}.eyebrow{font-family:var(--fh);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--a);margin-bottom:10px}.muted{color:var(--t2)}.small{font-size:12px;color:var(--t2);line-height:1.5}
+.kpi{padding:14px;border:1px solid var(--bl);border-radius:12px;background:linear-gradient(180deg,var(--s),var(--sa))}.kpi .label{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--fh)}.kpi .val{font-family:var(--fd);font-size:34px;line-height:1.05;margin-top:6px}.kpi .sub{font-size:12px;color:var(--t2);margin-top:2px}
+label{display:block;font-size:12px;color:var(--t2);margin-bottom:6px;font-family:var(--fh)}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--s);font:inherit;color:var(--t)}
+textarea{min-height:84px;resize:vertical} input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px var(--abg)}
+.row{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.c12{grid-column:span 12}.c9{grid-column:span 9}.c8{grid-column:span 8}.c7{grid-column:span 7}.c6{grid-column:span 6}.c5{grid-column:span 5}.c4{grid-column:span 4}.c3{grid-column:span 3}.c2{grid-column:span 2}
+.table-wrap{overflow:auto;border:1px solid var(--bl);border-radius:12px}.table{width:100%;border-collapse:collapse;min-width:980px}.table th,.table td{padding:10px 12px;border-bottom:1px solid var(--bl);text-align:left;font-size:13px;vertical-align:top}.table th{font-family:var(--fh);font-size:12px;color:var(--t2);background:var(--sa);position:sticky;top:0}.table tr:hover td{background:#fcfcfd}
+.badge{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:11px;font-family:var(--fh);font-weight:600}.b-ok{background:var(--okbg);color:var(--ok)}.b-warn{background:var(--warnbg);color:var(--warn)}.b-err{background:var(--errbg);color:var(--err)}.b-info{background:var(--infobg);color:var(--info)}.b-soft{background:var(--abg);color:var(--a)}
+.list{display:flex;flex-direction:column;gap:10px}.item{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--s)}.item h4{font-size:15px;margin-bottom:6px}.item .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.item .meta span{font-size:11px;border-radius:999px;padding:3px 8px;background:var(--sa);color:var(--t2);font-family:var(--fh)}
+.timeline{position:relative;padding-left:18px}.timeline:before{content:'';position:absolute;left:4px;top:0;bottom:0;width:2px;background:var(--bl)}.step{position:relative;margin-bottom:12px}.step:before{content:'';position:absolute;left:-18px;top:18px;width:10px;height:10px;border-radius:50%;background:var(--a);box-shadow:0 0 0 4px var(--abg)}
+.chart{width:100%;height:360px;border:1px solid var(--bl);border-radius:14px;background:linear-gradient(180deg,#fff,#fafafa)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.legend span{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--sa);color:var(--t2);font-family:var(--fh)}
+.progress{height:8px;border-radius:999px;background:var(--bl);overflow:hidden}.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--al));border-radius:999px}
+.note{padding:12px 14px;border:1px solid #BFDBFE;background:#EFF6FF;color:#1E40AF;border-radius:12px;font-size:12px;line-height:1.6}
+.hr{height:1px;background:var(--bl);margin:16px 0}
+@media(max-width:1100px){.grid,.grid-3,.grid-2{grid-template-columns:1fr}.row{grid-template-columns:1fr}.c2,.c3,.c4,.c5,.c6,.c7,.c8,.c9,.c12{grid-column:span 1}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="Lexend, sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a">
+    <button class="btn" onclick="exportJSON()">Export JSON</button>
+    <button class="btn" onclick="exportCSV()">Export CSV</button>
+    <label class="btn" for="importFile">Importer JSON</label><input id="importFile" type="file" accept="application/json" style="display:none">
+    <button class="btn btn-soft" onclick="resetData()">Réinitialiser</button>
+  </div>
+</div>
+
+<section class="hero"><h1>Audit maturité digitale + feuille de route</h1><p>Autoévaluation structurée pour situer la maturité digitale, détecter les angles morts, prioriser les pistes de progrès, puis générer une feuille de route réaliste. Le principe n’est pas de se raconter des histoires, mais de clarifier la trajectoire, l’usage de la donnée, l’expérience client, les compétences et le pilotage de la transformation.</p></section>
+<div class="container">
+  <div class="grid-3">
+    <div class="kpi"><div class="label">Maturité globale</div><div class="val" id="mScore">0%</div><div class="sub" id="mLevel">—</div></div>
+    <div class="kpi"><div class="label">Domaine le plus faible</div><div class="val" id="mWeak">—</div><div class="sub">priorité de travail</div></div>
+    <div class="kpi"><div class="label">Actions de roadmap</div><div class="val" id="mRoad">0</div><div class="sub">0-90 j / 3-6 mois / 6-12 mois</div></div>
+  </div>
+  <div class="grid" style="margin-top:18px">
+    <div>
+      <div class="card">
+        <div class="eyebrow">Référentiel</div>
+        <div class="title">Évaluer chaque critère</div>
+        <div class="note" style="margin-bottom:14px">Échelle recommandée : 0 = absent, 1 = initial, 2 = en place mais partiel, 3 = maîtrisé, 4 = piloté / optimisé. Mets une note réaliste. Le cosplay de transformation ne paie pas les factures.</div>
+        <div id="domains"></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="eyebrow">Vue synthèse</div>
+        <div class="title">Scores par domaine</div>
+        <div id="domainScores" class="list"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Roadmap</div>
+        <div class="title">Feuille de route générée</div>
+        <div id="roadmap" class="list"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Pilotage</div>
+        <div class="title">Actions personnalisées</div>
+        <div class="row">
+          <div class="c5"><label>Action</label><input id="r-name" placeholder="Ex. nommer un owner data par BU"></div>
+          <div class="c3"><label>Horizon</label><select id="r-horizon"><option>0-90 jours</option><option>3-6 mois</option><option>6-12 mois</option></select></div>
+          <div class="c4"><label>Pilote</label><input id="r-owner" placeholder="DSI / CODIR / QSE…"></div>
+          <div class="c12"><label>Livrable</label><textarea id="r-deliverable" placeholder="Ce qui doit exister concrètement : cartographie, KPI, standard, pilote, outillage…"></textarea></div>
+        </div>
+        <div class="hd-a" style="margin-top:12px"><button class="btn btn-pri" onclick="addRoadAction()">Ajouter</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const STORAGE_KEY='ascalis_audit_maturite_digitale_v1';
+const model=[
+{name:'Stratégie & gouvernance', weight:1.2, questions:[
+{key:'s1', text:'Une trajectoire digitale explicite existe et est comprise.'},
+{key:'s2', text:'Les priorités sont liées aux enjeux business et non à l’effet gadget.'},
+{key:'s3', text:'La gouvernance de transformation est claire (sponsors, owners, arbitrages).'},
+{key:'s4', text:'Le ROI / les risques / la non-qualité sont évalués avant déploiement.'}
+]},
+{name:'Données & pilotage', weight:1.2, questions:[
+{key:'d1', text:'Les données utiles sont identifiées, fiables et exploitées.'},
+{key:'d2', text:'Des KPI clefs existent et servent à décider, pas seulement à décorer un slide.'},
+{key:'d3', text:'Les comparaisons, tendances et causes sont analysées.'},
+{key:'d4', text:'Les décisions s’appuient de plus en plus sur des données et non sur l’intuition seule.'}
+]},
+{name:'Processus & outils digitaux', weight:1.1, questions:[
+{key:'p1', text:'Les processus prioritaires sont cartographiés et digitalisés de façon cohérente.'},
+{key:'p2', text:'Les outils réduisent réellement les frictions, doubles saisies et erreurs.'},
+{key:'p3', text:'Les composants / solutions sont réutilisés plutôt que recréés partout.'},
+{key:'p4', text:'La feuille de route couvre court terme et déploiement progressif.'}
+]},
+{name:'Expérience client', weight:1.0, questions:[
+{key:'c1', text:'Le parcours client et ses moments de vérité sont identifiés.'},
+{key:'c2', text:'Des feedbacks sont collectés à des moments clefs.'},
+{key:'c3', text:'Les irritants majeurs sont connus et traités.'},
+{key:'c4', text:'La dimension recommandation / fidélisation est pilotée.'}
+]},
+{name:'Compétences & conduite du changement', weight:1.0, questions:[
+{key:'h1', text:'Les équipes comprennent le sens du projet et les gains attendus.'},
+{key:'h2', text:'Les rôles nouveaux nécessaires sont identifiés (owner data, référent métier…).'},
+{key:'h3', text:'La formation et l’accompagnement sont prévus.'},
+{key:'h4', text:'Les résistances sont anticipées et traitées avec une logique gains/pertes.'}
+]},
+{name:'SI, intégration & sécurité', weight:1.1, questions:[
+{key:'i1', text:'Les flux d’information entre outils ne reposent pas sur du bricolage permanent.'},
+{key:'i2', text:'Les questions d’accès, droits et cybersécurité sont prises au sérieux.'},
+{key:'i3', text:'Les dépendances techniques sont connues et gérées.'},
+{key:'i4', text:'Le niveau d’intégration permet d’éviter les silos et les reprises manuelles.'}
+]}
+];
+const defaultScores={}; model.forEach(d=>d.questions.forEach(q=>defaultScores[q.key]=0));
+const defaultRoad=[];
+let state=load();
+const $=s=>document.querySelector(s);
+function load(){try{const raw=localStorage.getItem(STORAGE_KEY); if(raw) return JSON.parse(raw)}catch(e){} return {scores:defaultScores, actions:defaultRoad}}
+function persist(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
+function esc(v=''){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function level(p){return p<25?'Débutant':p<50?'Structuration':p<75?'Déploiement':p<90?'Maîtrisé':'Piloté'}
+function colorClass(p){return p<25?'b-err':p<50?'b-warn':p<75?'b-info':'b-ok'}
+function domainScore(d){const max=d.questions.length*4; const sum=d.questions.reduce((s,q)=>s+(Number(state.scores[q.key]||0)),0); return Math.round((sum/max)*100)}
+function weightedGlobal(){let total=0,weights=0; model.forEach(d=>{total+=domainScore(d)*d.weight; weights+=d.weight}); return Math.round(total/weights)}
+function render(){
+ $('#domains').innerHTML=model.map(d=>`<div class="card" style="margin-bottom:14px"><div class="title">${esc(d.name)}</div>${d.questions.map(q=>`<div class="item" style="margin-bottom:10px"><div class="small" style="margin-bottom:8px">${esc(q.text)}</div><div class="hd-a">${[0,1,2,3,4].map(v=>`<button class="btn ${Number(state.scores[q.key])===v?'btn-soft':''}" onclick="setScore('${q.key}',${v})">${v}</button>`).join('')}</div></div>`).join('')}</div>`).join('');
+ const scores=model.map(d=>({name:d.name,score:domainScore(d)})); const weak=scores.slice().sort((a,b)=>a.score-b.score)[0]; const global=weightedGlobal(); $('#mScore').textContent=global+'%'; $('#mLevel').textContent=level(global); $('#mWeak').textContent=weak?weak.name:'—';
+ $('#domainScores').innerHTML=scores.map(s=>`<div class="item"><div class="meta"><span class="badge ${colorClass(s.score)}">${s.score}%</span></div><h4>${esc(s.name)}</h4><div class="progress" style="margin-top:8px"><i style="width:${s.score}%"></i></div></div>`).join('');
+ const generated=buildRoadmap(scores); const allActions=[...generated,...state.actions]; $('#mRoad').textContent=allActions.length; $('#roadmap').innerHTML=allActions.map(a=>`<div class="item"><div class="meta"><span>${esc(a.horizon)}</span><span>${esc(a.owner||'À nommer')}</span><span class="badge ${a.generated?'b-info':'b-soft'}">${a.generated?'Auto':'Manuel'}</span></div><h4>${esc(a.name)}</h4><p class="small">${esc(a.deliverable)}</p>${a.generated?'':`<div class="hd-a" style="margin-top:8px"><button class="btn" onclick="removeAction('${a.id}')">Supprimer</button></div>`}</div>`).join('');
+}
+function setScore(k,v){state.scores[k]=v; persist(); render()}
+function buildRoadmap(scores){const actions=[]; const sorted=scores.slice().sort((a,b)=>a.score-b.score); const map={
+'Stratégie & gouvernance':['Clarifier la trajectoire digitale prioritaire et nommer les sponsors.','Formaliser un portefeuille d’initiatives avec critères d’arbitrage, ROI et risques.'],
+'Données & pilotage':['Identifier les KPI clefs et fiabiliser les sources de données.','Mettre en place une revue mensuelle des indicateurs et des tendances.'],
+'Processus & outils digitaux':['Cartographier les processus prioritaires et supprimer les doubles saisies.','Sélectionner 1 ou 2 quick wins digitaux à fort impact.'],
+'Expérience client':['Cartographier le parcours client et les moments de vérité.','Mettre en place des feedbacks à chaud sur les points de contact clefs.'],
+'Compétences & conduite du changement':['Nommer les rôles nouveaux et préparer un mini-plan de formation.','Construire l’argumentaire gains/pertes pour embarquer les équipes.'],
+'SI, intégration & sécurité':['Cartographier les flux et dépendances critiques entre outils.','Définir les règles minimales d’accès, sécurité et intégration.']};
+ sorted.slice(0,3).forEach((s,idx)=>{const base=map[s.name]||['Définir un chantier ciblé.']; const horizon=idx===0?'0-90 jours':idx===1?'3-6 mois':'6-12 mois'; actions.push({id:'g'+idx,name:base[0],horizon,owner:'À nommer',deliverable:`Domaine ciblé : ${s.name}. Objectif : passer de ${s.score}% à un niveau supérieur.`,generated:true}); if(base[1]) actions.push({id:'g'+idx+'b',name:base[1],horizon:idx===0?'3-6 mois':'6-12 mois',owner:'À nommer',deliverable:`Livrable attendu sur ${s.name}.`,generated:true});});
+ return actions;
+}
+function addRoadAction(){const name=$('#r-name').value.trim(); if(!name) return alert('Nom de l’action manquant.'); state.actions.push({id:'a'+Math.random().toString(36).slice(2,9),name,horizon:$('#r-horizon').value,owner:$('#r-owner').value.trim(),deliverable:$('#r-deliverable').value.trim(),generated:false}); persist(); $('#r-name').value=''; $('#r-owner').value=''; $('#r-deliverable').value=''; render();}
+function removeAction(id){state.actions=state.actions.filter(a=>a.id!==id); persist(); render()}
+function exportJSON(){download(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),'audit-maturite-digitale-ascalis.json')}
+function exportCSV(){const scoreRows=[]; model.forEach(d=>d.questions.forEach(q=>scoreRows.push(['score',d.name,q.text,state.scores[q.key]]))); const actionRows=state.actions.map(a=>['action',a.horizon,a.name,a.owner,a.deliverable]); const rows=[['type','col1','col2','col3','col4'],...scoreRows,...actionRows]; const csv=rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n'); download(new Blob([csv],{type:'text/csv;charset=utf-8'}),'audit-maturite-digitale-ascalis.csv')}
+function download(blob,name){const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); URL.revokeObjectURL(a.href)}
+function resetData(){if(!confirm('Réinitialiser l’audit ?')) return; state={scores:{...defaultScores}, actions:[]}; persist(); render()}
+$('#importFile').addEventListener('change',e=>{const f=e.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{try{const obj=JSON.parse(reader.result); if(!obj || !obj.scores) throw new Error(); state=obj; persist(); render()}catch(err){alert('JSON invalide')} e.target.value=''}; reader.readAsText(f)});
+render();
+</script></body></html>

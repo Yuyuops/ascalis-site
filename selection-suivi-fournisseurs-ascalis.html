@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sélection, suivi et évaluation fournisseurs — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--warnbg:#FFFBEB;--err:#DC2626;--errbg:#FEF2F2;--info:#2563EB;--infobg:#EFF6FF;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}button,input,select,textarea{font:inherit}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;gap:16px;flex-wrap:wrap}.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:7px 14px;border-radius:8px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn:hover{border-color:var(--a);color:var(--a)}.btn-pri{background:var(--p);border-color:var(--p);color:var(--sa)}.btn-pri:hover{background:#16253f;color:#fff;border-color:#16253f}.btn-danger{border-color:#fecaca;color:#b91c1c;background:#fff}.btn-danger:hover{border-color:#ef4444;color:#991b1b}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:28px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.6);max-width:760px;line-height:1.55}
+.container{max-width:1240px;margin:0 auto;padding:28px 24px}.layout{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}.card,.panel-card{background:var(--s);border-radius:14px;border:1px solid var(--bl);padding:20px;margin-bottom:16px;box-shadow:0 1px 0 rgba(15,26,46,.03)}.card-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.form-grid .full{grid-column:1/-1}.form-grid input,.form-grid select,.form-grid textarea,.toolbar input,.toolbar select{width:100%;border:1px solid var(--bd);background:#fff;border-radius:10px;padding:10px 12px;color:var(--t);min-height:42px}.form-grid textarea{min-height:84px;resize:vertical}.field-label{display:block;font-size:11px;font-family:var(--fh);font-weight:600;color:var(--t2);margin:0 0 6px 2px}.sub-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mini-card{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--sa)}.mini-card h3{font-family:var(--fh);font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--a);margin-bottom:12px}
+.panel{position:sticky;top:72px}.panel-title{font-family:var(--fh);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--a);margin-bottom:12px}.global-score{text-align:center;padding:20px;background:linear-gradient(135deg,var(--p),#172a47);border-radius:12px;color:var(--sa);margin-bottom:16px}.gs-val{font-family:var(--fd);font-size:48px;color:var(--al);line-height:1}.gs-sub{font-size:11px;color:rgba(248,250,252,.5);margin-top:4px}.gs-level{font-size:12px;margin-top:8px;padding:4px 14px;border-radius:999px;display:inline-block;background:rgba(176,118,66,.18);color:var(--al)}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kpi{border:1px solid var(--bl);border-radius:10px;padding:10px;background:#fff}.kpi .name{font-size:11px;color:var(--t3);margin-bottom:2px}.kpi .val{font-family:var(--fh);font-size:22px;font-weight:600}.ok{color:var(--ok)}.warn{color:var(--warn)}.err{color:var(--err)}
+.notice{background:var(--infobg);border:1px solid #bfdbfe;color:#1d4ed8;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.6}.warn-box{background:var(--warnbg);border:1px solid #fde68a;color:#92400e;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.55}.err-box{background:var(--errbg);border:1px solid #fecaca;color:#991b1b;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.55}
+.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;margin-bottom:12px}.table-wrap{overflow:auto;border:1px solid var(--bl);border-radius:12px}.data-table{width:100%;border-collapse:collapse;min-width:1180px}.data-table th,.data-table td{padding:10px 12px;border-bottom:1px solid var(--bl);vertical-align:top}.data-table th{font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--t2);text-align:left;background:#fbfdff;position:sticky;top:0;z-index:1}.data-table td{font-size:13px}.data-table tr:hover{background:#fcfdff}
+.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-size:11px;font-family:var(--fh);font-weight:600}.b-pot{background:#eff6ff;color:#1d4ed8}.b-pre{background:#eef2ff;color:#4338ca}.b-app{background:#ecfdf5;color:#047857}.b-cond{background:#fffbeb;color:#b45309}.b-susp{background:#fef2f2;color:#b91c1c}.b-critical{background:#fef2f2;color:#b91c1c}.b-standard{background:#eff6ff;color:#1d4ed8}.b-low{background:#f8fafc;color:#475569}.chip{display:inline-flex;border-radius:999px;padding:2px 8px;font-size:10px;font-family:var(--fh);background:var(--abg);color:var(--a)}
+.scorebar{height:8px;border-radius:999px;background:var(--bl);overflow:hidden;margin-top:5px}.scorefill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--a),var(--al))}
+.footer-note{font-size:11px;color:var(--t3);line-height:1.55;margin-top:10px}.small{font-size:12px;color:var(--t2)}
+.ranking-list{display:grid;gap:10px}.rank-item{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:10px;border:1px solid var(--bl);border-radius:10px;background:#fff}.rank-num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--fh);font-size:12px;font-weight:700;background:var(--abg);color:var(--a)}
+.section-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tab{padding:7px 12px;border-radius:999px;border:1px solid var(--bd);background:#fff;font-family:var(--fh);font-size:11px;color:var(--t2)}.tab.active{background:var(--p);color:#fff;border-color:var(--p)}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.panel{position:static}.toolbar{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr 1fr}.split{grid-template-columns:1fr}}
+@media(max-width:700px){.form-grid,.toolbar,.kpi-grid{grid-template-columns:1fr}.hero h1{font-size:24px}.container{padding:20px 14px}.hd{padding:12px 16px}.hero{padding:26px 16px}}
+@media print{.hd,.btn,.toolbar,.sub-actions{display:none!important}body{background:#fff}.container{max-width:none;padding:0}.card,.panel-card{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="seedData()">Exemple</button><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="exportJSON()">↓ Export JSON</button><label class="btn">Import JSON<input id="importFile" type="file" accept="application/json" hidden></label><button class="btn btn-danger" onclick="clearAll()">Vider</button><button class="btn" onclick="window.print()">Imprimer</button><a class="btn" href="index.html">← Retour</a></div>
+</div>
+<div class="hero"><h1>Sélection, suivi et évaluation des fournisseurs / sous-traitants</h1><p>Outil de présélection, homologation, suivi QCD et pilotage du panel. La logique suit le processus décrit dans tes sources : cahier des charges, critères d’évaluation, préselection, audit / échantillons, homologation, suivi par indicateurs, puis décisions et actions de progrès.</p></div>
+<div class="container">
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="card-title">Fiche fournisseur / sous-traitant <span class="tag">QCD + risque + homologation</span></div>
+        <div class="section-tabs"><span class="tab active">Sélection</span><span class="tab">Audit & échantillons</span><span class="tab">Suivi panel</span></div>
+        <div class="form-grid">
+          <div><label class="field-label">Code</label><input id="fCode" placeholder="FOU-001"></div>
+          <div><label class="field-label">Raison sociale</label><input id="fName" placeholder="Nom du fournisseur"></div>
+          <div><label class="field-label">Type</label><select id="fKind"><option>Fournisseur</option><option>Sous-traitant</option></select></div>
+          <div><label class="field-label">Famille / prestation</label><input id="fFamily" placeholder="Usinage, peinture, transport…"></div>
+          <div><label class="field-label">Criticité</label><select id="fCriticality"><option>Faible</option><option selected>Moyenne</option><option>Critique</option></select></div>
+          <div><label class="field-label">Statut panel</label><select id="fStatus"><option>Potentiel</option><option>Présélectionné</option><option>Homologué</option><option>Conditionnel</option><option>Suspendu</option></select></div>
+          <div><label class="field-label">Localisation</label><input id="fLocation" placeholder="Ville / pays"></div>
+          <div><label class="field-label">Référent interne</label><input id="fOwner" placeholder="Acheteur / qualité"></div>
+          <div><label class="field-label">ISO 9001</label><select id="fIso"><option>Oui</option><option>Non</option><option>En cours</option></select></div>
+          <div><label class="field-label">Santé financière (0-100)</label><input id="fFinance" type="number" min="0" max="100" value="70"></div>
+          <div><label class="field-label">Capacité / charge (0-100)</label><input id="fCapacity" type="number" min="0" max="100" value="70"></div>
+          <div><label class="field-label">Références / expérience (0-100)</label><input id="fRefs" type="number" min="0" max="100" value="70"></div>
+          <div><label class="field-label">Score audit terrain (0-100)</label><input id="fAudit" type="number" min="0" max="100" value="75"></div>
+          <div><label class="field-label">Score échantillons / essais (0-100)</label><input id="fSample" type="number" min="0" max="100" value="80"></div>
+          <div><label class="field-label">Prix / compétitivité (0-100)</label><input id="fCost" type="number" min="0" max="100" value="72"></div>
+          <div><label class="field-label">Service / réactivité (0-100)</label><input id="fService" type="number" min="0" max="100" value="76"></div>
+          <div><label class="field-label">Conformité / qualité (%)</label><input id="fQuality" type="number" min="0" max="100" step="0.1" value="98.5"></div>
+          <div><label class="field-label">Respect délais OTD (%)</label><input id="fOTD" type="number" min="0" max="100" step="0.1" value="94"></div>
+          <div><label class="field-label">Réclamations / NC</label><input id="fClaims" type="number" min="0" step="1" value="1"></div>
+          <div><label class="field-label">Temps réponse (jours)</label><input id="fResponse" type="number" min="0" step="0.1" value="2"></div>
+          <div><label class="field-label">Contrôle réception</label><select id="fReception"><option>Allégé</option><option selected>Normal</option><option>Renforcé</option></select></div>
+          <div><label class="field-label">Dernière évaluation</label><input id="fReviewDate" type="date"></div>
+          <div><label class="field-label">Prochaine revue</label><input id="fNextReview" type="date"></div>
+          <div><label class="field-label">Plan de sécurisation</label><input id="fBackup" placeholder="Double source, stock tampon…"></div>
+          <div class="full"><label class="field-label">Cahier des charges / exigences</label><input id="fSpec" placeholder="Produit, conditionnement, traçabilité, échanges d’information, SAV, facturation…"></div>
+          <div class="full"><label class="field-label">Commentaires / actions</label><textarea id="fNotes" placeholder="Résultats d’audit, points durs, actions de progrès, décision d’homologation, causes de surveillance…"></textarea></div>
+        </div>
+        <div class="sub-actions"><button class="btn btn-pri" onclick="saveSupplier()">Enregistrer</button><button class="btn" onclick="resetForm()">Vider le formulaire</button></div>
+        <div class="footer-note">Logique retenue : prétri selon taille / proximité / santé financière / capacité / références, puis évaluation détaillée, échantillons, audit terrain, niveau de contrôle réception, suivi par indicateurs et déclenchement d’actions de progrès.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Lecture de l’évaluation <span class="tag">Calcul automatique</span></div>
+        <div class="split">
+          <div class="mini-card"><h3>Score de sélection / homologation</h3><div class="small">Le score mélange qualité, coût, délai, audit, essais, service et risque. Pas de magie. Juste une décision moins artisanale.</div><div id="liveDecision" style="margin-top:12px"></div></div>
+          <div class="mini-card"><h3>Garde-fous</h3><ul class="small" style="padding-left:18px;line-height:1.7"><li>Un audit ou un essai faible ne doit pas être caché par un bon prix.</li><li>Un fournisseur critique reste piloté plus sévèrement.</li><li>Le statut recommandé n’est qu’une aide, pas une excuse.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Panel fournisseurs / sous-traitants <span class="tag">Recherche, filtres, alertes</span></div>
+        <div class="toolbar"><input id="search" placeholder="Rechercher code, nom, famille, référent, lieu…"><select id="filterKind"><option value="">Tous types</option><option>Fournisseur</option><option>Sous-traitant</option></select><select id="filterStatus"><option value="">Tous statuts</option><option>Potentiel</option><option>Présélectionné</option><option>Homologué</option><option>Conditionnel</option><option>Suspendu</option></select><select id="filterCriticality"><option value="">Toute criticité</option><option>Faible</option><option>Moyenne</option><option>Critique</option></select><select id="sortBy"><option value="score">Tri : score</option><option value="name">Tri : nom</option><option value="nextReview">Tri : prochaine revue</option><option value="quality">Tri : qualité</option><option value="otd">Tri : OTD</option></select></div>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Code / nom</th><th>Type</th><th>Famille</th><th>Criticité</th><th>Statut</th><th>Score</th><th>Qualité</th><th>OTD</th><th>NC</th><th>Réponse</th><th>Audit / essai</th><th>Contrôle réception</th><th>Revue</th><th>Actions</th></tr></thead><tbody id="tbody"></tbody></table></div>
+      </div>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+</div>
+<script>
+const STORE='ascalis_suppliers_v1';
+let editId=null;
+let items=loadItems();
+
+function loadItems(){try{return JSON.parse(localStorage.getItem(STORE)||'[]')}catch(e){return []}}
+function persist(){localStorage.setItem(STORE,JSON.stringify(items))}
+function uid(){return 's'+Math.random().toString(36).slice(2,10)}
+function esc(v=''){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function num(id){const v=parseFloat(document.getElementById(id).value);return Number.isFinite(v)?v:0}
+function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
+function dateFR(v){if(!v) return '—'; const d=new Date(v+'T00:00:00'); return Number.isNaN(d)?v:d.toLocaleDateString('fr-FR')}
+function reviewState(v){if(!v) return 'none'; const t=new Date(); t.setHours(0,0,0,0); const d=new Date(v+'T00:00:00'); const days=Math.round((d-t)/86400000); if(days<0) return 'late'; if(days<=30) return 'soon'; return 'ok'}
+function critPenalty(c){return c==='Critique'?10:(c==='Moyenne'?4:0)}
+function isoBonus(i){return i==='Oui'?5:(i==='En cours'?2:0)}
+function lowerBetterScore(val,best,worst){if(val<=best) return 100; if(val>=worst) return 0; return clamp(100*(worst-val)/(worst-best),0,100)}
+function higherBetterScore(val,best,worst){if(val>=best) return 100; if(val<=worst) return 0; return clamp(100*(val-worst)/(best-worst),0,100)}
+function calcScore(o){
+  const quality=higherBetterScore(+o.quality,99.5,90);
+  const otd=higherBetterScore(+o.otd,98,75);
+  const claims=lowerBetterScore(+o.claims,0,10);
+  const response=lowerBetterScore(+o.response,1,10);
+  const base=(quality*0.22)+(otd*0.18)+(+o.audit*0.16)+(+o.sample*0.12)+(+o.cost*0.10)+(+o.service*0.08)+(+o.finance*0.06)+(+o.capacity*0.04)+(+o.refs*0.04)+(claims*0.05)+(response*0.05)+isoBonus(o.iso);
+  return clamp(base-critPenalty(o.criticality),0,100);
+}
+function recStatus(o,score){
+  if(score<45 || +o.audit<50 || +o.sample<50) return 'Suspendu';
+  if(score<62 || +o.quality<93 || +o.otd<85) return 'Conditionnel';
+  if(score<78) return 'Présélectionné';
+  return 'Homologué';
+}
+function statusBadge(v){const map={'Potentiel':'b-pot','Présélectionné':'b-pre','Homologué':'b-app','Conditionnel':'b-cond','Suspendu':'b-susp'}; return '<span class="badge '+(map[v]||'b-pot')+'">'+esc(v)+'</span>'}
+function criticalityBadge(v){const map={'Critique':'b-critical','Moyenne':'b-standard','Faible':'b-low'}; return '<span class="badge '+(map[v]||'b-low')+'">'+esc(v)+'</span>'}
+function typeChip(v){return '<span class="chip">'+esc(v)+'</span>'}
+function getForm(){
+  const o={
+    id:editId||uid(), code:fCode.value.trim(), name:fName.value.trim(), kind:fKind.value, family:fFamily.value.trim(), criticality:fCriticality.value,
+    status:fStatus.value, location:fLocation.value.trim(), owner:fOwner.value.trim(), iso:fIso.value, finance:num('fFinance'), capacity:num('fCapacity'),
+    refs:num('fRefs'), audit:num('fAudit'), sample:num('fSample'), cost:num('fCost'), service:num('fService'), quality:num('fQuality'), otd:num('fOTD'),
+    claims:num('fClaims'), response:num('fResponse'), reception:fReception.value, reviewDate:fReviewDate.value, nextReview:fNextReview.value,
+    backup:fBackup.value.trim(), spec:fSpec.value.trim(), notes:fNotes.value.trim()
+  };
+  o.score=calcScore(o);
+  o.recommended=recStatus(o,o.score);
+  return o;
+}
+function livePreview(){
+  const o=getForm();
+  const tone=o.recommended==='Homologué'?'ok':(o.recommended==='Présélectionné'?'warn':'err');
+  liveDecision.innerHTML=''
+    +'<div class="kpi-grid">'
+    +'<div class="kpi"><div class="name">Score global</div><div class="val">'+o.score.toFixed(1)+'/100</div><div class="scorebar"><div class="scorefill" style="width:'+o.score+'%"></div></div></div>'
+    +'<div class="kpi"><div class="name">Statut recommandé</div><div class="val '+tone+'">'+esc(o.recommended)+'</div><div class="small">Statut saisi : '+esc(o.status)+'</div></div>'
+    +'</div>';
+}
+function saveSupplier(){const o=getForm(); if(!o.code||!o.name){alert('Code et raison sociale requis.'); return} const i=items.findIndex(x=>x.id===o.id); if(i>=0) items[i]=o; else items.unshift(o); persist(); resetForm(); render()}
+function resetForm(){editId=null; ['fCode','fName','fFamily','fLocation','fOwner','fReviewDate','fNextReview','fBackup','fSpec','fNotes'].forEach(id=>document.getElementById(id).value=''); fKind.value='Fournisseur'; fCriticality.value='Moyenne'; fStatus.value='Potentiel'; fIso.value='Oui'; fFinance.value=70; fCapacity.value=70; fRefs.value=70; fAudit.value=75; fSample.value=80; fCost.value=72; fService.value=76; fQuality.value=98.5; fOTD.value=94; fClaims.value=1; fResponse.value=2; fReception.value='Normal'; livePreview()}
+function editSupplier(id){const o=items.find(x=>x.id===id); if(!o) return; editId=id; fCode.value=o.code||''; fName.value=o.name||''; fKind.value=o.kind||'Fournisseur'; fFamily.value=o.family||''; fCriticality.value=o.criticality||'Moyenne'; fStatus.value=o.status||'Potentiel'; fLocation.value=o.location||''; fOwner.value=o.owner||''; fIso.value=o.iso||'Oui'; fFinance.value=o.finance??70; fCapacity.value=o.capacity??70; fRefs.value=o.refs??70; fAudit.value=o.audit??75; fSample.value=o.sample??80; fCost.value=o.cost??72; fService.value=o.service??76; fQuality.value=o.quality??98.5; fOTD.value=o.otd??94; fClaims.value=o.claims??1; fResponse.value=o.response??2; fReception.value=o.reception||'Normal'; fReviewDate.value=o.reviewDate||''; fNextReview.value=o.nextReview||''; fBackup.value=o.backup||''; fSpec.value=o.spec||''; fNotes.value=o.notes||''; livePreview(); window.scrollTo({top:0,behavior:'smooth'})}
+function delSupplier(id){if(!confirm('Supprimer cette ligne ?')) return; items=items.filter(x=>x.id!==id); persist(); render()}
+function clearAll(){if(!confirm('Vider tout le panel ?')) return; items=[]; persist(); render(); resetForm()}
+function seedData(){
+  items=[
+    {id:uid(),code:'ST-ALU-001',name:'Alu Precision',kind:'Sous-traitant',family:'Usinage aluminium',criticality:'Critique',status:'Homologué',location:'Bordeaux',owner:'Achats / Qualité',iso:'Oui',finance:82,capacity:74,refs:88,audit:91,sample:89,cost:70,service:84,quality:99.1,otd:96.4,claims:1,response:1.5,reception:'Normal',reviewDate:'2026-02-10',nextReview:'2026-07-10',backup:'Double source en cours',spec:'Tolérances serrées, traçabilité lot, contrôle dimensionnel, emballage dédié.',notes:'Bon niveau process. Vigilance sur saturation charge été.'},
+    {id:uid(),code:'FOU-TRT-002',name:'Thermo Surface',kind:'Fournisseur',family:'Traitement de surface',criticality:'Critique',status:'Conditionnel',location:'Toulouse',owner:'Achats',iso:'En cours',finance:63,capacity:68,refs:61,audit:58,sample:65,cost:78,service:59,quality:94.6,otd:87.2,claims:4,response:5,reception:'Renforcé',reviewDate:'2026-03-01',nextReview:'2026-04-15',backup:'Stock tampon sécurité 2 semaines',spec:'Résistance corrosion, certificat matière, DVI.',notes:'Plan de progrès ouvert sur délais et communication.'},
+    {id:uid(),code:'FOU-EMB-003',name:'PackEco',kind:'Fournisseur',family:'Emballages',criticality:'Moyenne',status:'Présélectionné',location:'Angers',owner:'Achats',iso:'Oui',finance:77,capacity:80,refs:73,audit:74,sample:81,cost:86,service:71,quality:98.8,otd:92.1,claims:2,response:3,reception:'Allégé',reviewDate:'2026-01-15',nextReview:'2026-08-01',backup:'Alternative identifiée',spec:'Réutilisable, taux casse faible, étiquetage client.',notes:'Bon profil coût / RSE. Audit terrain à approfondir.'}
+  ];
+  items=items.map(o=>{o.score=calcScore(o); o.recommended=recStatus(o,o.score); return o});
+  persist(); render(); resetForm();
+}
+function exportCSV(){const rows=[['Code','Nom','Type','Famille','Criticité','Statut','Score','Statut recommandé','Qualité %','OTD %','NC','Temps réponse j','Audit','Essai','Coût','Service','ISO 9001','Finance','Capacité','Références','Contrôle réception','Dernière revue','Prochaine revue','Lieu','Référent','Plan sécurisation','Exigences','Commentaires']]; items.forEach(o=>rows.push([o.code,o.name,o.kind,o.family,o.criticality,o.status,o.score,o.recommended,o.quality,o.otd,o.claims,o.response,o.audit,o.sample,o.cost,o.service,o.iso,o.finance,o.capacity,o.refs,o.reception,o.reviewDate,o.nextReview,o.location,o.owner,o.backup,o.spec,o.notes])); const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\n'); const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='panel-fournisseurs-ascalis.csv'; a.click(); URL.revokeObjectURL(a.href)}
+function exportJSON(){const blob=new Blob([JSON.stringify(items,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='panel-fournisseurs-ascalis.json'; a.click(); URL.revokeObjectURL(a.href)}
+importFile.addEventListener('change',e=>{const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{try{const data=JSON.parse(r.result); if(!Array.isArray(data)) throw new Error(); items=data.map(o=>{o.score=calcScore(o); o.recommended=recStatus(o,o.score); return o}); persist(); render(); resetForm()}catch(err){alert('Fichier JSON invalide.')}}; r.readAsText(f)})
+
+function render(){
+  const s=search.value.toLowerCase().trim(), fk=filterKind.value, fs=filterStatus.value, fc=filterCriticality.value, sort=sortBy.value;
+  let rows=items.filter(o=>{const hay=[o.code,o.name,o.family,o.location,o.owner,o.spec].join(' ').toLowerCase(); return (!s||hay.includes(s)) && (!fk||o.kind===fk) && (!fs||o.status===fs) && (!fc||o.criticality===fc)});
+  rows.sort((a,b)=>{if(sort==='name') return a.name.localeCompare(b.name); if(sort==='nextReview') return (a.nextReview||'9999').localeCompare(b.nextReview||'9999'); if(sort==='quality') return b.quality-a.quality; if(sort==='otd') return b.otd-a.otd; return b.score-a.score});
+
+  tbody.innerHTML=rows.map(o=>{
+    const rev=reviewState(o.nextReview); const tone=rev==='late'?'err':(rev==='soon'?'warn':'ok');
+    return '<tr>'
+      +'<td><div><strong>'+esc(o.code)+'</strong></div><div>'+esc(o.name)+'</div><div class="small">'+esc(o.location||'')+'</div></td>'
+      +'<td>'+typeChip(o.kind)+'</td>'
+      +'<td>'+esc(o.family||'—')+'</td>'
+      +'<td>'+criticalityBadge(o.criticality)+'</td>'
+      +'<td>'+statusBadge(o.status)+'<div class="small">Reco : '+esc(o.recommended)+'</div></td>'
+      +'<td><strong>'+o.score.toFixed(1)+'</strong><div class="scorebar"><div class="scorefill" style="width:'+o.score+'%"></div></div></td>'
+      +'<td>'+o.quality.toFixed(1)+'%</td>'
+      +'<td>'+o.otd.toFixed(1)+'%</td>'
+      +'<td>'+o.claims+'</td>'
+      +'<td>'+o.response+' j</td>'
+      +'<td>'+o.audit+' / '+o.sample+'</td>'
+      +'<td>'+esc(o.reception)+'</td>'
+      +'<td><div class="'+tone+'">'+dateFR(o.nextReview)+'</div><div class="small">Dernière : '+dateFR(o.reviewDate)+'</div></td>'
+      +'<td><button class="btn" onclick="editSupplier(\''+o.id+'\')">Éditer</button> <button class="btn btn-danger" onclick="delSupplier(\''+o.id+'\')">Suppr.</button></td>'
+      +'</tr>';
+  }).join('');
+
+  const total=items.length;
+  const avg=(arr,key)=>arr.length?arr.reduce((a,b)=>a+(+b[key]||0),0)/arr.length:0;
+  const avgScore=avg(items,'score');
+  const approved=items.filter(x=>x.status==='Homologué').length;
+  const watch=items.filter(x=>x.status==='Conditionnel' || x.status==='Suspendu').length;
+  const critical=items.filter(x=>x.criticality==='Critique').length;
+  const ranking=[...items].sort((a,b)=>b.score-a.score).slice(0,5);
+  const alerts=items.filter(x=>x.score<62 || x.status==='Conditionnel' || x.status==='Suspendu' || reviewState(x.nextReview)!=='ok').sort((a,b)=>a.score-b.score).slice(0,4);
+
+  panel.innerHTML=''
+    +'<div class="panel-card"><div class="global-score"><div class="gs-val">'+(avgScore?avgScore.toFixed(1):'0.0')+'</div><div class="gs-sub">Score moyen panel</div><div class="gs-level">'+total+' entreprise(s) suivie(s)</div></div>'
+    +'<div class="kpi-grid">'
+    +'<div class="kpi"><div class="name">Homologués</div><div class="val ok">'+approved+'</div></div>'
+    +'<div class="kpi"><div class="name">Sous surveillance</div><div class="val warn">'+watch+'</div></div>'
+    +'<div class="kpi"><div class="name">Fournisseurs critiques</div><div class="val err">'+critical+'</div></div>'
+    +'<div class="kpi"><div class="name">OTD moyen</div><div class="val">'+avg(items,'otd').toFixed(1)+'%</div></div>'
+    +'</div></div>'
+    +'<div class="panel-card"><div class="panel-title">Lecture rapide</div><div class="notice">Le processus achat/qualité doit d’abord clarifier le cahier des charges, faire un prétri, compléter par audit terrain et essais, puis suivre la performance dans le temps et déclencher des actions de progrès si nécessaire.</div></div>'
+    +'<div class="panel-card"><div class="panel-title">Top panel</div><div class="ranking-list">'
+    +(ranking.length?ranking.map((o,i)=>'<div class="rank-item"><div class="rank-num">'+(i+1)+'</div><div><div><strong>'+esc(o.name)+'</strong></div><div class="small">'+esc(o.family)+' • '+esc(o.status)+'</div></div><div><strong>'+o.score.toFixed(1)+'</strong></div></div>').join(''):'<div class="small">Aucune donnée.</div>')
+    +'</div></div>'
+    +'<div class="panel-card"><div class="panel-title">Alertes</div>'
+    +(alerts.length?alerts.map(o=>'<div class="warn-box" style="margin-bottom:8px"><strong>'+esc(o.name)+'</strong><br>Score '+o.score.toFixed(1)+' • Statut '+esc(o.status)+' • Revue '+dateFR(o.nextReview)+'</div>').join(''):'<div class="notice">Aucune alerte critique pour l’instant.</div>')
+    +'</div>';
+
+  livePreview();
+}
+['fCode','fName','fFamily','fLocation','fOwner','fFinance','fCapacity','fRefs','fAudit','fSample','fCost','fService','fQuality','fOTD','fClaims','fResponse','fSpec','fNotes','fCriticality','fStatus','fIso','fReception','fReviewDate','fNextReview'].forEach(id=>document.getElementById(id).addEventListener('input',livePreview));
+['search','filterKind','filterStatus','filterCriticality','sortBy'].forEach(id=>document.getElementById(id).addEventListener('input',render));
+render(); resetForm();
+</script>
+</body>
+</html>

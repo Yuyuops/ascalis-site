@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrice de croissance — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--warnbg:#FFFBEB;--err:#DC2626;--errbg:#FEF2F2;--info:#2563EB;--infobg:#EFF6FF;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:50}.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:7px 16px;border-radius:6px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn:hover{border-color:var(--a);color:var(--a)}.btn-pri{background:var(--p);border-color:var(--p);color:var(--sa)}.btn-pri:hover{background:#162543;color:var(--sa);border-color:#162543}.btn-soft{background:var(--abg);border-color:transparent;color:var(--a)}.btn-soft:hover{border-color:var(--a)}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:28px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.58);max-width:860px;line-height:1.5}
+.container{max-width:1360px;margin:0 auto;padding:28px 24px}
+.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:20px;align-items:start}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{background:var(--s);border:1px solid var(--bl);border-radius:14px;padding:18px}.card + .card{margin-top:16px}.title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}.eyebrow{font-family:var(--fh);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--a);margin-bottom:10px}.muted{color:var(--t2)}.small{font-size:12px;color:var(--t2);line-height:1.5}
+.kpi{padding:14px;border:1px solid var(--bl);border-radius:12px;background:linear-gradient(180deg,var(--s),var(--sa))}.kpi .label{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--fh)}.kpi .val{font-family:var(--fd);font-size:34px;line-height:1.05;margin-top:6px}.kpi .sub{font-size:12px;color:var(--t2);margin-top:2px}
+label{display:block;font-size:12px;color:var(--t2);margin-bottom:6px;font-family:var(--fh)}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--s);font:inherit;color:var(--t)}
+textarea{min-height:84px;resize:vertical} input:focus,select:focus,textarea:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px var(--abg)}
+.row{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.c12{grid-column:span 12}.c9{grid-column:span 9}.c8{grid-column:span 8}.c7{grid-column:span 7}.c6{grid-column:span 6}.c5{grid-column:span 5}.c4{grid-column:span 4}.c3{grid-column:span 3}.c2{grid-column:span 2}
+.table-wrap{overflow:auto;border:1px solid var(--bl);border-radius:12px}.table{width:100%;border-collapse:collapse;min-width:980px}.table th,.table td{padding:10px 12px;border-bottom:1px solid var(--bl);text-align:left;font-size:13px;vertical-align:top}.table th{font-family:var(--fh);font-size:12px;color:var(--t2);background:var(--sa);position:sticky;top:0}.table tr:hover td{background:#fcfcfd}
+.badge{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:11px;font-family:var(--fh);font-weight:600}.b-ok{background:var(--okbg);color:var(--ok)}.b-warn{background:var(--warnbg);color:var(--warn)}.b-err{background:var(--errbg);color:var(--err)}.b-info{background:var(--infobg);color:var(--info)}.b-soft{background:var(--abg);color:var(--a)}
+.list{display:flex;flex-direction:column;gap:10px}.item{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--s)}.item h4{font-size:15px;margin-bottom:6px}.item .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.item .meta span{font-size:11px;border-radius:999px;padding:3px 8px;background:var(--sa);color:var(--t2);font-family:var(--fh)}
+.timeline{position:relative;padding-left:18px}.timeline:before{content:'';position:absolute;left:4px;top:0;bottom:0;width:2px;background:var(--bl)}.step{position:relative;margin-bottom:12px}.step:before{content:'';position:absolute;left:-18px;top:18px;width:10px;height:10px;border-radius:50%;background:var(--a);box-shadow:0 0 0 4px var(--abg)}
+.chart{width:100%;height:360px;border:1px solid var(--bl);border-radius:14px;background:linear-gradient(180deg,#fff,#fafafa)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.legend span{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--sa);color:var(--t2);font-family:var(--fh)}
+.progress{height:8px;border-radius:999px;background:var(--bl);overflow:hidden}.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--al));border-radius:999px}
+.note{padding:12px 14px;border:1px solid #BFDBFE;background:#EFF6FF;color:#1E40AF;border-radius:12px;font-size:12px;line-height:1.6}
+.hr{height:1px;background:var(--bl);margin:16px 0}
+@media(max-width:1100px){.grid,.grid-3,.grid-2{grid-template-columns:1fr}.row{grid-template-columns:1fr}.c2,.c3,.c4,.c5,.c6,.c7,.c8,.c9,.c12{grid-column:span 1}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="Lexend, sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a">
+    <button class="btn" onclick="exportJSON()">Export JSON</button>
+    <button class="btn" onclick="exportCSV()">Export CSV</button>
+    <label class="btn" for="importFile">Importer JSON</label><input id="importFile" type="file" accept="application/json" style="display:none">
+    <button class="btn btn-soft" onclick="resetData()">Réinitialiser</button>
+  </div>
+</div>
+
+<section class="hero"><h1>Matrice de croissance</h1><p>Outil de priorisation multicritère pour arbitrer des initiatives selon les gains, les risques et l’effort. La logique combine les impératifs de décision, les souhaits pondérés et la lecture gains-pertes pour éviter les choix “jolis sur le papier, médiocres dans la vraie vie”.</p></section>
+<div class="container">
+  <div class="grid-3">
+    <div class="kpi"><div class="label">Initiatives</div><div class="val" id="kpiCount">0</div><div class="sub">opportunités comparées</div></div>
+    <div class="kpi"><div class="label">Top priorité</div><div class="val" id="kpiTop">—</div><div class="sub">initiative la mieux classée</div></div>
+    <div class="kpi"><div class="label">Gain moyen / effort</div><div class="val" id="kpiRatio">—</div><div class="sub">lecture rapide du portefeuille</div></div>
+  </div>
+
+  <div class="grid" style="margin-top:18px">
+    <div>
+      <div class="card">
+        <div class="eyebrow">Scoring</div>
+        <div class="title">Ajouter ou modifier une initiative</div>
+        <div class="row">
+          <div class="c5"><label>Initiative</label><input id="g-name" placeholder="Ex. Portail client, CRM, nouvelle offre…"></div>
+          <div class="c3"><label>Catégorie</label><select id="g-type"><option>Acquisition</option><option>Offre</option><option>Expérience client</option><option>Digital</option><option>Organisation</option></select></div>
+          <div class="c2"><label>Impératif validé ?</label><select id="g-gate"><option value="oui">Oui</option><option value="non">Non</option></select></div>
+          <div class="c2"><label>ID</label><input id="g-id" disabled></div>
+          <div class="c2"><label>Gain business</label><select id="g-biz"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div class="c2"><label>Gain client</label><select id="g-client"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div class="c2"><label>Gain équipe</label><select id="g-team"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div class="c2"><label>Alignement stratégique</label><select id="g-fit"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div class="c2"><label>Rapidité de gains</label><select id="g-speed"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div class="c2"><label>Risque</label><select id="g-risk"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div class="c2"><label>Effort</label><select id="g-effort"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div class="c12"><label>Hypothèse / notes</label><textarea id="g-note" placeholder="Hypothèses, dépendances, objections, conditions de succès…"></textarea></div>
+        </div>
+        <div class="hd-a" style="margin-top:14px"><button class="btn btn-pri" onclick="saveIdea()">Enregistrer</button><button class="btn" onclick="clearGrowthForm()">Vider</button></div>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow">Visualisation</div>
+        <div class="title">Carte gains / effort</div>
+        <svg id="bubble" class="chart" viewBox="0 0 860 360" preserveAspectRatio="none"></svg>
+        <div class="legend"><span>Y = gains pondérés</span><span>X = effort</span><span>Taille = score final</span><span>Couleur = risque</span></div>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow">Classement</div>
+        <div class="title">Matrice détaillée</div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>#</th><th>Initiative</th><th>Type</th><th>Gate</th><th>Gains</th><th>Risque</th><th>Effort</th><th>Score</th><th></th></tr></thead><tbody id="growthBody"></tbody></table></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="eyebrow">Top 3</div>
+        <div class="title">Priorités recommandées</div>
+        <div id="topList" class="list"></div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Lecture</div>
+        <div class="title">Règle du jeu</div>
+        <div class="note">Une initiative qui ne passe pas les impératifs reste visible mais n’est pas recommandée. Ensuite, le score se fait par critères pondérés : gains business, gains client, gains équipe, alignement stratégique, rapidité des gains, puis pénalités de risque et d’effort. Donc non, on ne choisit pas “le projet préféré du plus bruyant de la salle”.</div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Synthèse</div>
+        <div class="title">Portefeuille</div>
+        <div id="mixList" class="list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const STORAGE_KEY='ascalis_matrice_croissance_v1';
+const seed=[
+{id:'m1',name:'Portail client en self-service',type:'Expérience client',gate:'oui',biz:4,client:5,team:3,fit:5,speed:3,risk:2,effort:4,note:'Réduit les frictions et améliore la perception de maîtrise.'},
+{id:'m2',name:'Automatisation des relances devis',type:'Digital',gate:'oui',biz:4,client:3,team:4,fit:4,speed:5,risk:1,effort:2,note:'Quick win clair sur conversion et charge administrative.'},
+{id:'m3',name:'Nouvelle offre premium',type:'Offre',gate:'oui',biz:5,client:4,team:2,fit:4,speed:2,risk:4,effort:4,note:'Potentiel élevé, mais hypothèses commerciales encore fragiles.'},
+{id:'m4',name:'Refonte complète du site',type:'Acquisition',gate:'non',biz:3,client:4,team:2,fit:3,speed:2,risk:3,effort:5,note:'Beaucoup de désir, peu de cadrage.'}
+];
+let data=load(); let editId=null;
+const $=s=>document.querySelector(s);
+function load(){try{const raw=localStorage.getItem(STORAGE_KEY); if(raw) return JSON.parse(raw)}catch(e){} return seed}
+function persist(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}
+function uid(){return 'm'+Math.random().toString(36).slice(2,9)}
+function esc(v=''){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function gainScore(it){return it.biz*1.3 + it.client*1.4 + it.team*0.8 + it.fit*1.2 + it.speed*1.0}
+function finalScore(it){const raw=gainScore(it) - (it.risk*1.0 + it.effort*0.9); const scaled=Math.max(0,Math.min(100,Math.round(raw*5))); return it.gate==='non'?Math.max(0,scaled-25):scaled}
+function ratio(it){return (gainScore(it)/(it.effort||1)).toFixed(1)}
+function badgeRisk(v){return v>=4?'b-err':v===3?'b-warn':'b-ok'}
+function clearGrowthForm(){editId=null; ['name','type','gate','biz','client','team','fit','speed','risk','effort','note','id'].forEach(k=>$('#g-'+k).value=''); $('#g-type').value='Acquisition'; $('#g-gate').value='oui'; ['biz','client','team','fit','speed','risk','effort'].forEach(k=>$('#g-'+k).value='3');}
+function fillIdea(it){editId=it.id; Object.entries(it).forEach(([k,v])=>{const el=$('#g-'+k); if(el) el.value=v})}
+function saveIdea(){const obj={id:editId||uid(),name:$('#g-name').value.trim(),type:$('#g-type').value,gate:$('#g-gate').value,biz:Number($('#g-biz').value),client:Number($('#g-client').value),team:Number($('#g-team').value),fit:Number($('#g-fit').value),speed:Number($('#g-speed').value),risk:Number($('#g-risk').value),effort:Number($('#g-effort').value),note:$('#g-note').value.trim()}; if(!obj.name) return alert('Renseigne le nom de l’initiative.'); const ix=data.findIndex(x=>x.id===obj.id); if(ix>=0)data[ix]=obj; else data.push(obj); persist(); clearGrowthForm(); render();}
+function delIdea(id){if(!confirm('Supprimer cette initiative ?')) return; data=data.filter(x=>x.id!==id); persist(); render();}
+function render(){const ranked=[...data].sort((a,b)=>finalScore(b)-finalScore(a)); $('#kpiCount').textContent=data.length; $('#kpiTop').textContent=ranked[0]?ranked[0].name:'—'; const avg=(data.reduce((s,x)=>s+gainScore(x)/(x.effort||1),0)/(data.length||1)).toFixed(1); $('#kpiRatio').textContent=avg;
+ $('#growthBody').innerHTML=ranked.map((it,i)=>`<tr><td>${i+1}</td><td>${esc(it.name)}</td><td>${esc(it.type)}</td><td><span class="badge ${it.gate==='oui'?'b-ok':'b-err'}">${it.gate==='oui'?'OK':'Bloqué'}</span></td><td>${gainScore(it).toFixed(1)}</td><td><span class="badge ${badgeRisk(it.risk)}">${it.risk}/5</span></td><td>${it.effort}/5</td><td><strong>${finalScore(it)}</strong></td><td><button class="btn" onclick="fillIdea(data.find(x=>x.id==='${it.id}'))">Éditer</button></td></tr>`).join('');
+ $('#topList').innerHTML=ranked.slice(0,3).map((it,i)=>`<div class="item"><div class="meta"><span>#${i+1}</span><span>${esc(it.type)}</span><span class="badge ${it.gate==='oui'?'b-ok':'b-err'}">${it.gate==='oui'?'Gate OK':'Gate KO'}</span></div><h4>${esc(it.name)}</h4><p class="small"><strong>Score :</strong> ${finalScore(it)} / 100 — <strong>Gain / effort :</strong> ${ratio(it)}</p><p class="small">${esc(it.note||'')}</p><div class="hd-a" style="margin-top:8px"><button class="btn" onclick="fillIdea(data.find(x=>x.id==='${it.id}'))">Modifier</button><button class="btn" onclick="delIdea('${it.id}')">Supprimer</button></div></div>`).join('') || `<div class="small muted">Aucune initiative.</div>`;
+ const byType={}; data.forEach(it=>{byType[it.type]=(byType[it.type]||0)+1}); $('#mixList').innerHTML=Object.entries(byType).map(([k,v])=>`<div class="item"><h4>${esc(k)}</h4><p class="small">${v} initiative(s)</p></div>`).join('') || `<div class="small muted">Pas encore de mix portefeuille.</div>`;
+ drawBubble(ranked);
+ }
+function drawBubble(items){const svg=$('#bubble'); const W=860,H=360,m=48; const riskColor=r=>r>=4?'#DC2626':r===3?'#D97706':'#059669'; let out=`<rect x="0" y="0" width="860" height="360" fill="url(#g)"/><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#fafafa"/></linearGradient></defs>`;
+ out+=`<line x1="${m}" y1="${H-m}" x2="${W-m}" y2="${H-m}" stroke="#CBD5E1"/><line x1="${m}" y1="${m}" x2="${m}" y2="${H-m}" stroke="#CBD5E1"/>`;
+ out+=`<line x1="${(W)/2}" y1="${m}" x2="${(W)/2}" y2="${H-m}" stroke="#E2E8F0" stroke-dasharray="4 4"/><line x1="${m}" y1="${(H)/2}" x2="${W-m}" y2="${(H)/2}" stroke="#E2E8F0" stroke-dasharray="4 4"/>`;
+ out+=`<text x="${W/2}" y="${H-10}" text-anchor="middle" fill="#475569" font-size="12" font-family="Lexend, sans-serif">Effort croissant →</text><text x="16" y="${H/2}" transform="rotate(-90 16 ${H/2})" text-anchor="middle" fill="#475569" font-size="12" font-family="Lexend, sans-serif">Gains pondérés →</text>`;
+ items.forEach(it=>{const x=m + ((it.effort-1)/4)*(W-2*m); const y=H-m - ((gainScore(it)-5.7)/(28.5-5.7))*(H-2*m); const r=12 + (finalScore(it)/100)*18; out+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${riskColor(it.risk)}" fill-opacity="0.72" stroke="#fff" stroke-width="2"></circle><text x="${x}" y="${y+4}" text-anchor="middle" font-size="11" fill="#fff" font-family="Lexend, sans-serif">${esc(it.name).slice(0,10)}</text>`});
+ svg.innerHTML=out;
+ }
+function exportJSON(){download(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),'matrice-croissance-ascalis.json')}
+function exportCSV(){const headers=['initiative','type','imperatif_ok','gain_business','gain_client','gain_equipe','alignement','rapidite_gains','risque','effort','score','notes']; const rows=data.map(it=>[it.name,it.type,it.gate,it.biz,it.client,it.team,it.fit,it.speed,it.risk,it.effort,finalScore(it),it.note]); const csv=[headers,...rows].map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n'); download(new Blob([csv],{type:'text/csv;charset=utf-8'}),'matrice-croissance-ascalis.csv')}
+function download(blob,name){const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); URL.revokeObjectURL(a.href)}
+function resetData(){if(!confirm('Revenir au jeu d’exemple ?')) return; data=JSON.parse(JSON.stringify(seed)); persist(); clearGrowthForm(); render()}
+$('#importFile').addEventListener('change',e=>{const f=e.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{try{const arr=JSON.parse(reader.result); if(!Array.isArray(arr)) throw new Error(); data=arr; persist(); render()}catch(err){alert('JSON invalide')} e.target.value=''}; reader.readAsText(f)});
+clearGrowthForm(); render();
+</script></body></html>

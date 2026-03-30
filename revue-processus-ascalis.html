@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Revue de processus — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p:#0F1A2E; --a:#B07642; --al:#D4956A; --abg:rgba(176,118,66,.08);
+  --s:#FFFFFF; --sa:#F8FAFC; --w:#FAF9F6; --t:#020617; --t2:#475569; --t3:#94A3B8;
+  --bd:#E2E8F0; --bl:#F1F5F9; --ok:#059669; --warn:#D97706; --err:#DC2626; --info:#2563EB;
+  --okbg:#ECFDF5; --warnbg:#FFFBEB; --errbg:#FEF2F2; --infobg:#EFF6FF;
+  --fh:'Lexend',sans-serif; --fb:'Source Sans 3',sans-serif; --fd:'Instrument Serif',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:40}
+.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:8px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:.2s;min-height:38px}
+.btn:hover{border-color:var(--a);color:var(--a)}
+.btn.primary{background:var(--p);border-color:var(--p);color:#fff}
+.btn.primary:hover{background:#162540;color:#fff}
+.hero{background:var(--p);padding:34px 28px;color:var(--sa)}
+.hero h1{font-family:var(--fd);font-size:30px;font-weight:400;margin-bottom:8px}
+.hero p{font-size:14px;color:rgba(248,250,252,.72);max-width:960px;line-height:1.55}
+.container{max-width:1380px;margin:0 auto;padding:28px 24px 48px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+@media(max-width:1100px){.grid{grid-template-columns:1fr}}
+.card{background:var(--s);border:1px solid var(--bl);border-radius:14px;padding:20px;margin-bottom:18px}
+.card-title{font-family:var(--fh);font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.sub{font-size:12px;color:var(--t3);line-height:1.55}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.meta{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.meta{grid-template-columns:1fr}}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.kpi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.kpi-grid{grid-template-columns:1fr}}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.field label{display:block;font-size:11px;font-family:var(--fh);text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:6px}
+input[type=text],input[type=number],input[type=date],select,textarea{
+  width:100%;border:1px solid var(--bd);background:var(--s);border-radius:10px;padding:10px 12px;font:inherit;color:var(--t);outline:none;transition:.2s;
+}
+textarea{min-height:94px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(176,118,66,.12)}
+.item-list{display:flex;flex-direction:column;gap:10px}
+.item{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--sa)}
+.item-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.item-title{font-family:var(--fh);font-size:13px;font-weight:600}
+.item-id{font-size:10px;padding:2px 8px;background:var(--abg);color:var(--a);border-radius:999px;font-family:var(--fh)}
+.item-tools{display:flex;gap:8px}
+.iconbtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--bd);background:#fff;cursor:pointer;color:var(--t2)}
+.iconbtn:hover{border-color:var(--a);color:var(--a)}
+.panel{position:sticky;top:76px}
+@media(max-width:1100px){.panel{position:static}}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat{border:1px solid var(--bl);background:var(--sa);padding:14px;border-radius:12px}
+.stat .k{font-size:11px;color:var(--t3);font-family:var(--fh);text-transform:uppercase;letter-spacing:.06em}
+.stat .v{font-family:var(--fd);font-size:30px;color:var(--p);line-height:1.05;margin-top:6px}
+.notice{padding:12px 14px;border-radius:10px;font-size:12px;line-height:1.6}
+.notice.info{background:var(--infobg);color:#1D4ED8;border:1px solid #BFDBFE}
+.notice.warn{background:var(--warnbg);color:#9A6708;border:1px solid #FDE68A}
+.empty{padding:18px;border:1px dashed var(--bd);border-radius:12px;color:var(--t3);font-size:12px;background:var(--sa)}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.range-row{display:grid;grid-template-columns:1fr 70px;gap:10px;align-items:center}
+.score-val{font-family:var(--fh);font-size:12px;color:var(--a);font-weight:600;text-align:right}
+.progress{height:8px;background:var(--bl);border-radius:999px;overflow:hidden;margin-top:8px}
+.progress > span{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--al))}
+.footer-note{font-size:11px;color:var(--t3);margin-top:12px;line-height:1.5}
+@media print{.hd,.btn,.iconbtn{display:none!important}body{background:white}.container{padding:0}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none">
+    <path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text>
+  </svg>
+  <div class="hd-a">
+    <button class="btn" onclick="loadDemo()">Exemple</button>
+    <button class="btn" onclick="exportJSON()">Export JSON</button>
+    <button class="btn" onclick="exportCurrentCSV()">Export CSV</button>
+    <button class="btn" onclick="window.print()">Imprimer</button>
+    <button class="btn primary" onclick="persist()">Sauvegarder</button>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Revue de processus</h1>
+  <p>La revue de processus est une réunion animée par le pilote avec les acteurs clés. Elle fait un point factuel sur l’efficacité du processus à partir d’indicateurs, non-conformités, réclamations, audits, actions et propositions d’amélioration, puis construit le plan d’action adapté.</p>
+</div>
+
+<div class="container">
+  <div class="grid">
+    <main>
+      <div class="card">
+        <div class="card-title">Cadrage de la revue <span class="tag">phase check</span></div>
+        <div class="meta">
+          <div class="field"><label>Processus</label><input id="process"></div>
+          <div class="field"><label>Pilote</label><input id="owner"></div>
+          <div class="field"><label>Période revue</label><input id="period"></div>
+          <div class="field"><label>Date de revue</label><input id="date" type="date"></div>
+        </div>
+        <div class="cols" style="margin-top:12px">
+          <div class="field"><label>Participants</label><textarea id="participants"></textarea></div>
+          <div class="field"><label>Conclusion synthétique</label><textarea id="conclusion"></textarea></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Ordre du jour structuré <span class="tag">trame complète</span></div>
+        <div class="item-list">
+          <div class="item">
+            <div class="item-title">1. Fiche d’identité du processus</div>
+            <div class="field" style="margin-top:10px"><label>Statut / commentaires</label><textarea id="agenda1"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">2. Plan d’action de la revue précédente</div>
+            <div class="field" style="margin-top:10px"><label>Bilan</label><textarea id="agenda2"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">3. Résultats et indicateurs</div>
+            <div class="field" style="margin-top:10px"><label>Performance / surveillance</label><textarea id="agenda3"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">4. Non-conformités, réclamations, incidents</div>
+            <div class="field" style="margin-top:10px"><label>Constats</label><textarea id="agenda4"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">5. Audits</div>
+            <div class="field" style="margin-top:10px"><label>Résultats / échéances</label><textarea id="agenda5"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">6. Évolutions du processus / contexte</div>
+            <div class="field" style="margin-top:10px"><label>Changements à prendre en compte</label><textarea id="agenda6"></textarea></div>
+          </div>
+          <div class="item">
+            <div class="item-title">7. Propositions d’amélioration et décisions</div>
+            <div class="field" style="margin-top:10px"><label>Décisions / besoins complémentaires</label><textarea id="agenda7"></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="card-title" style="margin-bottom:4px">Actions décidées</div>
+            <div class="sub">La sortie attendue de la revue est un bilan clair et un nouveau plan d’action.</div>
+          </div>
+          <button class="btn" onclick="addAction()">+ Ajouter</button>
+        </div>
+        <div id="actions" class="item-list"></div>
+        <div class="footer-note">Une revue utile se termine par peu de décisions, nettes, pilotées et suivies. L’inverse, c’est de la littérature de réunion.</div>
+      </div>
+    </main>
+
+    <aside class="panel">
+      <div class="card">
+        <div class="card-title">Lecture rapide</div>
+        <div class="stat-grid">
+          <div class="stat"><div class="k">Actions</div><div class="v" id="sAct">0</div></div>
+          <div class="stat"><div class="k">Échéance proche</div><div class="v" id="sSoon">0</div></div>
+          <div class="stat"><div class="k">Statut</div><div class="v" id="sEff">-</div></div>
+          <div class="stat"><div class="k">Maturité</div><div class="v" id="sMat">-</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Aide</div>
+        <div class="notice info">Entrées à préparer : fiche d’identité, revue précédente, objectifs, plan d’action, retours clients, NC, audits, CAPA, suggestions, indicateurs.</div>
+        <div style="height:8px"></div>
+        <div class="notice warn">Reste factuel. Une revue qui commente sans décider consomme du temps et protège le statu quo.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+function esc(s=''){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function uid(prefix){return prefix + Math.random().toString(36).slice(2,6).toUpperCase()}
+function save(key, state){localStorage.setItem(key, JSON.stringify(state))}
+function load(key, fallback){const raw=localStorage.getItem(key); if(!raw) return fallback; try{ return Object.assign(fallback, JSON.parse(raw)); }catch(e){ return fallback; }}
+function download(name, content, type='text/plain;charset=utf-8'){const blob=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function exportCSV(rows, filename){
+  const csv='\uFEFF'+rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n');
+  download(filename,csv,'text/csv;charset=utf-8');
+}
+
+const KEY='ascalis_revue_processus_v1';
+let state=load(KEY,{
+  meta:{
+    process:'PR-01 Produire / délivrer',
+    owner:'Resp. production',
+    period:'S1 2026',
+    date:new Date().toISOString().slice(0,10),
+    participants:'Pilote, qualité, achats, client interne, fournisseur du processus',
+    conclusion:'Le processus reste globalement efficace mais nécessite une action forte sur les causes de retard.',
+    eff:'Efficace',
+    mat:'3'
+  },
+  agenda:{
+    agenda1:'Fiche d’identité version 2 toujours adaptée.',
+    agenda2:'Le plan d’action précédent est globalement mis en œuvre.',
+    agenda3:'Indicateurs de performance majoritairement au vert.',
+    agenda4:'NC majeures en baisse, réclamations délai encore présentes.',
+    agenda5:'Audit interne réalisé, 2 écarts mineurs.',
+    agenda6:'Variation de charge et changement fournisseur critique.',
+    agenda7:'Lancer action sur validation initiale et pilotage délai.'
+  },
+  actions:[
+    {id:'RP1',title:'Sécuriser validation initiale',owner:'Qualité',due:'2026-05-30',status:'En cours',progress:35},
+    {id:'RP2',title:'Revoir priorisation ordonnancement',owner:'Production',due:'2026-04-30',status:'À lancer',progress:0}
+  ]
+});
+
+function persist(){
+  ['process','owner','period','date','participants','conclusion'].forEach(id=>state.meta[id]=document.getElementById(id).value);
+  ['agenda1','agenda2','agenda3','agenda4','agenda5','agenda6','agenda7'].forEach(id=>state.agenda[id]=document.getElementById(id).value);
+  save(KEY,state);
+  render();
+}
+function loadDemo(){
+  localStorage.removeItem(KEY);
+  location.reload();
+}
+function exportJSON(){
+  download('revue-processus-ascalis.json', JSON.stringify(state,null,2),'application/json');
+}
+function exportCurrentCSV(){
+  const rows=[
+    ['Champ','Valeur'],
+    ['Processus',state.meta.process],
+    ['Pilote',state.meta.owner],
+    ['Période',state.meta.period],
+    ['Date',state.meta.date],
+    ['Participants',state.meta.participants],
+    ['Conclusion',state.meta.conclusion],
+    ['1 Fiche identité',state.agenda.agenda1],
+    ['2 Plan action',state.agenda.agenda2],
+    ['3 Résultats',state.agenda.agenda3],
+    ['4 NC/réclamations',state.agenda.agenda4],
+    ['5 Audits',state.agenda.agenda5],
+    ['6 Evolutions',state.agenda.agenda6],
+    ['7 Décisions',state.agenda.agenda7],
+    [],
+    ['Actions décidées','','','','']
+  ];
+  state.actions.forEach(a=>rows.push([a.id,a.title,a.owner,a.due,a.status,a.progress]));
+  exportCSV(rows,'ASCALIS_revue-processus.csv');
+}
+function addAction(){
+  state.actions.push({id:uid('RP'),title:'Nouvelle action',owner:'',due:'',status:'À lancer',progress:0});
+  persist();
+}
+function edit(id,field,val){
+  const x=state.actions.find(i=>i.id===id);
+  if(x) x[field]=val;
+  persist();
+}
+function del(id){
+  state.actions=state.actions.filter(x=>x.id!==id);
+  persist();
+}
+function render(){
+  ['process','owner','period','date','participants','conclusion'].forEach(id=>document.getElementById(id).value=state.meta[id]||'');
+  ['agenda1','agenda2','agenda3','agenda4','agenda5','agenda6','agenda7'].forEach(id=>document.getElementById(id).value=state.agenda[id]||'');
+
+  document.getElementById('actions').innerHTML=state.actions.length ? state.actions.map(a=>`
+    <div class="item">
+      <div class="item-top">
+        <div class="item-title">${esc(a.title)}</div>
+        <div class="item-tools">
+          <span class="item-id">${a.id}</span>
+          <button class="iconbtn" onclick="del('${a.id}')">✕</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="field"><label>Action</label><input value="${esc(a.title)}" oninput="edit('${a.id}','title',this.value)"></div>
+        <div class="field"><label>Pilote</label><input value="${esc(a.owner||'')}" oninput="edit('${a.id}','owner',this.value)"></div>
+        <div class="field"><label>Échéance</label><input type="date" value="${esc(a.due||'')}" oninput="edit('${a.id}','due',this.value)"></div>
+        <div class="field"><label>Statut</label>
+          <select onchange="edit('${a.id}','status',this.value)">
+            ${['À lancer','En cours','Bloquée','Terminée'].map(v=>`<option ${a.status===v?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+
+      <div class="range-row" style="margin-top:10px">
+        <div>
+          <label class="small">Avancement</label>
+          <input type="range" min="0" max="100" value="${Number(a.progress)||0}" oninput="edit('${a.id}','progress',Number(this.value))">
+          <div class="progress"><span style="width:${Number(a.progress)||0}%"></span></div>
+        </div>
+        <div class="score-val">${Number(a.progress)||0}%</div>
+      </div>
+    </div>
+  `).join('') : `<div class="empty">Aucune action décidée.</div>`;
+
+  const now=new Date();
+  const soon=state.actions.filter(a=>a.due && ((new Date(a.due)-now)/(1000*3600*24))<=30 && a.status!=='Terminée').length;
+  document.getElementById('sAct').textContent=state.actions.length;
+  document.getElementById('sSoon').textContent=soon;
+  document.getElementById('sEff').textContent=state.meta.eff||'À statuer';
+  document.getElementById('sMat').textContent=state.meta.mat||'-';
+}
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cartographie des processus — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p:#0F1A2E; --a:#B07642; --al:#D4956A; --abg:rgba(176,118,66,.08);
+  --s:#FFFFFF; --sa:#F8FAFC; --w:#FAF9F6; --t:#020617; --t2:#475569; --t3:#94A3B8;
+  --bd:#E2E8F0; --bl:#F1F5F9; --ok:#059669; --warn:#D97706; --err:#DC2626; --info:#2563EB;
+  --okbg:#ECFDF5; --warnbg:#FFFBEB; --errbg:#FEF2F2; --infobg:#EFF6FF;
+  --fh:'Lexend',sans-serif; --fb:'Source Sans 3',sans-serif; --fd:'Instrument Serif',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:40}
+.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:8px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:.2s;min-height:38px}
+.btn:hover{border-color:var(--a);color:var(--a)}
+.btn.primary{background:var(--p);border-color:var(--p);color:#fff}
+.btn.primary:hover{background:#162540;color:#fff}
+.hero{background:var(--p);padding:34px 28px;color:var(--sa)}
+.hero h1{font-family:var(--fd);font-size:30px;font-weight:400;margin-bottom:8px}
+.hero p{font-size:14px;color:rgba(248,250,252,.72);max-width:860px;line-height:1.55}
+.container{max-width:1380px;margin:0 auto;padding:28px 24px 48px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+@media(max-width:1100px){.grid{grid-template-columns:1fr}}
+.card{background:var(--s);border:1px solid var(--bl);border-radius:14px;padding:20px;margin-bottom:18px}
+.card-title{font-family:var(--fh);font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.sub{font-size:12px;color:var(--t3);line-height:1.55}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.meta{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.meta{grid-template-columns:1fr}}
+.field label{display:block;font-size:11px;font-family:var(--fh);text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:6px}
+input[type=text],input[type=number],input[type=date],select,textarea{
+  width:100%;border:1px solid var(--bd);background:var(--s);border-radius:10px;padding:10px 12px;font:inherit;color:var(--t);outline:none;transition:.2s;
+}
+textarea{min-height:88px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(176,118,66,.12)}
+.item-list{display:flex;flex-direction:column;gap:10px}
+.item{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--sa)}
+.item-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.item-title{font-family:var(--fh);font-size:13px;font-weight:600}
+.item-id{font-size:10px;padding:2px 8px;background:var(--abg);color:var(--a);border-radius:999px;font-family:var(--fh)}
+.item-tools{display:flex;gap:8px}
+.iconbtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--bd);background:#fff;cursor:pointer;color:var(--t2)}
+.iconbtn:hover{border-color:var(--a);color:var(--a)}
+.panel{position:sticky;top:76px}
+@media(max-width:1100px){.panel{position:static}}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat{border:1px solid var(--bl);background:var(--sa);padding:14px;border-radius:12px}
+.stat .k{font-size:11px;color:var(--t3);font-family:var(--fh);text-transform:uppercase;letter-spacing:.06em}
+.stat .v{font-family:var(--fd);font-size:30px;color:var(--p);line-height:1.05;margin-top:6px}
+.notice{padding:12px 14px;border-radius:10px;font-size:12px;line-height:1.6}
+.notice.info{background:var(--infobg);color:#1D4ED8;border:1px solid #BFDBFE}
+.notice.warn{background:var(--warnbg);color:#9A6708;border:1px solid #FDE68A}
+.empty{padding:18px;border:1px dashed var(--bd);border-radius:12px;color:var(--t3);font-size:12px;background:var(--sa)}
+.table-wrap{overflow:auto;border:1px solid var(--bl);border-radius:12px}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{padding:10px;border-bottom:1px solid var(--bl);font-size:12px;text-align:left;vertical-align:top}
+th{background:var(--sa);font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3)}
+tr:last-child td{border-bottom:none}
+.small{font-size:11px;color:var(--t3)}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.kpi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.kpi-grid{grid-template-columns:1fr}}
+.lane{border-radius:14px;padding:14px;border:1px solid var(--bl)}
+.lane.dir{background:#F8FAFF}.lane.core{background:#FFFBF5}.lane.sup{background:#F9FAFB}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.footer-note{font-size:11px;color:var(--t3);margin-top:12px;line-height:1.5}
+@media print{.hd,.btn,.iconbtn{display:none!important}body{background:white}.container{padding:0}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none">
+    <path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text>
+  </svg>
+  <div class="hd-a">
+    <button class="btn" onclick="loadDemo()">Exemple</button>
+    <button class="btn" onclick="exportJSON()">Export JSON</button>
+    <button class="btn" onclick="window.print()">Imprimer</button>
+    <button class="btn primary" onclick="persist()">Sauvegarder</button>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Cartographie des processus</h1>
+  <p>La cartographie représente l’entreprise comme un ensemble de processus orientés satisfaction client, et non comme un simple organigramme. Elle sert à identifier les processus clés, partager une vision commune et préparer le pilotage par processus.</p>
+</div>
+
+<div class="container">
+  <div class="grid">
+    <main>
+      <div class="card">
+        <div class="card-title">Cadrage <span class="tag">vision client</span></div>
+        <div class="meta">
+          <div class="field"><label>Organisation</label><input id="org"></div>
+          <div class="field"><label>Version</label><input id="version"></div>
+          <div class="field"><label>Validateur</label><input id="approver"></div>
+          <div class="field"><label>Date</label><input id="date" type="date"></div>
+        </div>
+        <div class="kpi-grid" style="margin-top:12px">
+          <div class="field" style="grid-column:span 2"><label>Clients / parties intéressées</label><textarea id="clients"></textarea></div>
+          <div class="field" style="grid-column:span 2"><label>Valeur livrée / attentes majeures</label><textarea id="value"></textarea></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Vue cartographique <span class="tag">direction • métiers • support</span></div>
+
+        <div class="lane dir">
+          <div class="section-head">
+            <div>
+              <div class="item-title">Processus de direction / pilotage</div>
+              <div class="small">Orientent, arbitrent, priorisent.</div>
+            </div>
+            <button class="btn" onclick="addProc('direction')">+ Ajouter</button>
+          </div>
+          <div id="dirList" class="item-list"></div>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="lane core">
+          <div class="section-head">
+            <div>
+              <div class="item-title">Processus métiers</div>
+              <div class="small">Créent directement la valeur client.</div>
+            </div>
+            <button class="btn" onclick="addProc('core')">+ Ajouter</button>
+          </div>
+          <div id="coreList" class="item-list"></div>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="lane sup">
+          <div class="section-head">
+            <div>
+              <div class="item-title">Processus support</div>
+              <div class="small">Fournissent les ressources, méthodes et appuis nécessaires.</div>
+            </div>
+            <button class="btn" onclick="addProc('support')">+ Ajouter</button>
+          </div>
+          <div id="supList" class="item-list"></div>
+        </div>
+
+        <div class="footer-note">Commence par ce que le client reçoit, puis remonte vers les processus qui rendent cette promesse possible. L’inverse produit souvent une belle cartographie interne, mais pas une bonne cartographie utile.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Table de synthèse</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Catégorie</th><th>Processus</th><th>Finalité</th><th>Pilote</th><th>KPI clés</th></tr>
+            </thead>
+            <tbody id="summaryTbl"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <aside class="panel">
+      <div class="card">
+        <div class="card-title">Contrôles</div>
+        <div class="stat-grid">
+          <div class="stat"><div class="k">Direction</div><div class="v" id="sDir">0</div></div>
+          <div class="stat"><div class="k">Métiers</div><div class="v" id="sCore">0</div></div>
+          <div class="stat"><div class="k">Support</div><div class="v" id="sSup">0</div></div>
+          <div class="stat"><div class="k">Total</div><div class="v" id="sTot">0</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Conseils</div>
+        <div class="notice info">Valide la cartographie en comité de direction. Une version réellement utilisée vaut mieux qu’une version parfaite et ignorée.</div>
+        <div style="height:8px"></div>
+        <div class="notice warn">Ne copie pas une cartographie standard. Si elle ne colle pas au terrain, elle finit en décoration ISO.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+function esc(s=''){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function uid(prefix){return prefix + Math.random().toString(36).slice(2,6).toUpperCase()}
+function save(key, state){localStorage.setItem(key, JSON.stringify(state))}
+function load(key, fallback){const raw=localStorage.getItem(key); if(!raw) return fallback; try{ return Object.assign(fallback, JSON.parse(raw)); }catch(e){ return fallback; }}
+function download(name, content, type='text/plain;charset=utf-8'){const blob=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+
+const KEY='ascalis_carto_process_v1';
+let state=load(KEY,{
+  meta:{
+    org:'ASCALIS',
+    version:'v1',
+    approver:'CODIR',
+    date:new Date().toISOString().slice(0,10),
+    clients:'Clients, utilisateurs finaux, MOA, direction',
+    value:'Conformité, délai, coût, fiabilité, sécurité'
+  },
+  direction:[
+    {id:'D1',name:'Piloter la stratégie',purpose:'Définir cap, objectifs, arbitrages',owner:'Direction',kpi:'Hoshin, marge, satisfaction'}
+  ],
+  core:[
+    {id:'M1',name:'Vendre / contractualiser',purpose:'Transformer le besoin client en engagement clair',owner:'Commerce',kpi:'Taux de conversion'},
+    {id:'M2',name:'Concevoir / préparer',purpose:'Préparer une délivrance conforme',owner:'Opérations',kpi:'Taux de dossier complet'},
+    {id:'M3',name:'Produire / délivrer',purpose:'Exécuter la prestation / produit',owner:'Production',kpi:'OTD, NC'}
+  ],
+  support:[
+    {id:'S1',name:'Achats fournisseurs',purpose:'Mettre à disposition les ressources externes',owner:'Achats',kpi:'OTIF fournisseur'},
+    {id:'S2',name:'QHSE / amélioration',purpose:'Assurer pilotage qualité et amélioration',owner:'Qualité',kpi:'CNQ, audits'}
+  ]
+});
+
+function persist(){
+  state.meta.org=document.getElementById('org').value;
+  state.meta.version=document.getElementById('version').value;
+  state.meta.approver=document.getElementById('approver').value;
+  state.meta.date=document.getElementById('date').value;
+  state.meta.clients=document.getElementById('clients').value;
+  state.meta.value=document.getElementById('value').value;
+  save(KEY,state);
+  render();
+}
+function loadDemo(){localStorage.removeItem(KEY); location.reload();}
+function exportJSON(){persist(); download('cartographie-processus-ascalis.json', JSON.stringify(state,null,2),'application/json')}
+function addProc(type){
+  const pref=type==='direction'?'D':type==='core'?'M':'S';
+  state[type].push({id:uid(pref),name:'Nouveau processus',purpose:'',owner:'',kpi:''});
+  persist();
+}
+function delProc(type,id){
+  state[type]=state[type].filter(x=>x.id!==id);
+  persist();
+}
+function edit(type,id,field,val){
+  const x=state[type].find(i=>i.id===id);
+  if(x) x[field]=val;
+  persist();
+}
+function itemTpl(type,p){
+  return `<div class="item">
+    <div class="item-top">
+      <div class="item-title">${esc(p.name)}</div>
+      <div class="item-tools">
+        <span class="item-id">${p.id}</span>
+        <button class="iconbtn" onclick="delProc('${type}','${p.id}')">✕</button>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="field"><label>Intitulé</label><input value="${esc(p.name)}" oninput="edit('${type}','${p.id}','name',this.value)"></div>
+      <div class="field"><label>Finalité</label><input value="${esc(p.purpose||'')}" oninput="edit('${type}','${p.id}','purpose',this.value)"></div>
+      <div class="field"><label>Pilote</label><input value="${esc(p.owner||'')}" oninput="edit('${type}','${p.id}','owner',this.value)"></div>
+      <div class="field"><label>KPI clés</label><input value="${esc(p.kpi||'')}" oninput="edit('${type}','${p.id}','kpi',this.value)"></div>
+    </div>
+  </div>`;
+}
+function renderList(id, type){
+  const arr=state[type];
+  document.getElementById(id).innerHTML=arr.length?arr.map(p=>itemTpl(type,p)).join(''):`<div class="empty">Aucun processus.</div>`;
+}
+function render(){
+  document.getElementById('org').value=state.meta.org||'';
+  document.getElementById('version').value=state.meta.version||'';
+  document.getElementById('approver').value=state.meta.approver||'';
+  document.getElementById('date').value=state.meta.date||'';
+  document.getElementById('clients').value=state.meta.clients||'';
+  document.getElementById('value').value=state.meta.value||'';
+
+  renderList('dirList','direction');
+  renderList('coreList','core');
+  renderList('supList','support');
+
+  document.getElementById('sDir').textContent=state.direction.length;
+  document.getElementById('sCore').textContent=state.core.length;
+  document.getElementById('sSup').textContent=state.support.length;
+  document.getElementById('sTot').textContent=state.direction.length+state.core.length+state.support.length;
+
+  const rows=[];
+  [['Direction',state.direction],['Métier',state.core],['Support',state.support]].forEach(([label,arr])=>{
+    arr.forEach(p=>rows.push(`<tr><td>${label}</td><td><strong>${esc(p.name)}</strong></td><td>${esc(p.purpose||'')}</td><td>${esc(p.owner||'')}</td><td>${esc(p.kpi||'')}</td></tr>`))
+  });
+  document.getElementById('summaryTbl').innerHTML=rows.join('') || '<tr><td colspan="5">Aucune donnée.</td></tr>';
+}
+render();
+</script>
+</body>
+</html>

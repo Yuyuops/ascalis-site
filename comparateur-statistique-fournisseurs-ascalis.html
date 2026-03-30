@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparateur statistique fournisseurs — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--warn:#D97706;--err:#DC2626;--infobg:#EFF6FF;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}button,input,select,textarea{font:inherit}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;gap:16px;flex-wrap:wrap}.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:7px 14px;border-radius:8px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn:hover{border-color:var(--a);color:var(--a)}.btn-pri{background:var(--p);border-color:var(--p);color:var(--sa)}.btn-pri:hover{background:#16253f;color:#fff;border-color:#16253f}.btn-danger{border-color:#fecaca;color:#b91c1c;background:#fff}.btn-danger:hover{border-color:#ef4444;color:#991b1b}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:28px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.6);max-width:760px;line-height:1.55}
+.container{max-width:1280px;margin:0 auto;padding:28px 24px}.layout{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}.card,.panel-card{background:var(--s);border-radius:14px;border:1px solid var(--bl);padding:20px;margin-bottom:16px;box-shadow:0 1px 0 rgba(15,26,46,.03)}.card-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.form-grid .full{grid-column:1/-1}.form-grid input,.form-grid select,.form-grid textarea,.toolbar input,.toolbar select{width:100%;border:1px solid var(--bd);background:#fff;border-radius:10px;padding:10px 12px;color:var(--t);min-height:42px}.form-grid textarea{min-height:84px;resize:vertical}.field-label{display:block;font-size:11px;font-family:var(--fh);font-weight:600;color:var(--t2);margin:0 0 6px 2px}.sub-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.panel{position:sticky;top:72px}.panel-title{font-family:var(--fh);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--a);margin-bottom:12px}.global-score{text-align:center;padding:20px;background:linear-gradient(135deg,var(--p),#172a47);border-radius:12px;color:var(--sa);margin-bottom:16px}.gs-val{font-family:var(--fd);font-size:48px;color:var(--al);line-height:1}.gs-sub{font-size:11px;color:rgba(248,250,252,.5);margin-top:4px}.gs-level{font-size:12px;margin-top:8px;padding:4px 14px;border-radius:999px;display:inline-block;background:rgba(176,118,66,.18);color:var(--al)}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kpi{border:1px solid var(--bl);border-radius:10px;padding:10px;background:#fff}.kpi .name{font-size:11px;color:var(--t3);margin-bottom:2px}.kpi .val{font-family:var(--fh);font-size:22px;font-weight:600}.ok{color:var(--ok)}.warn{color:var(--warn)}.err{color:var(--err)}
+.notice{background:var(--infobg);border:1px solid #bfdbfe;color:#1d4ed8;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.6}.warn-box{background:#FFFBEB;border:1px solid #fde68a;color:#92400e;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.55}
+.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;margin-bottom:12px}.table-wrap{overflow:auto;border:1px solid var(--bl);border-radius:12px}.data-table{width:100%;border-collapse:collapse;min-width:1200px}.data-table th,.data-table td{padding:10px 12px;border-bottom:1px solid var(--bl);vertical-align:top}.data-table th{font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--t2);text-align:left;background:#fbfdff;position:sticky;top:0;z-index:1}.data-table td{font-size:13px}.data-table tr:hover{background:#fcfdff}
+.scorebar{height:8px;border-radius:999px;background:var(--bl);overflow:hidden;margin-top:5px}.scorefill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--a),var(--al))}.chip{display:inline-flex;border-radius:999px;padding:2px 8px;font-size:10px;font-family:var(--fh);background:var(--abg);color:var(--a)}.small{font-size:12px;color:var(--t2)}.ranking-list{display:grid;gap:10px}.rank-item{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:10px;border:1px solid var(--bl);border-radius:10px;background:#fff}.rank-num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--fh);font-size:12px;font-weight:700;background:var(--abg);color:var(--a)}
+.spark{width:170px;height:46px}.spark polyline{fill:none;stroke:var(--a);stroke-width:2}.spark .axis{stroke:#cbd5e1;stroke-width:1}
+.footer-note{font-size:11px;color:var(--t3);line-height:1.55;margin-top:10px}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.panel{position:static}.toolbar{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.form-grid,.toolbar,.kpi-grid{grid-template-columns:1fr}.hero h1{font-size:24px}.container{padding:20px 14px}.hd{padding:12px 16px}.hero{padding:26px 16px}}
+@media print{.hd,.btn,.toolbar,.sub-actions{display:none!important}body{background:#fff}.container{max-width:none;padding:0}.card,.panel-card{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="seedData()">Exemple</button><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="exportJSON()">↓ Export JSON</button><label class="btn">Import JSON<input id="importFile" type="file" accept="application/json" hidden></label><button class="btn btn-danger" onclick="clearAll()">Vider</button><button class="btn" onclick="window.print()">Imprimer</button><a class="btn" href="index.html">← Retour</a></div>
+</div>
+<div class="hero"><h1>Comparateur statistique de fournisseurs / sous-traitants</h1><p>Outil de comparaison multi-fournisseurs à partir d’observations périodiques. Il consolide des données, calcule moyenne, médiane, dispersion, coefficient de variation, tendance et score pondéré. L’esprit est Lean Six Sigma : mesurer, comparer, prioriser, puis décider — pas raconter une histoire après coup.</p></div>
+<div class="container">
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="card-title">Définition des KPI <span class="tag">Pondération + sens de lecture</span></div>
+        <div class="notice">Les KPI par défaut couvrent qualité, délai, coût, service et non-conformités. Le comparateur classe ensuite les fournisseurs sur base statistique et non sur une impression du mardi matin.</div>
+        <div class="table-wrap" style="margin-top:12px"><table class="data-table" style="min-width:860px"><thead><tr><th>KPI</th><th>Poids</th><th>Sens</th><th>Unité</th><th>Description</th></tr></thead><tbody id="kpiBody"></tbody></table></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Saisie d’observation <span class="tag">Une ligne = un fournisseur × une période</span></div>
+        <div class="form-grid">
+          <div><label class="field-label">Fournisseur</label><input id="oSupplier" placeholder="Nom fournisseur"></div>
+          <div><label class="field-label">Type</label><select id="oKind"><option>Fournisseur</option><option>Sous-traitant</option></select></div>
+          <div><label class="field-label">Période</label><input id="oPeriod" placeholder="2026-01 ou T1-2026"></div>
+          <div><label class="field-label">Famille</label><input id="oFamily" placeholder="Usinage, transport, traitement…"></div>
+          <div><label class="field-label">Conformité (%)</label><input id="mQuality" type="number" step="0.1" value="98.2"></div>
+          <div><label class="field-label">OTD (%)</label><input id="mOTD" type="number" step="0.1" value="95"></div>
+          <div><label class="field-label">Prix relatif (indice 100 = cible)</label><input id="mCost" type="number" step="0.1" value="100"></div>
+          <div><label class="field-label">Réactivité (jours)</label><input id="mResponse" type="number" step="0.1" value="2"></div>
+          <div><label class="field-label">NC / réclamations</label><input id="mClaims" type="number" step="1" value="1"></div>
+          <div><label class="field-label">Audit / service (0-100)</label><input id="mService" type="number" step="0.1" value="82"></div>
+          <div><label class="field-label">COPQ / impact (€)</label><input id="mCopq" type="number" step="0.01" value="350"></div>
+          <div><label class="field-label">Volume livré</label><input id="mVolume" type="number" step="1" value="1000"></div>
+          <div class="full"><label class="field-label">Commentaire</label><input id="oNote" placeholder="Événement ponctuel, incident logistique, dérive matière, changement d’équipe…"></div>
+        </div>
+        <div class="sub-actions"><button class="btn btn-pri" onclick="saveObs()">Enregistrer l’observation</button><button class="btn" onclick="resetForm()">Vider le formulaire</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Filtres d’analyse <span class="tag">Comparaisons, tendances, dispersion</span></div>
+        <div class="toolbar"><input id="search" placeholder="Rechercher fournisseur, famille, période…"><select id="filterKind"><option value="">Tous types</option><option>Fournisseur</option><option>Sous-traitant</option></select><select id="filterFamily"><option value="">Toutes familles</option></select><select id="selectedKpi"></select><select id="sortBy"><option value="rank">Tri : score global</option><option value="quality">Tri : qualité</option><option value="otd">Tri : OTD</option><option value="cv">Tri : variabilité</option></select></div>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Fournisseur</th><th>Type</th><th>Famille</th><th>N obs.</th><th>Score pondéré</th><th>Moyennes KPI</th><th>Médiane KPI sélectionné</th><th>Dispersion</th><th>Tendance</th><th>Actions</th></tr></thead><tbody id="tbody"></tbody></table></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Détail des observations <span class="tag">Brut utile</span></div>
+        <div class="table-wrap"><table class="data-table" style="min-width:1160px"><thead><tr><th>Fournisseur</th><th>Période</th><th>Qualité</th><th>OTD</th><th>Coût idx</th><th>Réactivité</th><th>NC</th><th>Service</th><th>COPQ</th><th>Volume</th><th>Commentaire</th><th>Actions</th></tr></thead><tbody id="obsBody"></tbody></table></div>
+      </div>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+</div>
+<script>
+const STORE='ascalis_supplier_stats_v1';
+const KPI_META=[
+  {key:'quality',label:'Conformité',weight:28,dir:'high',unit:'%',desc:'Taux de conformité / qualité reçue'},
+  {key:'otd',label:'OTD',weight:22,dir:'high',unit:'%',desc:'Respect des délais de livraison'},
+  {key:'cost',label:'Prix relatif',weight:14,dir:'low',unit:'idx',desc:'100 = cible ; plus bas est mieux'},
+  {key:'response',label:'Réactivité',weight:10,dir:'low',unit:'j',desc:'Temps moyen de réponse'},
+  {key:'claims',label:'NC / réclamations',weight:14,dir:'low',unit:'nb',desc:'Nombre de non-conformités ou réclamations'},
+  {key:'service',label:'Audit / service',weight:8,dir:'high',unit:'/100',desc:'Audit, support, souplesse, service'},
+  {key:'copq',label:'COPQ',weight:4,dir:'low',unit:'€',desc:'Impact financier de la non-qualité'}
+];
+let editId=null;
+let obs=loadObs();
+
+function loadObs(){try{return JSON.parse(localStorage.getItem(STORE)||'[]')}catch(e){return []}}
+function persist(){localStorage.setItem(STORE,JSON.stringify(obs))}
+function uid(){return 'o'+Math.random().toString(36).slice(2,10)}
+function esc(v=''){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function n(v){v=parseFloat(v); return Number.isFinite(v)?v:0}
+function mean(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0}
+function median(a){if(!a.length) return 0; const s=[...a].sort((x,y)=>x-y); const m=Math.floor(s.length/2); return s.length%2?s[m]:(s[m-1]+s[m])/2}
+function stdev(a){if(a.length<2) return 0; const m=mean(a); return Math.sqrt(a.reduce((s,v)=>s+(v-m)*(v-m),0)/(a.length-1))}
+function cv(a){const m=mean(a); return m?stdev(a)/Math.abs(m):0}
+function trend(a){if(a.length<2) return 0; let sx=0,sy=0,sxy=0,sxx=0; a.forEach((v,i)=>{const x=i+1; sx+=x; sy+=v; sxy+=x*v; sxx+=x*x}); const len=a.length; const denom=(len*sxx-sx*sx); return denom?((len*sxy-sx*sy)/denom):0}
+function normHigh(v,min,max){if(max===min) return 100; return Math.max(0,Math.min(100,100*(v-min)/(max-min)))}
+function normLow(v,min,max){if(max===min) return 100; return Math.max(0,Math.min(100,100*(max-v)/(max-min)))}
+function chip(v){return '<span class="chip">'+esc(v)+'</span>'}
+function getForm(){return {id:editId||uid(),supplier:oSupplier.value.trim(),kind:oKind.value,period:oPeriod.value.trim(),family:oFamily.value.trim(),quality:n(mQuality.value),otd:n(mOTD.value),cost:n(mCost.value),response:n(mResponse.value),claims:n(mClaims.value),service:n(mService.value),copq:n(mCopq.value),volume:n(mVolume.value),note:oNote.value.trim()}}
+function saveObs(){const o=getForm(); if(!o.supplier||!o.period){alert('Fournisseur et période requis.'); return} const i=obs.findIndex(x=>x.id===o.id); if(i>=0) obs[i]=o; else obs.unshift(o); persist(); resetForm(); render()}
+function resetForm(){editId=null; oSupplier.value=''; oKind.value='Fournisseur'; oPeriod.value=''; oFamily.value=''; mQuality.value='98.2'; mOTD.value='95'; mCost.value='100'; mResponse.value='2'; mClaims.value='1'; mService.value='82'; mCopq.value='350'; mVolume.value='1000'; oNote.value=''}
+function editObs(id){const o=obs.find(x=>x.id===id); if(!o) return; editId=id; oSupplier.value=o.supplier||''; oKind.value=o.kind||'Fournisseur'; oPeriod.value=o.period||''; oFamily.value=o.family||''; mQuality.value=o.quality??98.2; mOTD.value=o.otd??95; mCost.value=o.cost??100; mResponse.value=o.response??2; mClaims.value=o.claims??1; mService.value=o.service??82; mCopq.value=o.copq??350; mVolume.value=o.volume??1000; oNote.value=o.note||''; window.scrollTo({top:0,behavior:'smooth'})}
+function delObs(id){if(!confirm('Supprimer cette observation ?')) return; obs=obs.filter(x=>x.id!==id); persist(); render()}
+function clearAll(){if(!confirm('Vider toutes les observations ?')) return; obs=[]; persist(); render(); resetForm()}
+function exportCSV(){const rows=[['Fournisseur','Type','Période','Famille','Qualité','OTD','Coût idx','Réactivité','NC','Service','COPQ','Volume','Commentaire']]; obs.forEach(o=>rows.push([o.supplier,o.kind,o.period,o.family,o.quality,o.otd,o.cost,o.response,o.claims,o.service,o.copq,o.volume,o.note])); const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\n'); const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='comparateur-fournisseurs-stat.csv'; a.click(); URL.revokeObjectURL(a.href)}
+function exportJSON(){const blob=new Blob([JSON.stringify(obs,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='comparateur-fournisseurs-stat.json'; a.click(); URL.revokeObjectURL(a.href)}
+importFile.addEventListener('change',e=>{const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{try{const data=JSON.parse(r.result); if(!Array.isArray(data)) throw new Error(); obs=data; persist(); render(); resetForm()}catch(err){alert('Fichier JSON invalide.')}}; r.readAsText(f)})
+
+function seedData(){
+  obs=[
+    {id:uid(),supplier:'Alu Precision',kind:'Sous-traitant',period:'2026-01',family:'Usinage',quality:99.2,otd:97.2,cost:101,response:1.3,claims:0,service:90,copq:120,volume:1400,note:'Mois stable'},
+    {id:uid(),supplier:'Alu Precision',kind:'Sous-traitant',period:'2026-02',family:'Usinage',quality:98.9,otd:96.5,cost:101,response:1.7,claims:1,service:88,copq:180,volume:1360,note:'Léger retard semaine 3'},
+    {id:uid(),supplier:'Alu Precision',kind:'Sous-traitant',period:'2026-03',family:'Usinage',quality:99.4,otd:98.1,cost:100,response:1.2,claims:0,service:92,copq:90,volume:1500,note:'Très bon mois'},
+    {id:uid(),supplier:'Thermo Surface',kind:'Fournisseur',period:'2026-01',family:'Traitement',quality:95.3,otd:88.4,cost:96,response:4.8,claims:4,service:63,copq:1650,volume:980,note:'Retards et reprises'},
+    {id:uid(),supplier:'Thermo Surface',kind:'Fournisseur',period:'2026-02',family:'Traitement',quality:94.8,otd:84.0,cost:95,response:6.1,claims:5,service:59,copq:2100,volume:1020,note:'Dérive qualité'},
+    {id:uid(),supplier:'Thermo Surface',kind:'Fournisseur',period:'2026-03',family:'Traitement',quality:96.2,otd:89.1,cost:95,response:5.0,claims:3,service:65,copq:1320,volume:960,note:'Léger mieux'},
+    {id:uid(),supplier:'PackEco',kind:'Fournisseur',period:'2026-01',family:'Emballages',quality:98.5,otd:93.0,cost:92,response:2.8,claims:1,service:80,copq:240,volume:3100,note:'RAS'},
+    {id:uid(),supplier:'PackEco',kind:'Fournisseur',period:'2026-02',family:'Emballages',quality:98.1,otd:94.5,cost:91,response:2.1,claims:1,service:82,copq:190,volume:3250,note:'Très compétitif'},
+    {id:uid(),supplier:'PackEco',kind:'Fournisseur',period:'2026-03',family:'Emballages',quality:98.7,otd:95.4,cost:90,response:2.0,claims:0,service:84,copq:120,volume:3300,note:'Amélioration nette'}
+  ];
+  persist(); render(); resetForm();
+}
+
+function spark(vals){
+  if(!vals.length) return '—';
+  const w=170,h=46,p=4,max=Math.max(...vals),min=Math.min(...vals);
+  const pts=vals.map((v,i)=>{const x=p+(i*(w-2*p)/Math.max(1,vals.length-1)); const y=(max===min)?h/2:(h-p-((v-min)/(max-min))*(h-2*p)); return x.toFixed(1)+','+y.toFixed(1)}).join(' ');
+  return '<svg class="spark" viewBox="0 0 '+w+' '+h+'"><line class="axis" x1="0" y1="'+(h-1)+'" x2="'+w+'" y2="'+(h-1)+'"></line><polyline points="'+pts+'"></polyline></svg>';
+}
+
+function groupStats(data){
+  const groups={};
+  data.forEach(o=>{if(!groups[o.supplier]) groups[o.supplier]=[]; groups[o.supplier].push(o)});
+  const arr=Object.keys(groups).map(name=>{const rows=groups[name]; const first=rows[0]; const res={supplier:name,kind:first.kind,family:first.family,n:rows.length,rows:rows}; KPI_META.forEach(k=>{res[k.key+'Arr']=rows.map(r=>+r[k.key]||0)}); return res});
+  KPI_META.forEach(k=>{
+    const means=arr.map(a=>mean(a[k.key+'Arr']));
+    const min=Math.min(...means), max=Math.max(...means);
+    arr.forEach(a=>{
+      a[k.key+'Mean']=mean(a[k.key+'Arr']);
+      a[k.key+'Median']=median(a[k.key+'Arr']);
+      a[k.key+'Stdev']=stdev(a[k.key+'Arr']);
+      a[k.key+'CV']=cv(a[k.key+'Arr']);
+      a[k.key+'Trend']=trend(a[k.key+'Arr']);
+      a[k.key+'Score']=k.dir==='high'?normHigh(a[k.key+'Mean'],min,max):normLow(a[k.key+'Mean'],min,max);
+    });
+  });
+  arr.forEach(a=>{
+    const wsum=KPI_META.reduce((s,k)=>s+k.weight,0);
+    a.rankScore=KPI_META.reduce((s,k)=>s+a[k.key+'Score']*k.weight,0)/wsum;
+    a.variability=mean(KPI_META.map(k=>a[k.key+'CV']));
+  });
+  return arr;
+}
+
+function prefillSupplier(supplier,kind,family){oSupplier.value=supplier; oKind.value=kind; oFamily.value=family; window.scrollTo({top:0,behavior:'smooth'})}
+function buildKpiTable(){kpiBody.innerHTML=KPI_META.map(k=>'<tr><td><strong>'+k.label+'</strong></td><td>'+k.weight+'</td><td>'+(k.dir==='high'?'Plus haut = mieux':'Plus bas = mieux')+'</td><td>'+k.unit+'</td><td>'+k.desc+'</td></tr>').join('')}
+function populateFilters(){
+  const selectedFamily=filterFamily.value;
+  const selectedK=selectedKpi.value || 'quality';
+  const families=[...new Set(obs.map(o=>o.family).filter(Boolean))].sort();
+  filterFamily.innerHTML='<option value="">Toutes familles</option>'+families.map(f=>'<option'+(f===selectedFamily?' selected':'')+'>'+esc(f)+'</option>').join('');
+  selectedKpi.innerHTML=KPI_META.map(k=>'<option value="'+k.key+'"'+(k.key===selectedK?' selected':'')+'>'+'KPI : '+k.label+'</option>').join('');
+}
+
+function render(){
+  buildKpiTable();
+  populateFilters();
+  const searchText=search.value.toLowerCase().trim();
+  const fk=filterKind.value; const ff=filterFamily.value; const sel=selectedKpi.value || 'quality'; const sort=sortBy.value;
+  const filtered=obs.filter(o=>{const hay=[o.supplier,o.family,o.period,o.note].join(' ').toLowerCase(); return (!searchText||hay.includes(searchText)) && (!fk||o.kind===fk) && (!ff||o.family===ff)});
+  const stats=groupStats(filtered);
+  stats.sort((a,b)=>{if(sort==='quality') return b.qualityMean-a.qualityMean; if(sort==='otd') return b.otdMean-a.otdMean; if(sort==='cv') return a.variability-b.variability; return b.rankScore-a.rankScore});
+
+  tbody.innerHTML=stats.map(a=>{
+    const med=a[sel+'Median'], sigma=a[sel+'Stdev'], cvar=a[sel+'CV'], slope=a[sel+'Trend'];
+    const slopeTxt=slope>0.05?'Hausse':(slope<-0.05?'Baisse':'Stable');
+    const slopeCls=slope>0.05?'ok':(slope<-0.05?'err':'warn');
+    const onclick='prefillSupplier('+JSON.stringify(a.supplier)+','+JSON.stringify(a.kind)+','+JSON.stringify(a.family)+')';
+    return '<tr>'
+      +'<td><strong>'+esc(a.supplier)+'</strong><div class="small">'+spark(a[sel+'Arr'])+'</div></td>'
+      +'<td>'+chip(a.kind)+'</td>'
+      +'<td>'+esc(a.family||'—')+'</td>'
+      +'<td>'+a.n+'</td>'
+      +'<td><strong>'+a.rankScore.toFixed(1)+'</strong><div class="scorebar"><div class="scorefill" style="width:'+a.rankScore+'%"></div></div></td>'
+      +'<td><div class="small">Qualité <strong>'+a.qualityMean.toFixed(2)+'%</strong><br>OTD <strong>'+a.otdMean.toFixed(2)+'%</strong><br>Coût <strong>'+a.costMean.toFixed(1)+'</strong><br>NC <strong>'+a.claimsMean.toFixed(2)+'</strong></div></td>'
+      +'<td>'+med.toFixed(2)+'</td>'
+      +'<td><div class="small">σ = <strong>'+sigma.toFixed(2)+'</strong><br>CV = <strong>'+(cvar*100).toFixed(1)+'%</strong></div></td>'
+      +'<td><span class="'+slopeCls+'">'+slopeTxt+'</span><div class="small">pente '+slope.toFixed(3)+' / période</div></td>'
+      +'<td><button class="btn" onclick="'+onclick.replace(/"/g,'&quot;')+'">Ajouter obs.</button></td>'
+      +'</tr>';
+  }).join('');
+
+  obsBody.innerHTML=filtered.map(o=>'<tr><td><strong>'+esc(o.supplier)+'</strong><div class="small">'+esc(o.kind)+' • '+esc(o.family||'')+'</div></td><td>'+esc(o.period)+'</td><td>'+o.quality+'</td><td>'+o.otd+'</td><td>'+o.cost+'</td><td>'+o.response+'</td><td>'+o.claims+'</td><td>'+o.service+'</td><td>'+o.copq+'</td><td>'+o.volume+'</td><td>'+esc(o.note||'')+'</td><td><button class="btn" onclick="editObs(\''+o.id+'\')">Éditer</button> <button class="btn btn-danger" onclick="delObs(\''+o.id+'\')">Suppr.</button></td></tr>').join('');
+
+  const totalObs=filtered.length, supplierCount=stats.length, best=stats[0], meta=KPI_META.find(k=>k.key===sel) || KPI_META[0];
+  const alerts=stats.filter(a=>a.rankScore<60 || a[sel+'CV']>0.08 || (sel==='quality' && a.qualityMean<97) || (sel==='otd' && a.otdMean<92)).slice(0,4);
+  panel.innerHTML=''
+    +'<div class="panel-card"><div class="global-score"><div class="gs-val">'+(best?best.rankScore.toFixed(1):'0.0')+'</div><div class="gs-sub">Meilleur score global</div><div class="gs-level">'+(best?esc(best.supplier):'Aucune donnée')+'</div></div>'
+    +'<div class="kpi-grid"><div class="kpi"><div class="name">Observations</div><div class="val">'+totalObs+'</div></div><div class="kpi"><div class="name">Fournisseurs comparés</div><div class="val">'+supplierCount+'</div></div><div class="kpi"><div class="name">KPI analysé</div><div class="val">'+esc(meta.label)+'</div></div><div class="kpi"><div class="name">Poids KPI</div><div class="val">'+meta.weight+'</div></div></div></div>'
+    +'<div class="panel-card"><div class="panel-title">Lecture statistique</div><div class="notice">Le comparateur utilise des statistiques descriptives et des comparaisons de performance : moyenne, médiane, écart-type, coefficient de variation, tendance et score pondéré. C’est propre pour décider. Pas suffisant pour faire semblant de faire de la science si les données sont pauvres.</div></div>'
+    +'<div class="panel-card"><div class="panel-title">Classement</div><div class="ranking-list">'
+    +(stats.length?stats.slice(0,5).map((a,i)=>'<div class="rank-item"><div class="rank-num">'+(i+1)+'</div><div><div><strong>'+esc(a.supplier)+'</strong></div><div class="small">'+esc(a.family||'—')+' • N='+a.n+'</div></div><div><strong>'+a.rankScore.toFixed(1)+'</strong></div></div>').join(''):'<div class="small">Aucune donnée.</div>')
+    +'</div></div>'
+    +'<div class="panel-card"><div class="panel-title">Alertes</div>'
+    +(alerts.length?alerts.map(a=>'<div class="warn-box" style="margin-bottom:8px"><strong>'+esc(a.supplier)+'</strong><br>Score '+a.rankScore.toFixed(1)+' • CV '+(a[sel+'CV']*100).toFixed(1)+'% • '+esc(meta.label)+' moyen '+a[sel+'Mean'].toFixed(2)+' '+meta.unit+'</div>').join(''):'<div class="notice">Aucune alerte significative sur le filtre actuel.</div>')
+    +'</div>'
+    +'<div class="panel-card"><div class="panel-title">Référentiel de lecture</div><div class="small" style="line-height:1.7">Une lecture robuste regarde les tendances dans le temps, les cibles atteintes, puis les comparaisons avec d’autres entités ou meilleurs acteurs. Les démarches Lean Six Sigma listent aussi les statistiques descriptives, tests de variance, ANOVA et autres outils d’analyse pour passer du constat à la preuve.</div></div>';
+}
+['search','filterKind','filterFamily','selectedKpi','sortBy'].forEach(id=>document.getElementById(id).addEventListener('input',render));
+render(); resetForm();
+</script>
+</body>
+</html>

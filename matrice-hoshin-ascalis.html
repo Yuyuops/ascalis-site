@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Matrice Hoshin — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p:#0F1A2E; --a:#B07642; --al:#D4956A; --abg:rgba(176,118,66,.08);
+  --s:#FFFFFF; --sa:#F8FAFC; --w:#FAF9F6; --t:#020617; --t2:#475569; --t3:#94A3B8;
+  --bd:#E2E8F0; --bl:#F1F5F9; --ok:#059669; --okbg:#ECFDF5; --warn:#D97706; --warnbg:#FFFBEB;
+  --err:#DC2626; --errbg:#FEF2F2; --info:#2563EB; --infobg:#EFF6FF;
+  --fh:'Lexend',sans-serif; --fb:'Source Sans 3',sans-serif; --fd:'Instrument Serif',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.hd svg{height:22px}
+.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:8px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:38px}
+.btn:hover{border-color:var(--a);color:var(--a)}
+.btn.primary{background:var(--p);color:var(--sa);border-color:var(--p)}
+.btn.primary:hover{background:#162540;color:#fff}
+.hero{background:var(--p);padding:34px 28px;color:var(--sa)}
+.hero h1{font-family:var(--fd);font-size:30px;font-weight:400;margin-bottom:6px}
+.hero p{font-size:14px;color:rgba(248,250,252,.72);max-width:760px;line-height:1.55}
+.container{max-width:1380px;margin:0 auto;padding:28px 24px 48px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+@media(max-width:1100px){.grid{grid-template-columns:1fr}}
+.card{background:var(--s);border:1px solid var(--bl);border-radius:14px;padding:20px;margin-bottom:18px}
+.card-title{font-family:var(--fh);font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.sub{font-size:12px;color:var(--t3);line-height:1.55}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.meta{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.meta{grid-template-columns:1fr}}
+.field label{display:block;font-size:11px;font-family:var(--fh);text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:6px}
+input[type=text],input[type=number],select,textarea{
+  width:100%;border:1px solid var(--bd);background:var(--s);border-radius:10px;padding:10px 12px;
+  font:inherit;color:var(--t);outline:none;transition:border-color .2s, box-shadow .2s;
+}
+textarea{min-height:92px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(176,118,66,.12)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.kpis{grid-template-columns:1fr}}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.stat-grid{grid-template-columns:1fr 1fr}}
+.stat{border:1px solid var(--bl);background:var(--sa);padding:14px;border-radius:12px}
+.stat .k{font-size:11px;color:var(--t3);font-family:var(--fh);text-transform:uppercase;letter-spacing:.06em}
+.stat .v{font-family:var(--fd);font-size:34px;color:var(--p);line-height:1.05;margin-top:6px}
+.stat .s{font-size:12px;color:var(--t2);margin-top:4px}
+.notice{padding:12px 14px;border-radius:10px;font-size:12px;line-height:1.6}
+.notice.info{background:var(--infobg);color:#1D4ED8;border:1px solid #BFDBFE}
+.notice.warn{background:var(--warnbg);color:#9A6708;border:1px solid #FDE68A}
+.notice.ok{background:var(--okbg);color:#047857;border:1px solid #A7F3D0}
+.notice.err{background:var(--errbg);color:#B91C1C;border:1px solid #FCA5A5}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.item-list{display:flex;flex-direction:column;gap:10px}
+.item{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--sa)}
+.item-top{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px}
+.item-title{font-family:var(--fh);font-size:13px;font-weight:600}
+.item-id{font-size:10px;padding:2px 8px;background:var(--abg);color:var(--a);border-radius:999px;font-family:var(--fh)}
+.item-tools{display:flex;gap:8px}
+.iconbtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--bd);background:#fff;cursor:pointer;color:var(--t2)}
+.iconbtn:hover{border-color:var(--a);color:var(--a)}
+.rel-wrap{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 9px;background:#fff;border:1px solid var(--bd);font-size:11px;color:var(--t2)}
+.pill strong{font-family:var(--fh);font-size:10px;color:var(--a)}
+.progress{height:8px;background:var(--bl);border-radius:999px;overflow:hidden;margin-top:8px}
+.progress > span{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--al))}
+.range-row{display:grid;grid-template-columns:1fr 70px;gap:10px;align-items:center}
+.score-val{font-family:var(--fh);font-size:12px;color:var(--a);font-weight:600;text-align:right}
+.panel{position:sticky;top:76px}
+@media(max-width:1100px){.panel{position:static}}
+.matrix{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.matrix{grid-template-columns:1fr}}
+.table-wrap{overflow:auto;border:1px solid var(--bl);border-radius:12px}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{border-bottom:1px solid var(--bl);padding:10px 10px;text-align:left;font-size:12px;vertical-align:top}
+th{background:var(--sa);font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3)}
+tr:last-child td{border-bottom:none}
+.linkdot{width:24px;height:24px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:11px;font-weight:700}
+.link-strong{background:rgba(5,150,105,.14);color:var(--ok)}
+.link-medium{background:rgba(37,99,235,.14);color:var(--info)}
+.link-weak{background:rgba(217,119,6,.16);color:var(--warn)}
+.link-none{background:var(--bl);color:var(--t3)}
+.matrix-x{display:grid;grid-template-columns:280px 1fr 280px;grid-template-rows:auto auto auto;gap:12px;align-items:stretch}
+@media(max-width:1200px){.matrix-x{grid-template-columns:1fr;}}
+.quad{border:1px solid var(--bl);background:#fff;border-radius:14px;padding:14px}
+.quad h3{font-family:var(--fh);font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--a);margin-bottom:10px}
+.center-box{display:flex;align-items:center;justify-content:center;min-height:260px;background:
+  linear-gradient(135deg, transparent 49%, var(--bl) 49.5%, var(--bl) 50.5%, transparent 51%),
+  linear-gradient(225deg, transparent 49%, var(--bl) 49.5%, var(--bl) 50.5%, transparent 51%),
+  var(--sa);
+  border:1px solid var(--bl);border-radius:16px;padding:18px;text-align:center}
+.center-box h2{font-family:var(--fd);font-size:28px;color:var(--p);margin-bottom:8px}
+.center-box p{font-size:13px;color:var(--t2);max-width:360px;line-height:1.55}
+.center-kpis{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.mini{padding:8px 10px;border-radius:10px;background:#fff;border:1px solid var(--bd);min-width:88px}
+.mini .n{font-family:var(--fd);font-size:22px;color:var(--p)}
+.mini .l{font-size:10px;color:var(--t3);font-family:var(--fh);text-transform:uppercase;letter-spacing:.05em}
+.footer-note{font-size:11px;color:var(--t3);margin-top:12px;line-height:1.5}
+.small{font-size:11px;color:var(--t3)}
+.checks{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.check-item{padding:5px 8px;border-radius:999px;border:1px solid var(--bd);font-size:11px;background:#fff;color:var(--t2);cursor:pointer;user-select:none}
+.check-item.active{border-color:var(--a);background:var(--abg);color:var(--a)}
+.empty{padding:18px;border:1px dashed var(--bd);border-radius:12px;color:var(--t3);font-size:12px;background:var(--sa)}
+@media print{
+  .hd,.btn,.iconbtn{display:none!important}
+  body{background:white}
+  .container{padding:0}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none">
+    <path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text>
+  </svg>
+  <div class="hd-a">
+    <button class="btn" onclick="loadDemo()">Exemple</button>
+    <button class="btn" onclick="exportJSON()">Export JSON</button>
+    <button class="btn" onclick="exportCSV()">Export CSV</button>
+    <button class="btn" onclick="document.getElementById('importFile').click()">Import JSON</button>
+    <button class="btn" onclick="window.print()">Imprimer</button>
+    <button class="btn primary" onclick="saveData()">Sauvegarder</button>
+    <input id="importFile" type="file" accept=".json" style="display:none" />
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Matrice Hoshin</h1>
+  <p>Version web d’une matrice Hoshin / X-Matrix pour déployer la stratégie : vision, objectifs de percée, objectifs annuels, initiatives clés, pilotes, indicateurs et revues d’avancement. Pensé pour passer de l’intention à l’action sans raconter des histoires à soi-même.</p>
+</div>
+
+<div class="container">
+  <div class="grid">
+    <main>
+      <div class="card">
+        <div class="card-title">Cadrage <span class="tag">Vision • année • cap</span></div>
+        <div class="meta">
+          <div class="field"><label>Organisation</label><input id="orgName" type="text" placeholder="ASCALIS" /></div>
+          <div class="field"><label>Année</label><input id="year" type="number" placeholder="2026" /></div>
+          <div class="field"><label>Périodicité de revue</label>
+            <select id="reviewCadence">
+              <option>Mensuelle</option><option>Trimestrielle</option><option>Hebdomadaire</option><option>Semestrielle</option>
+            </select>
+          </div>
+          <div class="field"><label>Propriétaire de la matrice</label><input id="owner" type="text" placeholder="Direction / CODIR / PMO" /></div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <div class="field" style="flex:1 1 340px"><label>Vision / ambition</label><textarea id="vision" placeholder="Ex. Devenir la référence de notre marché sur la qualité d’exécution, la fiabilité et la vitesse de délivrance."></textarea></div>
+          <div class="field" style="flex:1 1 340px"><label>Défi / thème annuel</label><textarea id="northStar" placeholder="Ex. Réduire les dérives opérationnelles majeures tout en sécurisant la rentabilité et l’expérience client."></textarea></div>
+        </div>
+        <div class="footer-note">Logique conseillée : peu d’objectifs, chiffrés, reliés à la politique et à la stratégie. Si tout est prioritaire, rien ne l’est.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Vue synthétique Hoshin <span class="tag">X-Matrix simplifiée</span></div>
+        <div class="matrix-x">
+          <div class="quad">
+            <h3>Objectifs de percée</h3>
+            <div id="northList"></div>
+          </div>
+          <div class="center-box">
+            <div>
+              <h2 id="centerOrg">ASCALIS</h2>
+              <p id="centerVision">Renseigne la vision et les priorités annuelles pour afficher la matrice.</p>
+              <div class="center-kpis">
+                <div class="mini"><div class="n" id="cBreak">0</div><div class="l">Percées</div></div>
+                <div class="mini"><div class="n" id="cAnnual">0</div><div class="l">Annuel</div></div>
+                <div class="mini"><div class="n" id="cActions">0</div><div class="l">Actions</div></div>
+                <div class="mini"><div class="n" id="cOwners">0</div><div class="l">Pilotes</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="quad">
+            <h3>Objectifs annuels & KPI</h3>
+            <div id="eastList"></div>
+          </div>
+          <div class="quad">
+            <h3>Pilotes / processus / value streams</h3>
+            <div id="westList"></div>
+          </div>
+          <div class="quad">
+            <h3>Initiatives / plans d’action</h3>
+            <div id="southList"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="card-title" style="margin-bottom:4px">Objectifs de percée <span class="tag">3 à 5 idéalement</span></div>
+            <div class="sub">Cap long terme. Peu nombreux. Chiffrés. Sinon tu fais une liste de souhaits.</div>
+          </div>
+          <button class="btn" onclick="addBreakthrough()">+ Ajouter</button>
+        </div>
+        <div id="breakthroughs" class="item-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="card-title" style="margin-bottom:4px">Objectifs annuels <span class="tag">déclinés du stratégique</span></div>
+            <div class="sub">Relie chaque objectif annuel à un ou plusieurs objectifs de percée. Baseline, cible, échéance, avancement.</div>
+          </div>
+          <button class="btn" onclick="addAnnual()">+ Ajouter</button>
+        </div>
+        <div id="annuals" class="item-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="card-title" style="margin-bottom:4px">Initiatives clés / plans d’action <span class="tag">faire, pas bavarder</span></div>
+            <div class="sub">Chaque initiative doit contribuer à un objectif annuel. Sinon elle consomme des réunions et de l’oxygène.</div>
+          </div>
+          <button class="btn" onclick="addInitiative()">+ Ajouter</button>
+        </div>
+        <div id="initiatives" class="item-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="card-title" style="margin-bottom:4px">Pilotes / processus / value streams <span class="tag">qui porte quoi</span></div>
+            <div class="sub">Assigne la responsabilité. Le flou organisationnel adore les plans stratégiques non pilotés.</div>
+          </div>
+          <button class="btn" onclick="addOwnerItem()">+ Ajouter</button>
+        </div>
+        <div id="owners" class="item-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tables de liens <span class="tag">cohérence et priorités</span></div>
+        <div class="matrix">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Objectif annuel</th><th>Objectifs de percée liés</th><th>Score cohérence</th></tr></thead>
+              <tbody id="tableAB"></tbody>
+            </table>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Initiative</th><th>Objectifs annuels liés</th><th>Pilotes liés</th></tr></thead>
+              <tbody id="tableIO"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="footer-note">Relation conseillée : fort = 9, moyen = 3, faible = 1. Ici l’outil simplifie en nombre de liens et cohérence structurelle. Tu pourras le raffiner ensuite si tu veux une vraie matrice pondérée.</div>
+      </div>
+    </main>
+
+    <aside class="panel">
+      <div class="card">
+        <div class="card-title">Cohérence globale <span class="tag">revue</span></div>
+        <div class="stat-grid">
+          <div class="stat"><div class="k">Couverture</div><div class="v" id="coverageScore">0%</div><div class="s">annuels reliés au stratégique</div></div>
+          <div class="stat"><div class="k">Execution</div><div class="v" id="execScore">0%</div><div class="s">initiatives rattachées</div></div>
+          <div class="stat"><div class="k">Ownership</div><div class="v" id="ownScore">0%</div><div class="s">initiatives pilotées</div></div>
+          <div class="stat"><div class="k">Progression</div><div class="v" id="avgProgress">0%</div><div class="s">avancement moyen</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Diagnostic rapide <span class="tag">points d’alerte</span></div>
+        <div id="diagnostics" style="display:flex;flex-direction:column;gap:10px"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Rituels recommandés <span class="tag">cadence</span></div>
+        <div class="notice info">Mensuel : revue des KPI, dérives, actions correctives, arbitrages de ressources.</div>
+        <div style="height:8px"></div>
+        <div class="notice ok">Annuel : réviser la vision, les percées, les objectifs et les priorités. Le Hoshin n’est pas un poster. C’est un système de pilotage.</div>
+        <div style="height:8px"></div>
+        <div class="notice warn">Piège classique : 12 priorités, 27 KPI, personne responsable, et le mot “alignement” partout. Ça finit en théâtre stratégique.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Exports</div>
+        <div class="row">
+          <button class="btn" onclick="exportJSON()">Export JSON</button>
+          <button class="btn" onclick="exportCSV()">Export CSV</button>
+        </div>
+        <div class="footer-note">La sauvegarde locale navigateur est automatique après “Sauvegarder”. L’export JSON permet de reprendre la matrice plus tard.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'ascalis_hoshin_matrix_v1';
+const state = {
+  orgName:'ASCALIS',
+  year:new Date().getFullYear(),
+  reviewCadence:'Mensuelle',
+  owner:'CODIR',
+  vision:'Devenir la référence de notre marché sur la qualité d’exécution, la fiabilité et la vitesse de délivrance.',
+  northStar:'Concentrer l’année sur quelques priorités décisives, chiffrées et suivies.',
+  breakthrough:[
+    {id:'B1', title:'Réduire les dérives majeures de qualité', target:'-50% NC critiques', horizon:'24 mois', note:'Focaliser les causes récurrentes et les interfaces sensibles.'},
+    {id:'B2', title:'Améliorer la rentabilité opérationnelle', target:'+3 pts marge', horizon:'24 mois', note:'Réduction des reprises, des gaspillages et des retards.'},
+    {id:'B3', title:'Fiabiliser la satisfaction client', target:'NPS / CSAT en hausse', horizon:'18 mois', note:'Sécuriser délais, communication, conformité du premier coup.'}
+  ],
+  annual:[
+    {id:'A1', title:'Baisser les NC critiques', baseline:'18', target:'9', kpi:'NC critiques / an', due:'T4', progress:42, links:['B1']},
+    {id:'A2', title:'Réduire les coûts de non-qualité', baseline:'420k€', target:'300k€', kpi:'CNQ', due:'T4', progress:36, links:['B1','B2']},
+    {id:'A3', title:'Améliorer le taux de service client', baseline:'89%', target:'95%', kpi:'OTIF / service', due:'T4', progress:55, links:['B3','B2']}
+  ],
+  initiatives:[
+    {id:'I1', title:'Standardiser le traitement des écarts majeurs', owner:'Qualité', due:'T2', progress:50, links:['A1','A2'], note:'QRQC / 8D / revue hebdo'},
+    {id:'I2', title:'Sécuriser les interfaces achats-production', owner:'Achats', due:'T3', progress:30, links:['A2','A3'], note:'fournisseurs critiques, planning, priorisation'},
+    {id:'I3', title:'Ritualiser la revue client / délai / engagement', owner:'Opérations', due:'T2', progress:65, links:['A3'], note:'tableau mensuel et escalade'}
+  ],
+  owners:[
+    {id:'O1', title:'Processus Qualité', role:'Pilote processus', links:['I1']},
+    {id:'O2', title:'Processus Achats', role:'Pilote processus', links:['I2']},
+    {id:'O3', title:'Opérations / Delivery', role:'Direction opérationnelle', links:['I2','I3']}
+  ]
+};
+
+function uid(prefix){
+  return prefix + Math.random().toString(36).slice(2,6).toUpperCase();
+}
+function byId(id){ return document.getElementById(id); }
+
+function saveData(){
+  collectMeta();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  render();
+}
+function loadStored(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw) return;
+  try{
+    const parsed = JSON.parse(raw);
+    Object.assign(state, parsed);
+  }catch(e){}
+}
+function collectMeta(){
+  state.orgName = byId('orgName').value.trim();
+  state.year = byId('year').value;
+  state.reviewCadence = byId('reviewCadence').value;
+  state.owner = byId('owner').value.trim();
+  state.vision = byId('vision').value.trim();
+  state.northStar = byId('northStar').value.trim();
+}
+function syncMeta(){
+  byId('orgName').value = state.orgName || '';
+  byId('year').value = state.year || '';
+  byId('reviewCadence').value = state.reviewCadence || 'Mensuelle';
+  byId('owner').value = state.owner || '';
+  byId('vision').value = state.vision || '';
+  byId('northStar').value = state.northStar || '';
+}
+function loadDemo(){
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+function removeItem(arr, id){
+  const idx = state[arr].findIndex(x=>x.id===id);
+  if(idx>=0) state[arr].splice(idx,1);
+  // clean linked references
+  if(arr === 'breakthrough'){
+    state.annual.forEach(a=>a.links = (a.links||[]).filter(x=>x!==id));
+  }
+  if(arr === 'annual'){
+    state.initiatives.forEach(i=>i.links = (i.links||[]).filter(x=>x!==id));
+  }
+  if(arr === 'initiatives'){
+    state.owners.forEach(o=>o.links = (o.links||[]).filter(x=>x!==id));
+  }
+  saveData();
+}
+function addBreakthrough(){
+  state.breakthrough.push({id:uid('B'),title:'Nouvel objectif de percée',target:'',horizon:'24 mois',note:''});
+  saveData();
+}
+function addAnnual(){
+  state.annual.push({id:uid('A'),title:'Nouvel objectif annuel',baseline:'',target:'',kpi:'',due:'T4',progress:0,links:[]});
+  saveData();
+}
+function addInitiative(){
+  state.initiatives.push({id:uid('I'),title:'Nouvelle initiative',owner:'',due:'T4',progress:0,links:[],note:''});
+  saveData();
+}
+function addOwnerItem(){
+  state.owners.push({id:uid('O'),title:'Nouveau pilote / processus',role:'',links:[]});
+  saveData();
+}
+function updateField(arr, id, field, value){
+  const item = state[arr].find(x=>x.id===id);
+  if(!item) return;
+  item[field] = value;
+  saveData();
+}
+function toggleLink(arr, id, field, value){
+  const item = state[arr].find(x=>x.id===id);
+  if(!item) return;
+  item[field] = item[field] || [];
+  const exists = item[field].includes(value);
+  item[field] = exists ? item[field].filter(x=>x!==value) : [...item[field], value];
+  saveData();
+}
+function relationPills(ids, refArr){
+  if(!ids || !ids.length) return '<span class="pill">Aucun lien</span>';
+  return ids.map(id=>{
+    const found = refArr.find(x=>x.id===id);
+    return `<span class="pill"><strong>${id}</strong>${found ? escapeHtml(found.title) : id}</span>`;
+  }).join('');
+}
+function escapeHtml(s=''){
+  return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function checkboxGroup(options, selected, onclick){
+  return `<div class="checks">${
+    options.map(o=>{
+      const active = (selected||[]).includes(o.id) ? 'active' : '';
+      return `<span class="check-item ${active}" onclick="${onclick}('${o.id}')">${o.id} — ${escapeHtml(o.title)}</span>`;
+    }).join('')
+  }</div>`;
+}
+function progressBar(value){
+  return `<div class="progress"><span style="width:${Math.max(0,Math.min(100,Number(value)||0))}%"></span></div>`;
+}
+function renderBreakthroughs(){
+  const wrap = byId('breakthroughs');
+  if(!state.breakthrough.length){ wrap.innerHTML = `<div class="empty">Aucun objectif de percée.</div>`; return; }
+  wrap.innerHTML = state.breakthrough.map(item=>`
+    <div class="item">
+      <div class="item-top">
+        <div class="item-title">${escapeHtml(item.title)}</div>
+        <div class="item-tools">
+          <span class="item-id">${item.id}</span>
+          <button class="iconbtn" onclick="removeItem('breakthrough','${item.id}')">✕</button>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="field"><label>Titre</label><input type="text" value="${escapeHtml(item.title)}" oninput="updateField('breakthrough','${item.id}','title',this.value)" /></div>
+        <div class="field"><label>Cible long terme</label><input type="text" value="${escapeHtml(item.target||'')}" oninput="updateField('breakthrough','${item.id}','target',this.value)" /></div>
+        <div class="field"><label>Horizon</label><input type="text" value="${escapeHtml(item.horizon||'')}" oninput="updateField('breakthrough','${item.id}','horizon',this.value)" /></div>
+        <div class="field"><label>ID</label><input type="text" value="${escapeHtml(item.id)}" disabled /></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Note</label><textarea oninput="updateField('breakthrough','${item.id}','note',this.value)">${escapeHtml(item.note||'')}</textarea></div>
+    </div>
+  `).join('');
+}
+function renderAnnuals(){
+  const wrap = byId('annuals');
+  if(!state.annual.length){ wrap.innerHTML = `<div class="empty">Aucun objectif annuel.</div>`; return; }
+  wrap.innerHTML = state.annual.map(item=>`
+    <div class="item">
+      <div class="item-top">
+        <div class="item-title">${escapeHtml(item.title)}</div>
+        <div class="item-tools">
+          <span class="item-id">${item.id}</span>
+          <button class="iconbtn" onclick="removeItem('annual','${item.id}')">✕</button>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="field"><label>Titre</label><input type="text" value="${escapeHtml(item.title)}" oninput="updateField('annual','${item.id}','title',this.value)" /></div>
+        <div class="field"><label>Baseline</label><input type="text" value="${escapeHtml(item.baseline||'')}" oninput="updateField('annual','${item.id}','baseline',this.value)" /></div>
+        <div class="field"><label>Cible</label><input type="text" value="${escapeHtml(item.target||'')}" oninput="updateField('annual','${item.id}','target',this.value)" /></div>
+        <div class="field"><label>KPI</label><input type="text" value="${escapeHtml(item.kpi||'')}" oninput="updateField('annual','${item.id}','kpi',this.value)" /></div>
+      </div>
+      <div class="kpis" style="margin-top:10px">
+        <div class="field"><label>Échéance</label>
+          <select onchange="updateField('annual','${item.id}','due',this.value)">
+            ${['T1','T2','T3','T4','S1','S2','Année'].map(x=>`<option ${item.due===x?'selected':''}>${x}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field" style="grid-column:span 3">
+          <label>Liens vers objectifs de percée</label>
+          ${checkboxGroup(state.breakthrough, item.links, `toggleLink.bind(null,'annual','${item.id}','links')`)}
+        </div>
+      </div>
+      <div class="range-row" style="margin-top:10px">
+        <div>
+          <label class="small">Avancement</label>
+          <input type="range" min="0" max="100" value="${Number(item.progress)||0}" oninput="updateField('annual','${item.id}','progress',Number(this.value))">
+          ${progressBar(item.progress)}
+        </div>
+        <div class="score-val">${Number(item.progress)||0}%</div>
+      </div>
+    </div>
+  `).join('');
+}
+function renderInitiatives(){
+  const wrap = byId('initiatives');
+  if(!state.initiatives.length){ wrap.innerHTML = `<div class="empty">Aucune initiative.</div>`; return; }
+  wrap.innerHTML = state.initiatives.map(item=>`
+    <div class="item">
+      <div class="item-top">
+        <div class="item-title">${escapeHtml(item.title)}</div>
+        <div class="item-tools">
+          <span class="item-id">${item.id}</span>
+          <button class="iconbtn" onclick="removeItem('initiatives','${item.id}')">✕</button>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="field"><label>Titre</label><input type="text" value="${escapeHtml(item.title)}" oninput="updateField('initiatives','${item.id}','title',this.value)" /></div>
+        <div class="field"><label>Pilote opérationnel</label><input type="text" value="${escapeHtml(item.owner||'')}" oninput="updateField('initiatives','${item.id}','owner',this.value)" /></div>
+        <div class="field"><label>Échéance</label>
+          <select onchange="updateField('initiatives','${item.id}','due',this.value)">
+            ${['T1','T2','T3','T4','S1','S2','Année'].map(x=>`<option ${item.due===x?'selected':''}>${x}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>Liens vers objectifs annuels</label>${checkboxGroup(state.annual, item.links, `toggleLink.bind(null,'initiatives','${item.id}','links')`)}</div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Note / contenu d’action</label><textarea oninput="updateField('initiatives','${item.id}','note',this.value)">${escapeHtml(item.note||'')}</textarea></div>
+      <div class="range-row" style="margin-top:10px">
+        <div>
+          <label class="small">Avancement</label>
+          <input type="range" min="0" max="100" value="${Number(item.progress)||0}" oninput="updateField('initiatives','${item.id}','progress',Number(this.value))">
+          ${progressBar(item.progress)}
+        </div>
+        <div class="score-val">${Number(item.progress)||0}%</div>
+      </div>
+    </div>
+  `).join('');
+}
+function renderOwners(){
+  const wrap = byId('owners');
+  if(!state.owners.length){ wrap.innerHTML = `<div class="empty">Aucun pilote / processus.</div>`; return; }
+  wrap.innerHTML = state.owners.map(item=>`
+    <div class="item">
+      <div class="item-top">
+        <div class="item-title">${escapeHtml(item.title)}</div>
+        <div class="item-tools">
+          <span class="item-id">${item.id}</span>
+          <button class="iconbtn" onclick="removeItem('owners','${item.id}')">✕</button>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="field"><label>Intitulé</label><input type="text" value="${escapeHtml(item.title)}" oninput="updateField('owners','${item.id}','title',this.value)" /></div>
+        <div class="field"><label>Rôle</label><input type="text" value="${escapeHtml(item.role||'')}" oninput="updateField('owners','${item.id}','role',this.value)" /></div>
+        <div class="field" style="grid-column:span 2"><label>Liens vers initiatives</label>${checkboxGroup(state.initiatives, item.links, `toggleLink.bind(null,'owners','${item.id}','links')`)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+function renderXLists(){
+  byId('northList').innerHTML = state.breakthrough.length ? state.breakthrough.map(b=>`
+    <div class="pill" style="display:flex;margin-bottom:8px"><strong>${b.id}</strong>${escapeHtml(b.title)}</div>
+  `).join('') : `<div class="empty">Aucun objectif de percée.</div>`;
+  byId('eastList').innerHTML = state.annual.length ? state.annual.map(a=>`
+    <div class="item" style="padding:10px;margin-bottom:8px">
+      <div class="item-title">${escapeHtml(a.title)}</div>
+      <div class="small">${escapeHtml(a.kpi||'Sans KPI')} • ${escapeHtml(a.target||'Sans cible')} • ${escapeHtml(a.due||'')}</div>
+      ${progressBar(a.progress||0)}
+    </div>
+  `).join('') : `<div class="empty">Aucun objectif annuel.</div>`;
+  byId('southList').innerHTML = state.initiatives.length ? state.initiatives.map(i=>`
+    <div class="item" style="padding:10px;margin-bottom:8px">
+      <div class="item-title">${escapeHtml(i.title)}</div>
+      <div class="small">${escapeHtml(i.owner||'Sans pilote')} • ${escapeHtml(i.due||'')}</div>
+      ${progressBar(i.progress||0)}
+    </div>
+  `).join('') : `<div class="empty">Aucune initiative.</div>`;
+  byId('westList').innerHTML = state.owners.length ? state.owners.map(o=>`
+    <div class="pill" style="display:flex;margin-bottom:8px"><strong>${o.id}</strong>${escapeHtml(o.title)}</div>
+  `).join('') : `<div class="empty">Aucun pilote.</div>`;
+}
+function renderTables(){
+  const tbody1 = byId('tableAB');
+  tbody1.innerHTML = state.annual.length ? state.annual.map(a=>{
+    const count = (a.links||[]).length;
+    const cls = count>=2 ? 'link-strong' : count===1 ? 'link-medium' : 'link-none';
+    return `<tr>
+      <td><strong>${escapeHtml(a.title)}</strong><div class="small">${a.id}</div></td>
+      <td>${relationPills(a.links, state.breakthrough)}</td>
+      <td><span class="linkdot ${cls}">${count}</span></td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="3">Aucune donnée.</td></tr>`;
+
+  const tbody2 = byId('tableIO');
+  tbody2.innerHTML = state.initiatives.length ? state.initiatives.map(i=>{
+    const linkedOwners = state.owners.filter(o=>(o.links||[]).includes(i.id));
+    return `<tr>
+      <td><strong>${escapeHtml(i.title)}</strong><div class="small">${i.id}</div></td>
+      <td>${relationPills(i.links, state.annual)}</td>
+      <td>${linkedOwners.length ? relationPills(linkedOwners.map(o=>o.id), state.owners) : '<span class="pill">Aucun pilote lié</span>'}</td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="3">Aucune donnée.</td></tr>`;
+}
+function computeScores(){
+  const annualCovered = state.annual.length ? state.annual.filter(a=>(a.links||[]).length>0).length / state.annual.length : 0;
+  const initiativesCovered = state.initiatives.length ? state.initiatives.filter(i=>(i.links||[]).length>0).length / state.initiatives.length : 0;
+  const initiativesOwned = state.initiatives.length ? state.initiatives.filter(i=>state.owners.some(o=>(o.links||[]).includes(i.id))).length / state.initiatives.length : 0;
+  const allProgress = [...state.annual.map(a=>Number(a.progress)||0), ...state.initiatives.map(i=>Number(i.progress)||0)];
+  const avg = allProgress.length ? allProgress.reduce((a,b)=>a+b,0)/allProgress.length : 0;
+  byId('coverageScore').textContent = Math.round(annualCovered*100)+'%';
+  byId('execScore').textContent = Math.round(initiativesCovered*100)+'%';
+  byId('ownScore').textContent = Math.round(initiativesOwned*100)+'%';
+  byId('avgProgress').textContent = Math.round(avg)+'%';
+
+  byId('cBreak').textContent = state.breakthrough.length;
+  byId('cAnnual').textContent = state.annual.length;
+  byId('cActions').textContent = state.initiatives.length;
+  byId('cOwners').textContent = state.owners.length;
+
+  byId('centerOrg').textContent = state.orgName || 'ASCALIS';
+  const vtxt = (state.vision || '').trim();
+  const ntxt = (state.northStar || '').trim();
+  byId('centerVision').textContent = [vtxt, ntxt].filter(Boolean).join(' — ') || 'Renseigne la vision et les priorités annuelles pour afficher la matrice.';
+}
+function renderDiagnostics(){
+  const problems = [];
+  if(!state.breakthrough.length) problems.push(['err', 'Aucun objectif de percée. Sans cap, la matrice est juste décorative.']);
+  const annualOrphans = state.annual.filter(a=>(a.links||[]).length===0).length;
+  if(annualOrphans) problems.push(['warn', `${annualOrphans} objectif(s) annuel(s) sans lien stratégique.`]);
+  const initOrphans = state.initiatives.filter(i=>(i.links||[]).length===0).length;
+  if(initOrphans) problems.push(['warn', `${initOrphans} initiative(s) sans objectif annuel associé.`]);
+  const ownerGaps = state.initiatives.filter(i=>!state.owners.some(o=>(o.links||[]).includes(i.id))).length;
+  if(ownerGaps) problems.push(['warn', `${ownerGaps} initiative(s) sans pilote clairement lié.`]);
+  const kpiMissing = state.annual.filter(a=>!(a.kpi||'').trim() || !(a.target||'').trim()).length;
+  if(kpiMissing) problems.push(['err', `${kpiMissing} objectif(s) annuel(s) sans KPI ou sans cible. Dire “on va progresser” n’est pas une mesure.`]);
+  const lowProgress = state.annual.filter(a=>(Number(a.progress)||0)<25 && (a.due==='T1' || a.due==='T2')).length;
+  if(lowProgress) problems.push(['info', `${lowProgress} objectif(s) à faible avancement sur horizon court. À challenger en revue.`]);
+  if(!problems.length) problems.push(['ok', 'Structure cohérente. Il reste à tenir la discipline de revue et les arbitrages.']);
+
+  byId('diagnostics').innerHTML = problems.map(([cls,msg])=>`<div class="notice ${cls}">${escapeHtml(msg)}</div>`).join('');
+}
+function exportJSON(){
+  collectMeta();
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `matrice-hoshin-${(state.orgName||'ascalis').toLowerCase().replace(/\s+/g,'-')}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function exportCSV(){
+  collectMeta();
+  const rows = [['Type','ID','Titre','Cible/KPI/Rôle','Échéance','Avancement','Liens']];
+  state.breakthrough.forEach(x=>rows.push(['Percée',x.id,x.title,x.target||'',x.horizon||'','', '']));
+  state.annual.forEach(x=>rows.push(['Annuel',x.id,x.title,`${x.kpi||''} | cible:${x.target||''} | base:${x.baseline||''}`,x.due||'',x.progress||'',(x.links||[]).join(' / ')]));
+  state.initiatives.forEach(x=>rows.push(['Initiative',x.id,x.title,x.owner||'',x.due||'',x.progress||'',(x.links||[]).join(' / ')]));
+  state.owners.forEach(x=>rows.push(['Pilote',x.id,x.title,x.role||'','','',(x.links||[]).join(' / ')]));
+  const csv = rows.map(r => r.map(v => `"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `matrice-hoshin-${(state.orgName||'ascalis').toLowerCase().replace(/\s+/g,'-')}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+document.getElementById('importFile').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const txt = await file.text();
+    const parsed = JSON.parse(txt);
+    Object.assign(state, parsed);
+    saveData();
+  }catch(err){
+    alert('Import JSON impossible.');
+  }
+  e.target.value = '';
+});
+function render(){
+  syncMeta();
+  renderBreakthroughs();
+  renderAnnuals();
+  renderInitiatives();
+  renderOwners();
+  renderXLists();
+  renderTables();
+  computeScores();
+  renderDiagnostics();
+}
+['orgName','year','reviewCadence','owner','vision','northStar'].forEach(id=>{
+  document.addEventListener('input', (e)=>{
+    if(e.target && e.target.id === id){ collectMeta(); render(); }
+  });
+  document.addEventListener('change', (e)=>{
+    if(e.target && e.target.id === id){ collectMeta(); render(); }
+  });
+});
+
+loadStored();
+render();
+</script>
+</body>
+</html>

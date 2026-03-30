@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagramme de Kano — ASCALIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0F1A2E;--a:#B07642;--al:#D4956A;--abg:rgba(176,118,66,.08);--s:#FFF;--sa:#F8FAFC;--w:#FAF9F6;--t:#020617;--t2:#475569;--t3:#94A3B8;--bd:#E2E8F0;--bl:#F1F5F9;--ok:#059669;--okbg:#ECFDF5;--warn:#D97706;--warnbg:#FFFBEB;--err:#DC2626;--errbg:#FEF2F2;--info:#2563EB;--infobg:#EFF6FF;--vio:#7C3AED;--viobg:#F5F3FF;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--fb);background:var(--w);color:var(--t);-webkit-font-smoothing:antialiased}button,input,select,textarea{font:inherit}
+.hd{background:var(--s);border-bottom:1px solid var(--bl);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;gap:16px;flex-wrap:wrap}.hd svg{height:22px}.hd-a{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:7px 14px;border-radius:8px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--t2);transition:all .2s;min-height:36px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn:hover{border-color:var(--a);color:var(--a)}.btn-pri{background:var(--p);border-color:var(--p);color:var(--sa)}.btn-pri:hover{background:#16253f;color:#fff;border-color:#16253f}.btn-danger{border-color:#fecaca;color:#b91c1c;background:#fff}.btn-danger:hover{border-color:#ef4444;color:#991b1b}
+.hero{background:var(--p);padding:32px 28px;color:var(--sa)}.hero h1{font-family:var(--fd);font-size:28px;font-weight:400;margin-bottom:6px}.hero p{font-size:14px;color:rgba(248,250,252,.6);max-width:840px;line-height:1.55}
+.container{max-width:1280px;margin:0 auto;padding:28px 24px}.layout{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}.card,.panel-card{background:var(--s);border-radius:14px;border:1px solid var(--bl);padding:20px;margin-bottom:16px;box-shadow:0 1px 0 rgba(15,26,46,.03)}.card-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tag{font-size:10px;color:var(--a);background:var(--abg);padding:2px 8px;border-radius:999px;font-family:var(--fh)}
+.form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.form-grid .full{grid-column:1/-1}.field-label{display:block;font-size:11px;font-family:var(--fh);font-weight:600;color:var(--t2);margin:0 0 6px 2px}.form-grid input,.form-grid select,.form-grid textarea,.toolbar input,.toolbar select{width:100%;border:1px solid var(--bd);background:#fff;border-radius:10px;padding:10px 12px;color:var(--t);min-height:42px}.form-grid textarea{min-height:82px;resize:vertical}.sub-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mini-card{border:1px solid var(--bl);border-radius:12px;padding:14px;background:var(--sa)}.mini-card h3{font-family:var(--fh);font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--a);margin-bottom:10px}.small{font-size:12px;color:var(--t2)}.tiny{font-size:11px;color:var(--t3)}
+.panel{position:sticky;top:72px}.panel-title{font-family:var(--fh);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--a);margin-bottom:12px}.global-score{text-align:center;padding:20px;background:linear-gradient(135deg,var(--p),#172a47);border-radius:12px;color:var(--sa);margin-bottom:16px}.gs-val{font-family:var(--fd);font-size:46px;color:var(--al);line-height:1}.gs-sub{font-size:11px;color:rgba(248,250,252,.5);margin-top:4px}.gs-level{font-size:12px;margin-top:8px;padding:4px 14px;border-radius:999px;display:inline-block;background:rgba(176,118,66,.18);color:var(--al)}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kpi{border:1px solid var(--bl);border-radius:10px;padding:10px;background:#fff}.kpi .name{font-size:11px;color:var(--t3);margin-bottom:2px}.kpi .val{font-family:var(--fh);font-size:22px;font-weight:600}
+.notice{background:var(--infobg);border:1px solid #bfdbfe;color:#1d4ed8;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.6}.warn-box{background:var(--warnbg);border:1px solid #fde68a;color:#92400e;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.55}.ok-box{background:var(--okbg);border:1px solid #a7f3d0;color:#065f46;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.55}.vio-box{background:var(--viobg);border:1px solid #ddd6fe;color:#5b21b6;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.55}
+.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;margin-bottom:12px}.table-wrap{overflow:auto;border:1px solid var(--bl);border-radius:12px}.data-table{width:100%;border-collapse:collapse;min-width:1040px}.data-table th,.data-table td{padding:10px 12px;border-bottom:1px solid var(--bl);vertical-align:top}.data-table th{font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--t2);text-align:left;background:#fbfdff;position:sticky;top:0;z-index:1}.data-table td{font-size:13px}.data-table tr:hover{background:#fcfdff}
+.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-size:11px;font-family:var(--fh);font-weight:600}.b-A{background:#EEF2FF;color:#4338CA}.b-O{background:#EFF6FF;color:#1D4ED8}.b-M{background:#FEF2F2;color:#B91C1C}.b-I{background:#F8FAFC;color:#475569}.b-R{background:#FFFBEB;color:#B45309}.b-Q{background:#F5F3FF;color:#6D28D9}.chip{display:inline-flex;border-radius:999px;padding:2px 8px;font-size:10px;font-family:var(--fh);background:var(--abg);color:var(--a)}
+.matrix-grid{display:grid;grid-template-columns:repeat(6,minmax(160px,1fr));gap:12px}.bucket{border:1px solid var(--bl);border-radius:14px;overflow:hidden;background:#fff}.bucket-head{padding:12px 14px;font-family:var(--fh);font-size:12px;font-weight:700;color:#fff}.bucket-body{padding:12px;display:grid;gap:10px;min-height:180px;background:#fff}.bubble{border:1px solid var(--bl);border-radius:12px;padding:10px;background:var(--sa)}.bubble .name{font-weight:600;margin-bottom:2px}.bubble .meta{font-size:11px;color:var(--t3);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}.bubble .stats{font-size:11px;color:var(--t2);line-height:1.5}
+.choice-grid{display:grid;grid-template-columns:260px 1fr 1fr;gap:10px;align-items:center}.choice-grid .head{font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--t2)}.choice-grid select{width:100%;border:1px solid var(--bd);background:#fff;border-radius:10px;padding:10px 12px;min-height:42px}.choice-row{padding:10px 0;border-bottom:1px solid var(--bl)}
+.legend-list{display:grid;gap:8px}.legend-item{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}.dot{width:10px;height:10px;border-radius:50%;margin-top:4px}
+.spark{height:8px;border-radius:999px;background:var(--bl);overflow:hidden;margin-top:6px}.spark > span{display:block;height:100%;border-radius:999px}
+.empty{font-size:12px;color:var(--t3);padding:16px;border:1px dashed var(--bd);border-radius:12px;background:#fff}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}.panel{position:static}.toolbar{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr 1fr}.split{grid-template-columns:1fr}.matrix-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.choice-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.form-grid,.toolbar,.kpi-grid,.matrix-grid{grid-template-columns:1fr}.hero h1{font-size:24px}.container{padding:20px 14px}.hd{padding:12px 16px}.hero{padding:26px 16px}.choice-grid{gap:8px}}
+@media print{.hd,.btn,.toolbar,.sub-actions{display:none!important}body{background:#fff}.container{max-width:none;padding:0}.card,.panel-card{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg>
+  <div class="hd-a"><button class="btn" onclick="seedData()">Exemple</button><button class="btn" onclick="exportCSV()">↓ Export CSV</button><button class="btn" onclick="exportJSON()">↓ Export JSON</button><label class="btn">Import JSON<input id="importFile" type="file" accept="application/json" hidden></label><button class="btn btn-danger" onclick="clearAll()">Vider</button><button class="btn" onclick="window.print()">Imprimer</button><a class="btn" href="index.html">← Retour</a></div>
+</div>
+
+<div class="hero">
+  <h1>Diagramme de Kano</h1>
+  <p>Qualification des attentes clients en catégories obligatoires, proportionnelles et attractives, à partir de deux questions complémentaires : quand l’entreprise répond à l’attente, et quand elle n’y répond pas. L’outil sert à fixer les priorités sans perdre du temps à “surprendre” le client sur des points alors que les bases ne sont pas tenues.</p>
+</div>
+
+<div class="container">
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="card-title">Paramètres de l’étude <span class="tag">voix du client</span></div>
+        <div class="form-grid">
+          <div><label class="field-label">Nom de l’étude</label><input id="studyName" placeholder="Kano — Offre / service / projet"></div>
+          <div><label class="field-label">Segment principal</label><input id="studySegment" placeholder="PME, clients premium, patients…"></div>
+          <div><label class="field-label">Échantillon visé</label><input id="studyTarget" type="number" min="1" step="1" placeholder="50"></div>
+          <div><label class="field-label">Cycle de révision</label><input id="studyCycle" placeholder="Tous les 2 à 3 ans"></div>
+          <div class="full"><label class="field-label">Note de cadrage</label><textarea id="studyNote" placeholder="Contexte, objectif, source des attentes, périmètre…"></textarea></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Attentes à qualifier <span class="tag">20 à 25 clés max</span></div>
+        <div class="form-grid">
+          <div><label class="field-label">Attente</label><input id="expTitle" placeholder="Ex. Rapidité de prise de rendez-vous"></div>
+          <div><label class="field-label">Thème</label><input id="expTheme" placeholder="Délais, qualité perçue, support…"></div>
+          <div><label class="field-label">Importance client (1-5)</label><select id="expImportance"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+          <div><label class="field-label">Segment</label><input id="expSegment" placeholder="Tous, premium, SAV…"></div>
+          <div class="full"><label class="field-label">Commentaire</label><textarea id="expNote" placeholder="Formulation client, besoin implicite, hypothèse, remarque atelier…"></textarea></div>
+        </div>
+        <div class="sub-actions"><button class="btn btn-pri" onclick="saveExpectation()">Ajouter l’attente</button><button class="btn" onclick="resetExpectationForm()">Réinitialiser</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Questionnaire Kano <span class="tag">2 questions par attente</span></div>
+        <div class="split">
+          <div class="mini-card">
+            <h3>Répondant</h3>
+            <div class="form-grid" style="grid-template-columns:1fr 1fr">
+              <div><label class="field-label">Nom / code</label><input id="respName" placeholder="Client 01"></div>
+              <div><label class="field-label">Segment</label><input id="respSegment" placeholder="PME, grands comptes…"></div>
+            </div>
+            <div class="tiny" style="margin-top:10px">Question A : si le produit / la prestation répond à cette attente, qu’en pensez-vous ?</div>
+            <div class="tiny" style="margin-top:6px">Question B : si le produit / la prestation ne répond pas à cette attente, qu’en pensez-vous ?</div>
+          </div>
+          <div class="mini-card">
+            <h3>Modalités de réponse</h3>
+            <div class="legend-list">
+              <div class="legend-item"><span class="dot" style="background:#4338CA"></span><div><strong>Cela me plaît</strong><br><span class="tiny">Réponse enthousiaste / désirée.</span></div></div>
+              <div class="legend-item"><span class="dot" style="background:#1D4ED8"></span><div><strong>Ça doit être comme cela</strong><br><span class="tiny">C’est attendu, presque évident.</span></div></div>
+              <div class="legend-item"><span class="dot" style="background:#475569"></span><div><strong>Je suis indifférent</strong><br><span class="tiny">Pas d’effet notable.</span></div></div>
+              <div class="legend-item"><span class="dot" style="background:#B45309"></span><div><strong>Je m’en contente</strong><br><span class="tiny">Toléré sans enthousiasme.</span></div></div>
+              <div class="legend-item"><span class="dot" style="background:#B91C1C"></span><div><strong>Cela me déplaît</strong><br><span class="tiny">Insatisfaction claire.</span></div></div>
+            </div>
+          </div>
+        </div>
+        <div id="questionnaire" style="margin-top:16px"></div>
+        <div class="sub-actions"><button class="btn btn-pri" onclick="saveRespondent()">Enregistrer le répondant</button><button class="btn" onclick="resetRespondentForm()">Vider les réponses</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Attentes et résultats</div>
+        <div class="toolbar">
+          <input id="search" placeholder="Rechercher une attente, un thème, un segment…">
+          <select id="filterTheme"><option value="">Tous les thèmes</option></select>
+          <select id="filterSegment"><option value="">Tous les segments</option></select>
+          <select id="sortBy"><option value="dominant">Tri : catégorie dominante</option><option value="importance">Tri : importance</option><option value="responses">Tri : nb réponses</option><option value="name">Tri : nom</option></select>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Attente</th>
+                <th>Thème</th>
+                <th>Importance</th>
+                <th>Segment</th>
+                <th>Catégorie dominante</th>
+                <th>Réponses</th>
+                <th>Détail A/O/M/I/R/Q</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Lecture visuelle du diagramme</div>
+        <div id="matrixBoard" class="matrix-grid"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel"></div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY='ascalis_kano_v1';
+const OPTIONS=[
+  {value:'like',label:'Cela me plaît'},
+  {value:'must',label:'Ça doit être comme cela'},
+  {value:'neutral',label:'Je suis indifférent'},
+  {value:'live',label:'Je m’en contente'},
+  {value:'dislike',label:'Cela me déplaît'}
+];
+const CATS={
+  A:{label:'Attractive',fr:'Attractive',color:'#4338CA',badge:'b-A',desc:'Surprend positivement. Axe d’innovation.'},
+  O:{label:'One-dimensional',fr:'Proportionnelle',color:'#1D4ED8',badge:'b-O',desc:'Plus on répond, plus le client est satisfait.'},
+  M:{label:'Must-be',fr:'Obligatoire',color:'#B91C1C',badge:'b-M',desc:'Base attendue. Si absente, le client sanctionne.'},
+  I:{label:'Indifferent',fr:'Indifférente',color:'#475569',badge:'b-I',desc:'Effet faible ou nul sur la satisfaction.'},
+  R:{label:'Reverse',fr:'Inversée',color:'#B45309',badge:'b-R',desc:'La présence peut déplaire à certains segments.'},
+  Q:{label:'Questionable',fr:'Douteuse',color:'#6D28D9',badge:'b-Q',desc:'Réponses incohérentes ou mal formulées.'}
+};
+const BOARD_ORDER=['M','O','A','I','R','Q'];
+let state={
+  study:{name:'',segment:'',target:50,cycle:'Tous les 2 à 3 ans',note:''},
+  expectations:[],
+  respondents:[]
+};
+let editingExpectationId=null;
+
+function uid(){return 'id_'+Math.random().toString(36).slice(2,10)}
+function esc(v){return String(v??'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function persist(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
+function load(){try{const raw=localStorage.getItem(STORAGE_KEY); if(raw){const d=JSON.parse(raw); if(d&&d.study&&Array.isArray(d.expectations)&&Array.isArray(d.respondents)) state=d;}}catch(e){}}
+function optionLabel(v){const o=OPTIONS.find(x=>x.value===v); return o?o.label:'—'}
+function kanoEval(f,d){
+  const table={
+    like:{like:'Q',must:'A',neutral:'A',live:'A',dislike:'O'},
+    must:{like:'R',must:'I',neutral:'I',live:'I',dislike:'M'},
+    neutral:{like:'R',must:'I',neutral:'I',live:'I',dislike:'M'},
+    live:{like:'R',must:'I',neutral:'I',live:'I',dislike:'M'},
+    dislike:{like:'R',must:'R',neutral:'R',live:'R',dislike:'Q'}
+  };
+  return table[f]?.[d] || 'Q';
+}
+function getExpectationStats(id){
+  const counts={A:0,O:0,M:0,I:0,R:0,Q:0};
+  let total=0;
+  state.respondents.forEach(r=>{
+    const ans=r.answers?.[id];
+    if(ans&&ans.f&&ans.d){counts[kanoEval(ans.f,ans.d)]++; total++;}
+  });
+  const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  let dominant='I';
+  if(entries[0][1]===0) dominant='I';
+  else if(entries[0][1]===entries[1][1]) dominant='Q';
+  else dominant=entries[0][0];
+  return {counts,total,dominant};
+}
+function uniqueValues(key){return [...new Set(state.expectations.map(x=>x[key]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'fr'))}
+function saveStudyFromInputs(){
+  state.study={
+    name:studyName.value.trim(),
+    segment:studySegment.value.trim(),
+    target:Math.max(1,Number(studyTarget.value||50)),
+    cycle:studyCycle.value.trim(),
+    note:studyNote.value.trim()
+  };
+  persist();
+}
+function hydrateStudy(){studyName.value=state.study.name||''; studySegment.value=state.study.segment||''; studyTarget.value=state.study.target||50; studyCycle.value=state.study.cycle||''; studyNote.value=state.study.note||''}
+function resetExpectationForm(){editingExpectationId=null; expTitle.value=''; expTheme.value=''; expImportance.value='3'; expSegment.value=''; expNote.value='';}
+function saveExpectation(){
+  const obj={
+    id:editingExpectationId||uid(),
+    title:expTitle.value.trim(),
+    theme:expTheme.value.trim(),
+    importance:Number(expImportance.value||3),
+    segment:expSegment.value.trim(),
+    note:expNote.value.trim()
+  };
+  if(!obj.title){alert('Renseigne au moins une attente.'); return}
+  const idx=state.expectations.findIndex(x=>x.id===obj.id);
+  if(idx>=0) state.expectations[idx]=obj; else state.expectations.push(obj);
+  persist();
+  render();
+  resetExpectationForm();
+}
+function editExpectation(id){const o=state.expectations.find(x=>x.id===id); if(!o) return; editingExpectationId=id; expTitle.value=o.title||''; expTheme.value=o.theme||''; expImportance.value=String(o.importance||3); expSegment.value=o.segment||''; expNote.value=o.note||''; window.scrollTo({top:0,behavior:'smooth'})}
+function delExpectation(id){if(!confirm('Supprimer cette attente ? Les réponses associées disparaîtront aussi.')) return; state.expectations=state.expectations.filter(x=>x.id!==id); state.respondents=state.respondents.map(r=>{if(r.answers) delete r.answers[id]; return r}); persist(); render();}
+function resetRespondentForm(){respName.value=''; respSegment.value=''; buildQuestionnaire();}
+function saveRespondent(){
+  if(!state.expectations.length){alert('Ajoute au moins une attente avant de saisir un répondant.'); return}
+  const answers={};
+  let answered=0;
+  state.expectations.forEach(e=>{
+    const f=document.getElementById('f_'+e.id)?.value||'';
+    const d=document.getElementById('d_'+e.id)?.value||'';
+    if(f&&d){answers[e.id]={f,d}; answered++;}
+  });
+  if(!answered){alert('Aucune paire de réponses renseignée.'); return}
+  state.respondents.push({id:uid(),name:respName.value.trim()||('Répondant '+String(state.respondents.length+1).padStart(2,'0')),segment:respSegment.value.trim(),answers});
+  persist();
+  render();
+  resetRespondentForm();
+}
+function delRespondent(id){if(!confirm('Supprimer ce répondant ?')) return; state.respondents=state.respondents.filter(x=>x.id!==id); persist(); render();}
+function clearAll(){if(!confirm('Vider toute l’étude Kano ?')) return; state={study:{name:'',segment:'',target:50,cycle:'Tous les 2 à 3 ans',note:''},expectations:[],respondents:[]}; persist(); hydrateStudy(); resetExpectationForm(); resetRespondentForm(); render();}
+function buildQuestionnaire(){
+  if(!state.expectations.length){questionnaire.innerHTML='<div class="empty">Ajoute d’abord les attentes issues de tes interviews clients. Le questionnaire se construit ensuite automatiquement.</div>'; return}
+  questionnaire.innerHTML=''
+    +'<div class="choice-grid"><div class="head">Attente</div><div class="head">A — Si on répond à l’attente</div><div class="head">B — Si on ne répond pas à l’attente</div></div>'
+    +state.expectations.map(e=>`<div class="choice-grid choice-row"><div><strong>${esc(e.title)}</strong><div class="tiny">${esc(e.theme||'Sans thème')} • Importance ${e.importance}/5</div></div><div><select id="f_${e.id}"><option value="">Choisir…</option>${OPTIONS.map(o=>`<option value="${o.value}">${o.label}</option>`).join('')}</select></div><div><select id="d_${e.id}"><option value="">Choisir…</option>${OPTIONS.map(o=>`<option value="${o.value}">${o.label}</option>`).join('')}</select></div></div>`).join('');
+}
+function statusBadge(cat){const c=CATS[cat]||CATS.I; return `<span class="badge ${c.badge}">${c.fr}</span>`}
+function responseBreakdown(counts,total){return ['A','O','M','I','R','Q'].map(k=>`${k}:${counts[k]||0}`).join(' • ') + (total?` <div class="spark"><span style="width:${Math.min(100,((counts.A+counts.O+counts.M)/(total||1))*100)}%;background:linear-gradient(90deg,#B91C1C,#4338CA)"></span></div>`:'')}
+function renderTable(){
+  const q=search.value.toLowerCase().trim(); const th=filterTheme.value; const seg=filterSegment.value; const sort=sortBy.value;
+  let rows=state.expectations.map(e=>({...e,stats:getExpectationStats(e.id)})).filter(e=>{
+    const hay=[e.title,e.theme,e.segment,e.note].join(' ').toLowerCase();
+    return (!q||hay.includes(q)) && (!th||e.theme===th) && (!seg||e.segment===seg);
+  });
+  rows.sort((a,b)=>{
+    if(sort==='name') return a.title.localeCompare(b.title,'fr');
+    if(sort==='importance') return b.importance-a.importance;
+    if(sort==='responses') return b.stats.total-a.stats.total;
+    return BOARD_ORDER.indexOf(a.stats.dominant)-BOARD_ORDER.indexOf(b.stats.dominant) || b.importance-a.importance;
+  });
+  tbody.innerHTML=rows.length?rows.map(e=>`<tr>
+    <td><strong>${esc(e.title)}</strong><div class="small">${esc(e.note||'')}</div></td>
+    <td>${esc(e.theme||'—')}</td>
+    <td>${e.importance}/5</td>
+    <td>${esc(e.segment||'—')}</td>
+    <td>${statusBadge(e.stats.dominant)}</td>
+    <td>${e.stats.total}</td>
+    <td>${responseBreakdown(e.stats.counts,e.stats.total)}</td>
+    <td><button class="btn" onclick="editExpectation('${e.id}')">Éditer</button> <button class="btn btn-danger" onclick="delExpectation('${e.id}')">Suppr.</button></td>
+  </tr>`).join(''):'<tr><td colspan="8"><div class="empty">Aucune attente pour l’instant.</div></td></tr>';
+}
+function renderBoard(){
+  const buckets={A:[],O:[],M:[],I:[],R:[],Q:[]};
+  state.expectations.forEach(e=>{const stats=getExpectationStats(e.id); buckets[stats.dominant].push({e,stats})});
+  matrixBoard.innerHTML=BOARD_ORDER.map(cat=>{
+    const c=CATS[cat];
+    return `<div class="bucket"><div class="bucket-head" style="background:${c.color}">${c.fr}</div><div class="bucket-body">${buckets[cat].length?buckets[cat].sort((a,b)=>b.e.importance-a.e.importance).map(({e,stats})=>`<div class="bubble"><div class="name">${esc(e.title)}</div><div class="meta"><span>${esc(e.theme||'Sans thème')}</span><span>Importance ${e.importance}/5</span><span>${stats.total} réponse(s)</span></div><div class="stats">${responseBreakdown(stats.counts,stats.total)}</div></div>`).join(''):`<div class="empty">Aucune attente classée ici.</div>`}</div></div>`
+  }).join('');
+}
+function renderPanel(){
+  const totalExp=state.expectations.length;
+  const totalResp=state.respondents.length;
+  const completion=(state.study.target?Math.min(100,Math.round((totalResp/state.study.target)*100)):0);
+  const counts={A:0,O:0,M:0,I:0,R:0,Q:0};
+  state.expectations.forEach(e=>{counts[getExpectationStats(e.id).dominant]++});
+  const mainCount=counts.M+counts.O+counts.A;
+  const sampleList=state.respondents.slice(-5).reverse();
+  panel.innerHTML=''
+    +`<div class="panel-card"><div class="global-score"><div class="gs-val">${totalResp}</div><div class="gs-sub">Répondant(s) saisi(s)</div><div class="gs-level">${completion}% de l’échantillon visé</div></div><div class="kpi-grid"><div class="kpi"><div class="name">Attentes suivies</div><div class="val">${totalExp}</div></div><div class="kpi"><div class="name">Axes prioritaires</div><div class="val">${mainCount}</div></div><div class="kpi"><div class="name">Obligatoires</div><div class="val" style="color:#B91C1C">${counts.M}</div></div><div class="kpi"><div class="name">Attractives</div><div class="val" style="color:#4338CA">${counts.A}</div></div></div></div>`
+    +'<div class="panel-card"><div class="panel-title">Lecture rapide</div><div class="notice">Commence par sécuriser les attentes obligatoires. Ensuite seulement, travaille les attentes proportionnelles. Les attentes attractives servent à te différencier, pas à masquer une base défaillante.</div></div>'
+    +'<div class="panel-card"><div class="panel-title">Processus conseillé</div><div class="ok-box">1. Construire l’arbre des attentes.<br>2. Administrer le questionnaire Kano.<br>3. Dépouiller les réponses et segmenter si besoin.<br>4. Utiliser les résultats pour prioriser les actions et alimenter la matrice de la qualité.</div></div>'
+    +'<div class="panel-card"><div class="panel-title">Catégories</div><div class="legend-list">'
+    +BOARD_ORDER.map(cat=>`<div class="legend-item"><span class="dot" style="background:${CATS[cat].color}"></span><div><strong>${CATS[cat].fr}</strong><br><span class="tiny">${CATS[cat].desc}</span></div></div>`).join('')
+    +'</div></div>'
+    +'<div class="panel-card"><div class="panel-title">Derniers répondants</div>'
+    +(sampleList.length?sampleList.map(r=>`<div class="warn-box" style="margin-bottom:8px"><strong>${esc(r.name)}</strong><br>${esc(r.segment||'Segment non renseigné')}<br><button class="btn btn-danger" style="margin-top:8px" onclick="delRespondent('${r.id}')">Supprimer</button></div>`).join(''):'<div class="empty">Aucun répondant enregistré.</div>')
+    +'</div>';
+}
+function renderFilters(){
+  const themes=uniqueValues('theme'); const segments=uniqueValues('segment');
+  const themeVal=filterTheme.value, segmentVal=filterSegment.value;
+  filterTheme.innerHTML='<option value="">Tous les thèmes</option>'+themes.map(v=>`<option ${v===themeVal?'selected':''}>${esc(v)}</option>`).join('');
+  filterSegment.innerHTML='<option value="">Tous les segments</option>'+segments.map(v=>`<option ${v===segmentVal?'selected':''}>${esc(v)}</option>`).join('');
+}
+function render(){saveStudyFromInputs(); renderFilters(); buildQuestionnaire(); renderTable(); renderBoard(); renderPanel();}
+function exportCSV(){
+  const rows=[['Attente','Thème','Importance','Segment','Catégorie dominante','Nb réponses','A','O','M','I','R','Q','Commentaire']];
+  state.expectations.forEach(e=>{const s=getExpectationStats(e.id); rows.push([e.title,e.theme,e.importance,e.segment,CATS[s.dominant].fr,s.total,s.counts.A,s.counts.O,s.counts.M,s.counts.I,s.counts.R,s.counts.Q,e.note||''])});
+  rows.push([]); rows.push(['Répondant','Segment','Attente','Réponse A','Réponse B','Catégorie']);
+  state.respondents.forEach(r=>{state.expectations.forEach(e=>{const ans=r.answers?.[e.id]; if(ans?.f&&ans?.d) rows.push([r.name,r.segment,e.title,optionLabel(ans.f),optionLabel(ans.d),CATS[kanoEval(ans.f,ans.d)].fr])})});
+  const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='diagramme-kano-ascalis.csv'; a.click(); URL.revokeObjectURL(a.href);
+}
+function exportJSON(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='diagramme-kano-ascalis.json'; a.click(); URL.revokeObjectURL(a.href)}
+importFile.addEventListener('change',e=>{const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{try{const data=JSON.parse(r.result); if(!data||!data.study||!Array.isArray(data.expectations)||!Array.isArray(data.respondents)) throw new Error(); state=data; persist(); hydrateStudy(); resetExpectationForm(); resetRespondentForm(); render();}catch(err){alert('Fichier JSON invalide.')}}; r.readAsText(f)})
+function seedData(){
+  state={
+    study:{name:'Kano — cabinet dentaire',segment:'Patients actifs',target:50,cycle:'Tous les 2 à 3 ans',note:'Jeu d’exemple inspiré des attentes citées dans la source : hygiène, anesthésie, rapidité, prise de rendez-vous sur Internet, salle d’attente relaxante, etc.'},
+    expectations:[
+      {id:uid(),title:'Hygiène du matériel',theme:'Sécurité',importance:5,segment:'Tous',note:'Attente de base.'},
+      {id:uid(),title:'Anesthésie efficace',theme:'Qualité de soin',importance:5,segment:'Tous',note:'Attente de base.'},
+      {id:uid(),title:'Rapidité de la prise de rendez-vous',theme:'Délais',importance:4,segment:'Tous',note:'Attente proportionnelle.'},
+      {id:uid(),title:'Explication claire des soins',theme:'Relation client',importance:4,segment:'Tous',note:'Attente proportionnelle.'},
+      {id:uid(),title:'Prise de rendez-vous sur Internet',theme:'Digital',importance:3,segment:'Actifs',note:'Attente attractive pour certains segments.'},
+      {id:uid(),title:'Salle d’attente relaxante',theme:'Expérience',importance:2,segment:'Tous',note:'Attente attractive.'},
+      {id:uid(),title:'Historique des soins facilement accessible',theme:'Information',importance:3,segment:'Patients suivis',note:'Souvent plutôt obligatoire / attendue.'}
+    ],
+    respondents:[]
+  };
+  const ids=Object.fromEntries(state.expectations.map(x=>[x.title,x.id]));
+  const samples=[
+    {name:'Patient 01',segment:'Actifs',answers:{'Hygiène du matériel':['must','dislike'],'Anesthésie efficace':['must','dislike'],'Rapidité de la prise de rendez-vous':['like','live'],'Explication claire des soins':['like','live'],'Prise de rendez-vous sur Internet':['like','must'],'Salle d’attente relaxante':['like','neutral'],'Historique des soins facilement accessible':['must','dislike']}},
+    {name:'Patient 02',segment:'Actifs',answers:{'Hygiène du matériel':['must','dislike'],'Anesthésie efficace':['must','dislike'],'Rapidité de la prise de rendez-vous':['like','dislike'],'Explication claire des soins':['like','dislike'],'Prise de rendez-vous sur Internet':['like','neutral'],'Salle d’attente relaxante':['like','neutral'],'Historique des soins facilement accessible':['must','live']}},
+    {name:'Patient 03',segment:'Familles',answers:{'Hygiène du matériel':['must','dislike'],'Anesthésie efficace':['must','dislike'],'Rapidité de la prise de rendez-vous':['must','dislike'],'Explication claire des soins':['like','dislike'],'Prise de rendez-vous sur Internet':['neutral','neutral'],'Salle d’attente relaxante':['like','must'],'Historique des soins facilement accessible':['must','dislike']}},
+    {name:'Patient 04',segment:'Seniors',answers:{'Hygiène du matériel':['must','dislike'],'Anesthésie efficace':['must','dislike'],'Rapidité de la prise de rendez-vous':['like','dislike'],'Explication claire des soins':['must','dislike'],'Prise de rendez-vous sur Internet':['live','neutral'],'Salle d’attente relaxante':['neutral','neutral'],'Historique des soins facilement accessible':['must','dislike']}},
+    {name:'Patient 05',segment:'Actifs',answers:{'Hygiène du matériel':['must','dislike'],'Anesthésie efficace':['must','dislike'],'Rapidité de la prise de rendez-vous':['like','dislike'],'Explication claire des soins':['like','live'],'Prise de rendez-vous sur Internet':['like','neutral'],'Salle d’attente relaxante':['like','neutral'],'Historique des soins facilement accessible':['must','dislike']}},
+    {name:'Patient 06',segment:'Actifs',answers:{'Hygiène du matériel':['must','dislike'],'Anesthésie efficace':['must','dislike'],'Rapidité de la prise de rendez-vous':['like','live'],'Explication claire des soins':['like','dislike'],'Prise de rendez-vous sur Internet':['like','must'],'Salle d’attente relaxante':['neutral','neutral'],'Historique des soins facilement accessible':['must','dislike']}},
+    {name:'Patient 07',segment:'Familles',answers:{'Hygiène du matériel':['must','dislike'],'Anesthésie efficace':['must','dislike'],'Rapidité de la prise de rendez-vous':['like','dislike'],'Explication claire des soins':['must','dislike'],'Prise de rendez-vous sur Internet':['like','neutral'],'Salle d’attente relaxante':['like','neutral'],'Historique des soins facilement accessible':['must','live']}},
+    {name:'Patient 08',segment:'Seniors',answers:{'Hygiène du matériel':['must','dislike'],'Anesthésie efficace':['must','dislike'],'Rapidité de la prise de rendez-vous':['must','dislike'],'Explication claire des soins':['like','dislike'],'Prise de rendez-vous sur Internet':['neutral','neutral'],'Salle d’attente relaxante':['neutral','neutral'],'Historique des soins facilement accessible':['must','dislike']}}
+  ];
+  state.respondents=samples.map(r=>({id:uid(),name:r.name,segment:r.segment,answers:Object.fromEntries(Object.entries(r.answers).map(([title,pair])=>[ids[title],{f:pair[0],d:pair[1]}]))}));
+  persist(); hydrateStudy(); resetExpectationForm(); resetRespondentForm(); render();
+}
+
+['studyName','studySegment','studyTarget','studyCycle','studyNote'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{saveStudyFromInputs(); renderPanel(); persist()}));
+['search','filterTheme','filterSegment','sortBy'].forEach(id=>document.getElementById(id).addEventListener('input',render));
+load(); hydrateStudy(); buildQuestionnaire(); render();
+</script>
+</body>
+</html>
