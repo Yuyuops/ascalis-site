@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCALIS — Espace Pro standardisé</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#0F1A2E;--primary-light:#1B3A4B;--accent:#B07642;--accent-light:#D4956A;--accent-bg:rgba(176,118,66,.08);--surface:#FFFFFF;--surface-alt:#F8FAFC;--warm:#FAF9F6;--on-surface:#020617;--on-2:#475569;--on-3:#94A3B8;--border:#E2E8F0;--border-light:#F1F5F9;--success:#059669;--success-bg:#ECFDF5;--warning:#D97706;--warning-bg:#FFFBEB;--info:#2563EB;--info-bg:#EFF6FF;--radius-sm:6px;--radius-md:8px;--radius-lg:12px;--radius-xl:16px;--radius-full:9999px;--ease:cubic-bezier(.16,1,.3,1);--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif;--sidebar-w:280px;--nav-h:56px;--shadow-sm:0 2px 4px rgba(0,0,0,.05)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--fb);background:var(--warm);color:var(--on-surface);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
+.login-screen{min-height:100dvh;display:flex;align-items:center;justify-content:center;background:var(--primary);padding:24px}.login-card{background:var(--surface);border-radius:var(--radius-xl);padding:48px 40px;width:100%;max-width:400px;text-align:center}.login-logo svg{height:28px;margin-bottom:32px}.login-card h1{font-family:var(--fd);font-size:24px;font-weight:400;margin-bottom:8px}.login-card .sub{font-size:14px;color:var(--on-2);margin-bottom:32px}.login-field{text-align:left;margin-bottom:16px}.login-field label{font-family:var(--fh);font-size:12px;font-weight:500;color:var(--on-3);display:block;margin-bottom:4px}.login-field input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:15px;outline:none}.login-field input:focus{border-color:var(--accent)}.login-error{font-size:13px;color:#DC2626;margin-bottom:12px;min-height:20px}.login-btn{width:100%;padding:12px;background:var(--primary);color:var(--surface-alt);border:none;border-radius:var(--radius-md);font-family:var(--fh);font-size:15px;font-weight:500;min-height:48px}.login-hint{font-size:11px;color:var(--on-3);margin-top:24px;line-height:1.6}.login-site-link{display:inline-block;margin-top:16px;font-family:var(--fh);font-size:13px;color:var(--accent-light)}
+.app{display:none;min-height:100dvh}.app.active{display:flex}.sidebar{width:var(--sidebar-w);background:var(--primary);color:var(--surface-alt);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:40;transition:transform .3s var(--ease)}.sb-logo{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.06)}.sb-logo svg{height:22px}.sb-user{padding:16px 24px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px}.sb-avatar{width:36px;height:36px;border-radius:var(--radius-full);background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:13px;font-weight:600;color:#fff;flex-shrink:0}.sb-name{font-family:var(--fh);font-size:13px;font-weight:500}.sb-role{font-size:11px;color:rgba(248,250,252,.45)}.sb-nav{flex:1;padding:16px 0;overflow-y:auto}.sb-section{font-family:var(--fh);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(248,250,252,.25);padding:8px 24px 4px}.sb-link{display:flex;align-items:center;gap:10px;padding:10px 24px;font-size:13px;color:rgba(248,250,252,.56);transition:all .15s;cursor:pointer;min-height:44px;border:none;background:none;width:100%;text-align:left;font-family:var(--fb)}.sb-link:hover{color:var(--surface-alt);background:rgba(255,255,255,.04)}.sb-link.active{color:var(--surface-alt);background:rgba(255,255,255,.06);border-right:2px solid var(--accent)}.sb-link svg{width:18px;height:18px;flex-shrink:0;opacity:.5}.sb-link.active svg{opacity:1}.sb-badge{margin-left:auto;font-family:var(--fh);font-size:10px;background:var(--accent);color:#fff;padding:1px 7px;border-radius:var(--radius-full)}.sb-footer{padding:16px 24px;border-top:1px solid rgba(255,255,255,.06)}.sb-logout{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(248,250,252,.35);border:none;background:none;width:100%;padding:0}
+.main{margin-left:var(--sidebar-w);flex:1;min-height:100dvh}.topbar{height:var(--nav-h);background:var(--surface);border-bottom:1px solid var(--border-light);display:flex;align-items:center;padding:0 32px;justify-content:space-between;position:sticky;top:0;z-index:30}.topbar-title{font-family:var(--fh);font-size:16px;font-weight:600}.topbar-actions{display:flex;gap:8px;align-items:center}.topbar-btn{padding:7px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);font-family:var(--fh);font-size:12px;color:var(--on-2);min-height:36px}.content{padding:32px}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}.dash-stat{background:var(--surface);border-radius:var(--radius-lg);padding:24px;border:1px solid var(--border-light)}.ds-val{font-family:var(--fd);font-size:32px;line-height:1}.ds-label{font-size:12px;color:var(--on-3);margin-top:4px}.ds-trend{font-family:var(--fh);font-size:11px;margin-top:8px;display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:var(--radius-full)}.ds-up{background:var(--success-bg);color:var(--success)}.ds-warn{background:var(--warning-bg);color:var(--warning)}
+.dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:24px}.dash-card{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border-light);padding:24px}.dc-title{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}.dc-title .count{font-size:11px;color:var(--on-3);font-weight:400}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.tg-card{padding:16px;border-radius:var(--radius-md);border:1px solid var(--border-light);background:var(--surface-alt);transition:all .2s var(--ease);display:flex;gap:12px;align-items:flex-start;min-height:44px}.tg-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow-sm)}.tg-card.locked{opacity:.45;pointer-events:none}.tg-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}.tg-icon.green{background:var(--success-bg);color:var(--success)}.tg-icon.blue{background:var(--info-bg);color:var(--info)}.tg-icon.copper{background:var(--accent-bg);color:var(--accent)}.tg-info h4{font-family:var(--fh);font-size:13px;font-weight:500;margin-bottom:2px}.tg-info p{font-size:11px;color:var(--on-3);line-height:1.4}.tg-badge{font-family:var(--fh);font-size:9px;padding:2px 6px;border-radius:var(--radius-full);margin-top:4px;display:inline-block}.tgb-built{background:var(--success-bg);color:var(--success)}.tgb-soon{background:var(--warning-bg);color:var(--warning)}.tgb-planned{background:var(--surface-alt);color:var(--on-3);border:1px solid var(--border)}
+.activity-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-light)}.activity-item:last-child{border:none}.act-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}.act-text{font-size:13px;color:var(--on-2);line-height:1.5}.act-time{font-size:11px;color:var(--on-3);margin-top:2px}
+.note{padding:14px 16px;border-radius:var(--radius-md);background:var(--accent-bg);border:1px solid rgba(176,118,66,.15);font-size:13px;color:var(--on-2);margin-bottom:20px}.abaque-frame{width:100%;border:none;border-radius:var(--radius-lg);min-height:calc(100dvh - var(--nav-h) - 96px)}
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.dash-stats{grid-template-columns:repeat(2,1fr)}.dash-grid{grid-template-columns:1fr}.content{padding:20px}.topbar{padding:0 16px}.hamburger{display:flex!important}} .hamburger{display:none;align-items:center;justify-content:center;width:36px;height:36px;border:none;background:none;cursor:pointer;color:var(--on-surface)}
+</style>
+</head>
+<body>
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><svg viewBox="0 0 240 40" height="28" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg></div>
+    <h1>Espace Pro standardisé</h1>
+    <p class="sub">Version connectée au catalogue partagé du dashboard.</p>
+    <div class="login-field"><label for="login-email">Email</label><input type="email" id="login-email" placeholder="votre@email.com" autocomplete="email"></div>
+    <div class="login-field"><label for="login-pass">Mot de passe</label><input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"></div>
+    <div class="login-error" id="login-error"></div>
+    <button class="login-btn" onclick="doLogin()">Se connecter</button>
+    <p class="login-hint">Comptes de démonstration :<br><strong>admin@ascalis.fr</strong> / ascalis2026 (admin)<br><strong>client@demo.fr</strong> / demo2026 (client)</p>
+    <a href="index.html" class="login-site-link">&larr; Retour au site</a>
+  </div>
+</div>
+<div class="app" id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-logo"><svg viewBox="0 0 240 40" height="22" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#D4956A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="rgba(248,250,252,.6)" letter-spacing="4.5">SCALIS</text></svg></div>
+    <div class="sb-user"><div class="sb-avatar" id="sb-avatar">A</div><div><div class="sb-name" id="sb-name">Admin</div><div class="sb-role" id="sb-role">Consultant</div></div></div>
+    <nav class="sb-nav" id="sb-nav"></nav>
+    <div class="sb-footer"><button class="sb-logout" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Déconnexion</button></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <div class="topbar-title" id="topbar-title">Tableau de bord</div>
+      <div class="topbar-actions"><a href="index.html" class="topbar-btn">Voir le site</a><a href="dashboard.html" class="topbar-btn">Version actuelle</a></div>
+    </header>
+    <div class="content" id="page-content"></div>
+  </div>
+</div>
+<script type="module">
+import { getDashboardTools, getDashboardSummary } from './dashboard.catalog.js';
+
+const USERS=[
+  {email:'admin@ascalis.fr',pass:'ascalis2026',name:'Consultant ASCALIS',role:'admin',initials:'CA'},
+  {email:'client@demo.fr',pass:'demo2026',name:'Jean Dupont',role:'client',initials:'JD',company:'PME Aéro Demo'}
+];
+
+let currentUser=null;
+const ICONS={
+  dashboard:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+  abaque:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  tool:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>'
+};
+
+window.doLogin=function(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase();
+  const pass=document.getElementById('login-pass').value;
+  const user=USERS.find(u=>u.email===email&&u.pass===pass);
+  if(!user){document.getElementById('login-error').textContent='Email ou mot de passe incorrect.';return}
+  currentUser=user;
+  localStorage.setItem('ascalis_user_standardized',JSON.stringify(user));
+  showApp();
+}
+
+window.doLogout=function(){
+  currentUser=null;
+  localStorage.removeItem('ascalis_user_standardized');
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-error').textContent='';
+}
+
+function checkAuth(){
+  const stored=localStorage.getItem('ascalis_user_standardized');
+  if(stored){currentUser=JSON.parse(stored);showApp()}
+}
+
+function showApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').classList.add('active');
+  document.getElementById('sb-name').textContent=currentUser.name;
+  document.getElementById('sb-role').textContent=currentUser.role==='admin'?'Consultant — Admin':'Client';
+  document.getElementById('sb-avatar').textContent=currentUser.initials;
+  buildNav();
+  navigate('dashboard');
+}
+
+function navButton(pageId,label,icon,badge=''){
+  return `<button class="sb-link" data-page="${pageId}" onclick="window.navigate('${pageId}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">${icon}</svg>${label}${badge?`<span class="sb-badge">${badge}</span>`:''}</button>`;
+}
+
+function navAnchor(label,href,badge=''){
+  return `<a href="${href}" class="sb-link" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">${ICONS.tool}</svg>${label}${badge?`<span class="sb-badge">${badge}</span>`:''}</a>`;
+}
+
+function buildNav(){
+  const { pro, free } = getDashboardTools(currentUser.role);
+  let html='';
+  html+=`<div class="sb-section">Principal</div>`;
+  html+=navButton('dashboard','Tableau de bord',ICONS.dashboard);
+  if(currentUser.role==='admin') html+=navButton('abaque','Abaque des outils',ICONS.abaque,'99');
+  html+=`<div class="sb-section">Outils Pro</div>`;
+  html+=pro.map(tool=>navAnchor(tool.name,tool.link,tool.status==='soon'?'NEW':'' )).join('');
+  html+=`<div class="sb-section">Outils Gratuits</div>`;
+  html+=free.map(tool=>tool.link?navAnchor(tool.name,tool.link,tool.status==='soon'?'NEW':'' ):`<div class="sb-link" aria-disabled="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">${ICONS.tool}</svg>${tool.name}<span class="sb-badge">SOON</span></div>`).join('');
+  document.getElementById('sb-nav').innerHTML=html;
+}
+
+window.navigate=function(pageId){
+  document.querySelectorAll('.sb-link[data-page]').forEach(l=>l.classList.remove('active'));
+  const activeLink=document.querySelector(`.sb-link[data-page="${pageId}"]`);
+  if(activeLink) activeLink.classList.add('active');
+  if(pageId==='dashboard') renderDashboard();
+  else if(pageId==='abaque') renderAbaque();
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+function renderToolCard(tool){
+  const badge = tool.status==='built'
+    ? '<span class="tg-badge tgb-built">Disponible</span>'
+    : tool.status==='soon'
+      ? '<span class="tg-badge tgb-soon">Bientôt</span>'
+      : '<span class="tg-badge tgb-planned">Planifié</span>';
+  const wrapperStart = tool.link && tool.status==='built' ? `<a href="${tool.link}" target="_blank" rel="noopener" style="display:contents">` : '';
+  const wrapperEnd = tool.link && tool.status==='built' ? '</a>' : '';
+  return `${wrapperStart}<div class="tg-card ${tool.status!=='built'?'locked':''}"><div class="tg-icon ${tool.icon}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18">${ICONS.tool}</svg></div><div class="tg-info"><h4>${tool.name}</h4><p>${tool.desc}</p>${badge}</div></div>${wrapperEnd}`;
+}
+
+function renderDashboard(){
+  document.getElementById('topbar-title').textContent='Tableau de bord standardisé';
+  const { pro, free } = getDashboardTools(currentUser.role);
+  const summary = getDashboardSummary(currentUser.role);
+  const isAdmin = currentUser.role==='admin';
+  document.getElementById('page-content').innerHTML=`
+    <div class="note">Cette version branche les cartes et les KPI sur <strong>dashboard.catalog.js</strong>. Les ajouts d'outils n'ont plus besoin d'être recopiés dans plusieurs tableaux du dashboard.</div>
+    <div class="dash-stats">
+      <div class="dash-stat"><div class="ds-val" style="color:var(--primary)">${summary.totalCount}</div><div class="ds-label">Outils visibles</div><span class="ds-trend ds-up">Catalogue partagé</span></div>
+      <div class="dash-stat"><div class="ds-val" style="color:var(--success)">${summary.builtCount}</div><div class="ds-label">Disponibles</div><span class="ds-trend ds-up">Dérivé du registre</span></div>
+      <div class="dash-stat"><div class="ds-val" style="color:var(--warning)">${summary.pendingCount}</div><div class="ds-label">À finir</div><span class="ds-trend ds-warn">Soon + Planned</span></div>
+      <div class="dash-stat"><div class="ds-val" style="color:var(--accent)">${summary.proCount}</div><div class="ds-label">Outils Pro</div><span class="ds-trend ds-up">${isAdmin?'Vue admin':'Vue client'}</span></div>
+    </div>
+    <div class="dash-grid">
+      <div>
+        <div class="dash-card"><div class="dc-title">Outils Pro <span class="count">${pro.length} outils</span></div><div class="tool-grid">${pro.map(renderToolCard).join('')}</div></div>
+        <div class="dash-card" style="margin-top:24px"><div class="dc-title">Outils Gratuits <span class="count">${free.length} outils</span></div><div class="tool-grid">${free.map(renderToolCard).join('')}</div></div>
+      </div>
+      <div>
+        <div class="dash-card"><div class="dc-title">Activité récente</div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--success)"></div><div><div class="act-text">Catalogue dashboard centralisé dans un fichier partagé</div><div class="act-time">Branche standardisée</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--success)"></div><div><div class="act-text">KPI et cartes calculés depuis la même source</div><div class="act-time">Plus de duplication</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--accent)"></div><div><div class="act-text">Filtrage admin/client dérivé du registre</div><div class="act-time">Même logique partout</div></div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--info)"></div><div><div class="act-text">Version actuelle conservée pour comparaison</div><div class="act-time">Sans casse</div></div></div>
+        </div>
+        ${isAdmin?`<div class="dash-card" style="margin-top:16px"><div class="dc-title">Accès rapide admin</div>
+          <a href="abaque-outils.html" target="_blank" rel="noopener" class="tg-card" style="margin-bottom:8px"><div class="tg-icon copper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="tg-info"><h4>Abaque complet</h4><p>99 outils — vue détaillée avec filtres</p></div></a>
+          <a href="dashboard.html" target="_blank" rel="noopener" class="tg-card"><div class="tg-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="tg-info"><h4>Dashboard actuel</h4><p>Référence avant bascule complète</p></div></a>
+        </div>`:''}
+      </div>
+    </div>`;
+}
+
+function renderAbaque(){
+  if(currentUser.role!=='admin'){navigate('dashboard');return}
+  document.getElementById('topbar-title').textContent='Abaque des outils';
+  document.getElementById('page-content').innerHTML='<iframe src="abaque-outils.html" class="abaque-frame" title="Abaque des outils ASCALIS"></iframe>';
+}
+
+checkAuth();
+</script>
+</body>
+</html>
