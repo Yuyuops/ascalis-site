@@ -1,0 +1,48 @@
+{
+  "audit": {
+    "id": "audit_001",
+    "project_id": "proj_demo_001",
+    "process_id": "proc_pr5_001",
+    "title": "Audit interne PR5",
+    "audit_type": "internal",
+    "status": "completed"
+  },
+  "audit_finding": {
+    "id": "finding_001",
+    "audit_id": "audit_001",
+    "title": "Absence de suivi formalisé des actions",
+    "severity": "high",
+    "status": "open"
+  },
+  "review": {
+    "id": "review_001",
+    "project_id": "proj_demo_001",
+    "process_id": "proc_pr5_001",
+    "review_type": "process",
+    "title": "Revue processus mensuelle",
+    "status": "completed"
+  },
+  "review_decision": {
+    "id": "decision_001",
+    "review_id": "review_001",
+    "decision_text": "Renforcer la relance des actions critiques avant revue de direction",
+    "status": "open"
+  },
+  "supplier": {
+    "id": "supplier_001",
+    "organization_id": "org_demo_001",
+    "name": "Fournisseur Démo",
+    "status": "active",
+    "risk_level": "medium"
+  },
+  "supplier_assessment": {
+    "id": "supplier_assessment_001",
+    "supplier_id": "supplier_001",
+    "assessment_date": "2026-04-01",
+    "quality_score": 82,
+    "delivery_score": 74,
+    "cost_score": 79,
+    "service_score": 88,
+    "recommendation": "Maintenir sous surveillance renforcée"
+  }
+}
