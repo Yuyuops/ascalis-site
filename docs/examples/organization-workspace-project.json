@@ -1,0 +1,25 @@
+{
+  "organization": {
+    "id": "org_demo_001",
+    "name": "Client Démo ASCALIS",
+    "slug": "client-demo-ascalis",
+    "status": "active"
+  },
+  "workspace": {
+    "id": "ws_demo_001",
+    "organization_id": "org_demo_001",
+    "name": "Qualité & Performance",
+    "slug": "qualite-performance",
+    "status": "active"
+  },
+  "project": {
+    "id": "proj_demo_001",
+    "organization_id": "org_demo_001",
+    "workspace_id": "ws_demo_001",
+    "name": "Projet SMQ pilote",
+    "code": "PMAQSE-001",
+    "offer_id": "offer-structuration-smq",
+    "pathway_id": "pathway-performance-pilotage",
+    "status": "active"
+  }
+}
