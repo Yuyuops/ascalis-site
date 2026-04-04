@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCALIS — Matrice de la qualité</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#0F1A2E;--accent:#B07642;--accent-bg:rgba(176,118,66,.08);--surface:#FFFFFF;--surface-alt:#F8FAFC;--warm:#FAF9F6;--on:#020617;--on-2:#475569;--on-3:#6B7280;--border:#E2E8F0;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--warm);color:var(--on);padding:24px}
+.wrap{max-width:1180px;margin:0 auto}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.top a{font-family:var(--fh);font-size:13px;color:var(--accent);text-decoration:none}
+h1{font-family:var(--fh);font-size:28px;color:var(--primary);margin-bottom:8px}
+.lead{color:var(--on-2);line-height:1.7;margin-bottom:18px;max-width:780px}
+.note{padding:14px 16px;border-radius:12px;background:var(--accent-bg);border:1px solid rgba(176,118,66,.15);font-size:14px;color:var(--on-2);margin-bottom:20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px}
+.card h2{font-family:var(--fh);font-size:16px;color:var(--primary);margin-bottom:8px}
+.card p{font-size:14px;color:var(--on-2);line-height:1.7}
+table{width:100%;border-collapse:separate;border-spacing:0;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+th,td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:14px;text-align:left;vertical-align:top}
+th{font-family:var(--fh);font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--on-3);background:var(--surface-alt)}
+tr:last-child td{border-bottom:none}
+textarea{width:100%;min-height:72px;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--surface-alt)}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="parcours.html">← Retour aux parcours</a>
+    <a href="dashboard.html">Espace pro</a>
+  </div>
+  <h1>Matrice de la qualité</h1>
+  <p class="lead">Prototype pour traduire la voix du client en exigences structurées, puis en décisions internes. La logique est simple : besoin client → exigence attendue → décision de valeur.</p>
+  <div class="note">Usage recommandé : après le parcours client et le diagramme de Kano. Si tu utilises cette matrice avant d’avoir clarifié les attentes client, tu ne fais que déplacer du flou dans un tableau plus propre.</div>
+  <div class="grid">
+    <article class="card"><h2>Pourquoi</h2><p>Éviter les arbitrages au feeling sur ce qui compte vraiment pour le client. La matrice force la traduction du besoin en exigence puis en action.</p></article>
+    <article class="card"><h2>Quand</h2><p>Quand les besoins client sont identifiés mais encore mal traduits en critères concrets de produit, service ou expérience.</p></article>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Besoin / attente client</th><th>Importance</th><th>Exigence traduite</th><th>Décision / action à prendre</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><textarea>Réponse rapide et lisible au client</textarea></td><td>Élevée</td><td><textarea>Délai de réponse ≤ 24h, contenu standardisé, responsable identifié</textarea></td><td><textarea>Créer un workflow et une trame de réponse</textarea></td></tr>
+      <tr><td><textarea>Moins de surprises en livraison / chantier</textarea></td><td>Élevée</td><td><textarea>Jalons visibles, validation documentée, suivi d’écarts</textarea></td><td><textarea>Relier le tableau de bord et le plan d’action aux jalons client</textarea></td></tr>
+      <tr><td><textarea>Plus de cohérence entre promesse commerciale et exécution</textarea></td><td>Moyenne</td><td><textarea>Passage d’information structuré vente → opérationnel</textarea></td><td><textarea>Créer une revue d’entrée et une check-list de transfert</textarea></td></tr>
+    </tbody>
+  </table>
+</div>
+<script type="module" src="./tool-context-panel.js"></script>
+</body>
+</html>
