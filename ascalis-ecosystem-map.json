@@ -1,0 +1,1486 @@
+{
+  "project": {
+    "name": "ASCALIS",
+    "version": "ecosystem-v1",
+    "architecture": "static-html-same-level",
+    "entryPublic": "ascalis-site.html",
+    "entryPro": "dashboard.html",
+    "toolIndex": "abaque-outils.html",
+    "navigator": "dmaic-navigator.html"
+  },
+  "designSystem": {
+    "mustPreserve": true,
+    "fonts": [
+      "Lexend",
+      "Source Sans 3",
+      "Instrument Serif"
+    ],
+    "colors": {
+      "primary": "#0F1A2E",
+      "accent": "#B07642",
+      "surfaceWarm": "#FAF9F6"
+    }
+  },
+  "globalFlow": [
+    "probleme",
+    "diagnostic",
+    "analyse",
+    "decision",
+    "action",
+    "controle",
+    "revue"
+  ],
+  "sitePagesToCreate": [
+    {
+      "file": "parcours.html",
+      "visibility": "public",
+      "role": "hub public d’orientation par problème, offre et parcours"
+    },
+    {
+      "file": "orchestrateur-outils.html",
+      "visibility": "pro",
+      "role": "hub pro d’orchestration des outils et parcours"
+    }
+  ],
+  "entryModes": [
+    {
+      "id": "problem",
+      "label": "Entrée par problème"
+    },
+    {
+      "id": "offer",
+      "label": "Entrée par offre"
+    },
+    {
+      "id": "stage",
+      "label": "Entrée par étape méthodologique"
+    }
+  ],
+  "sharedMetaFields": [
+    "projectId",
+    "offerId",
+    "pathwayId",
+    "processId",
+    "issueId",
+    "actionId",
+    "kpiId",
+    "auditId",
+    "documentId",
+    "supplierId",
+    "reviewId",
+    "customerNeedId",
+    "problemStatement",
+    "owner",
+    "date"
+  ],
+  "blocksRequiredOnEveryTool": [
+    "whyUseThisTool",
+    "whenToUseThisTool",
+    "inputsNeeded",
+    "outputsProduced",
+    "linkedOffers",
+    "linkedPathways",
+    "previousToolRecommended",
+    "nextToolRecommended",
+    "typicalStartingProblem"
+  ],
+  "offers": [
+    {
+      "id": "offer-diagnostic-flash-qualite",
+      "name": "Diagnostic Flash Qualité",
+      "objective": "Qualifier rapidement les dérives, les écarts et les priorités d’action",
+      "symptoms": [
+        "non-conformités diffuses",
+        "manque de visibilité terrain",
+        "besoin d’un état des lieux rapide"
+      ],
+      "linkedTools": [
+        "diagnostic-terrain.html",
+        "checklist-audit.html",
+        "grille-audit.html",
+        "calculateur-cnq.html",
+        "matrice-priorisation.html",
+        "plan-action-central-ascalis.html"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem",
+        "pathway-suppliers"
+      ]
+    },
+    {
+      "id": "offer-remise-conformite-documentaire",
+      "name": "Remise en conformité documentaire",
+      "objective": "Structurer et fiabiliser le système documentaire",
+      "symptoms": [
+        "documents dispersés",
+        "GED floue",
+        "procédures peu maîtrisées",
+        "audit à venir"
+      ],
+      "linkedTools": [
+        "score-documentaire.html",
+        "matrice-documentaire-ascalis.html",
+        "cartographie-processus-ascalis.html",
+        "fiche-identite-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ],
+      "linkedPathways": [
+        "pathway-documentation-smq"
+      ]
+    },
+    {
+      "id": "offer-nc-racine",
+      "name": "NC récurrentes : traitement à la racine",
+      "objective": "Traiter les causes racines et éviter la récidive",
+      "symptoms": [
+        "réclamations récurrentes",
+        "défauts qui reviennent",
+        "actions correctives inefficaces"
+      ],
+      "linkedTools": [
+        "diagnostic-terrain.html",
+        "pareto.html",
+        "ishikawa.html",
+        "fiche-8d.html",
+        "plan-action-central-ascalis.html",
+        "tableau-bord-qualite-ascalis.html",
+        "revue-processus-ascalis.html"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem"
+      ]
+    },
+    {
+      "id": "offer-structuration-smq",
+      "name": "Structuration du SMQ",
+      "objective": "Construire un système de management qualité pilotable",
+      "symptoms": [
+        "pilotage diffus",
+        "processus peu formalisés",
+        "revues peu utiles"
+      ],
+      "linkedTools": [
+        "cartographie-processus-ascalis.html",
+        "fiche-identite-processus-ascalis.html",
+        "matrice-hoshin-ascalis.html",
+        "tableau-bord-qualite-ascalis.html",
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ],
+      "linkedPathways": [
+        "pathway-documentation-smq",
+        "pathway-performance-pilotage"
+      ]
+    },
+    {
+      "id": "offer-automatisation-qualite",
+      "name": "Automatisation des processus qualité",
+      "objective": "Identifier et prioriser les leviers d’automatisation",
+      "symptoms": [
+        "surcharge administrative",
+        "double saisie",
+        "faible maturité digitale"
+      ],
+      "linkedTools": [
+        "audit-maturite-digitale-feuille-route-ascalis.html",
+        "matrice-croissance-ascalis.html",
+        "simulateur-roi.html",
+        "matrice-documentaire-ascalis.html",
+        "tableau-bord-qualite-ascalis.html"
+      ],
+      "linkedPathways": [
+        "pathway-digital-maturity"
+      ]
+    },
+    {
+      "id": "offer-performance-continue",
+      "name": "Accompagnement performance continue",
+      "objective": "Installer une boucle durable de pilotage et d’amélioration",
+      "symptoms": [
+        "actions peu suivies",
+        "KPI peu utiles",
+        "revues sans impact"
+      ],
+      "linkedTools": [
+        "tableau-bord-qualite-ascalis.html",
+        "plan-action-central-ascalis.html",
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html",
+        "calculateur-cnq.html",
+        "matrice-hoshin-ascalis.html"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem",
+        "pathway-performance-pilotage"
+      ]
+    },
+    {
+      "id": "offer-diagnostic-performance-maturite-numerique",
+      "name": "Diagnostic Performance & Maturité Numérique",
+      "objective": "Cadrer la transformation par la valeur et la maturité réelle",
+      "symptoms": [
+        "projets digitaux flous",
+        "priorités mal arbitrées",
+        "difficulté à justifier les investissements"
+      ],
+      "linkedTools": [
+        "diagnostic-dirigeant.html",
+        "audit-maturite-digitale-feuille-route-ascalis.html",
+        "matrice-croissance-ascalis.html",
+        "simulateur-roi.html",
+        "parcours-client-ascalis.html",
+        "diagramme-kano-ascalis.html"
+      ],
+      "linkedPathways": [
+        "pathway-digital-maturity",
+        "pathway-customer-value"
+      ]
+    },
+    {
+      "id": "offer-structuration-operationnelle-pme",
+      "name": "Structuration opérationnelle PME",
+      "objective": "Rendre l’organisation plus lisible, pilotable et robuste",
+      "symptoms": [
+        "responsabilités floues",
+        "processus mal reliés",
+        "pilotage faible"
+      ],
+      "linkedTools": [
+        "cartographie-processus-ascalis.html",
+        "fiche-identite-processus-ascalis.html",
+        "matrice-hoshin-ascalis.html",
+        "tableau-bord-qualite-ascalis.html",
+        "selection-suivi-fournisseurs-ascalis.html",
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ],
+      "linkedPathways": [
+        "pathway-performance-pilotage",
+        "pathway-suppliers"
+      ]
+    }
+  ],
+  "pathways": [
+    {
+      "id": "pathway-quality-problem",
+      "name": "Problème qualité / NC / réclamation",
+      "entryProblems": [
+        "non-conformités récurrentes",
+        "réclamations client",
+        "dérives qualité",
+        "causes racines mal identifiées"
+      ],
+      "startTool": "diagnostic-terrain.html",
+      "steps": [
+        "diagnostic-terrain.html",
+        "checklist-audit.html",
+        "grille-audit.html",
+        "pareto.html",
+        "ishikawa.html",
+        "fiche-8d.html",
+        "plan-action-central-ascalis.html",
+        "tableau-bord-qualite-ascalis.html",
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite",
+        "offer-nc-racine",
+        "offer-performance-continue"
+      ]
+    },
+    {
+      "id": "pathway-documentation-smq",
+      "name": "Documentation / conformité / SMQ",
+      "entryProblems": [
+        "documentation désorganisée",
+        "SMQ flou",
+        "conformité fragile",
+        "processus peu formalisés"
+      ],
+      "startTool": "score-documentaire.html",
+      "steps": [
+        "score-documentaire.html",
+        "matrice-documentaire-ascalis.html",
+        "cartographie-processus-ascalis.html",
+        "fiche-identite-processus-ascalis.html",
+        "plan-action-central-ascalis.html",
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-remise-conformite-documentaire",
+        "offer-structuration-smq"
+      ]
+    },
+    {
+      "id": "pathway-performance-pilotage",
+      "name": "Pilotage de la performance",
+      "entryProblems": [
+        "KPI peu utiles",
+        "manque d’alignement",
+        "actions mal suivies",
+        "gouvernance faible"
+      ],
+      "startTool": "matrice-hoshin-ascalis.html",
+      "steps": [
+        "matrice-hoshin-ascalis.html",
+        "cartographie-processus-ascalis.html",
+        "fiche-identite-processus-ascalis.html",
+        "tableau-bord-qualite-ascalis.html",
+        "plan-action-central-ascalis.html",
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-structuration-smq",
+        "offer-performance-continue",
+        "offer-structuration-operationnelle-pme"
+      ]
+    },
+    {
+      "id": "pathway-digital-maturity",
+      "name": "Maturité digitale / transformation",
+      "entryProblems": [
+        "maturité digitale faible",
+        "priorités mal cadrées",
+        "décisions d’investissement floues"
+      ],
+      "startTool": "diagnostic-dirigeant.html",
+      "steps": [
+        "diagnostic-dirigeant.html",
+        "audit-maturite-digitale-feuille-route-ascalis.html",
+        "matrice-croissance-ascalis.html",
+        "simulateur-roi.html",
+        "matrice-hoshin-ascalis.html",
+        "plan-action-central-ascalis.html",
+        "tableau-bord-qualite-ascalis.html",
+        "revue-direction-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-performance-maturite-numerique",
+        "offer-automatisation-qualite",
+        "offer-structuration-operationnelle-pme"
+      ]
+    },
+    {
+      "id": "pathway-suppliers",
+      "name": "Fournisseurs / sous-traitants",
+      "entryProblems": [
+        "fournisseurs peu fiables",
+        "sous-traitants mal évalués",
+        "performance irrégulière"
+      ],
+      "startTool": "selection-suivi-fournisseurs-ascalis.html",
+      "steps": [
+        "selection-suivi-fournisseurs-ascalis.html",
+        "comparateur-statistique-fournisseurs-ascalis.html",
+        "plan-controle.html",
+        "tableau-bord-qualite-ascalis.html",
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite",
+        "offer-structuration-smq",
+        "offer-structuration-operationnelle-pme"
+      ]
+    },
+    {
+      "id": "pathway-customer-value",
+      "name": "Voix du client / valeur / expérience",
+      "entryProblems": [
+        "attentes client floues",
+        "irritants parcours",
+        "priorités client mal traduites"
+      ],
+      "startTool": "parcours-client-ascalis.html",
+      "steps": [
+        "parcours-client-ascalis.html",
+        "diagramme-kano-ascalis.html",
+        "matrice-qualite.html",
+        "matrice-croissance-ascalis.html",
+        "plan-action-central-ascalis.html",
+        "tableau-bord-qualite-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-performance-maturite-numerique",
+        "offer-structuration-operationnelle-pme",
+        "offer-performance-continue"
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "file": "diagnostic-dirigeant.html",
+      "title": "Diagnostic dirigeant",
+      "status": "planned",
+      "visibility": "public",
+      "stage": "probleme",
+      "role": "Qualifier le besoin, reformuler le problème, identifier le niveau de maturité perçu",
+      "typicalStartingProblem": "Besoin flou, difficultés de priorisation, volonté de transformation",
+      "inputsNeeded": [
+        "symptômes",
+        "contexte entreprise",
+        "enjeux de direction"
+      ],
+      "outputsProduced": [
+        "problème reformulé",
+        "niveau de maturité initial",
+        "axe prioritaire"
+      ],
+      "previousToolRecommended": null,
+      "nextToolRecommended": "audit-maturite-digitale-feuille-route-ascalis.html",
+      "alternativeNextTools": [
+        "diagnostic-terrain.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-performance-maturite-numerique",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-digital-maturity"
+      ]
+    },
+    {
+      "file": "diagnostic-terrain.html",
+      "title": "Diagnostic terrain",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "diagnostic",
+      "role": "Faire l’état des lieux rapide sur le terrain",
+      "typicalStartingProblem": "Dérive qualité, réclamation, performance instable",
+      "inputsNeeded": [
+        "problème initial",
+        "zone ou processus concerné",
+        "observations terrain"
+      ],
+      "outputsProduced": [
+        "constats",
+        "écarts",
+        "pistes de creusement"
+      ],
+      "previousToolRecommended": null,
+      "nextToolRecommended": "checklist-audit.html",
+      "alternativeNextTools": [
+        "grille-audit.html",
+        "pareto.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite",
+        "offer-nc-racine"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem"
+      ]
+    },
+    {
+      "file": "checklist-audit.html",
+      "title": "Checklist audit",
+      "status": "existing",
+      "visibility": "free",
+      "stage": "diagnostic",
+      "role": "Contrôler rapidement des points standards",
+      "typicalStartingProblem": "Besoin de vérifier une zone ou un standard",
+      "inputsNeeded": [
+        "périmètre",
+        "critères de contrôle"
+      ],
+      "outputsProduced": [
+        "écarts simples",
+        "points conformes",
+        "points à approfondir"
+      ],
+      "previousToolRecommended": "diagnostic-terrain.html",
+      "nextToolRecommended": "grille-audit.html",
+      "alternativeNextTools": [
+        "plan-action-central-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem"
+      ]
+    },
+    {
+      "file": "grille-audit.html",
+      "title": "Grille audit",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "diagnostic",
+      "role": "Évaluer plus finement un processus, une activité ou un fournisseur",
+      "typicalStartingProblem": "Diagnostic à structurer avec critères et scores",
+      "inputsNeeded": [
+        "checklist",
+        "référentiel",
+        "critères d’évaluation"
+      ],
+      "outputsProduced": [
+        "score",
+        "constats",
+        "écarts",
+        "recommandations"
+      ],
+      "previousToolRecommended": "checklist-audit.html",
+      "nextToolRecommended": "plan-action-central-ascalis.html",
+      "alternativeNextTools": [
+        "revue-processus-ascalis.html",
+        "selection-suivi-fournisseurs-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite",
+        "offer-structuration-smq"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem",
+        "pathway-suppliers"
+      ]
+    },
+    {
+      "file": "score-documentaire.html",
+      "title": "Score documentaire",
+      "status": "existing",
+      "visibility": "free",
+      "stage": "diagnostic",
+      "role": "Mesurer la robustesse documentaire",
+      "typicalStartingProblem": "Documentation désorganisée, audit proche, GED floue",
+      "inputsNeeded": [
+        "documents existants",
+        "règles de gestion",
+        "constats utilisateurs"
+      ],
+      "outputsProduced": [
+        "score",
+        "écarts documentaires",
+        "points faibles"
+      ],
+      "previousToolRecommended": null,
+      "nextToolRecommended": "matrice-documentaire-ascalis.html",
+      "alternativeNextTools": [],
+      "linkedOffers": [
+        "offer-remise-conformite-documentaire"
+      ],
+      "linkedPathways": [
+        "pathway-documentation-smq"
+      ]
+    },
+    {
+      "file": "matrice-documentaire-ascalis.html",
+      "title": "Matrice documentaire",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "decision",
+      "role": "Structurer la base documentaire et les règles de gestion",
+      "typicalStartingProblem": "Documents dispersés, responsabilités floues",
+      "inputsNeeded": [
+        "score documentaire",
+        "inventaire des documents",
+        "règles d’archivage"
+      ],
+      "outputsProduced": [
+        "référentiel documentaire",
+        "matrice de gestion",
+        "base structurée"
+      ],
+      "previousToolRecommended": "score-documentaire.html",
+      "nextToolRecommended": "cartographie-processus-ascalis.html",
+      "alternativeNextTools": [
+        "audit-maturite-digitale-feuille-route-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-remise-conformite-documentaire",
+        "offer-automatisation-qualite"
+      ],
+      "linkedPathways": [
+        "pathway-documentation-smq",
+        "pathway-digital-maturity"
+      ]
+    },
+    {
+      "file": "cartographie-processus-ascalis.html",
+      "title": "Cartographie des processus",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "decision",
+      "role": "Structurer l’organisation par processus direction / métiers / support",
+      "typicalStartingProblem": "Organisation peu lisible, responsabilités floues, SMQ diffus",
+      "inputsNeeded": [
+        "vision client",
+        "activités majeures",
+        "organisation",
+        "périmètre"
+      ],
+      "outputsProduced": [
+        "liste de processus",
+        "macro structure pilotable"
+      ],
+      "previousToolRecommended": "matrice-documentaire-ascalis.html",
+      "nextToolRecommended": "fiche-identite-processus-ascalis.html",
+      "alternativeNextTools": [
+        "matrice-hoshin-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-remise-conformite-documentaire",
+        "offer-structuration-smq",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-documentation-smq",
+        "pathway-performance-pilotage"
+      ]
+    },
+    {
+      "file": "fiche-identite-processus-ascalis.html",
+      "title": "Fiche d’identité processus",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "decision",
+      "role": "Décrire le processus pour le piloter",
+      "typicalStartingProblem": "Processus identifié mais non piloté",
+      "inputsNeeded": [
+        "cartographie",
+        "pilote",
+        "finalité",
+        "étapes",
+        "risques",
+        "KPI"
+      ],
+      "outputsProduced": [
+        "fiche processus",
+        "standard de pilotage",
+        "base pour revue"
+      ],
+      "previousToolRecommended": "cartographie-processus-ascalis.html",
+      "nextToolRecommended": "plan-action-central-ascalis.html",
+      "alternativeNextTools": [
+        "tableau-bord-qualite-ascalis.html",
+        "revue-processus-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-remise-conformite-documentaire",
+        "offer-structuration-smq",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-documentation-smq",
+        "pathway-performance-pilotage"
+      ]
+    },
+    {
+      "file": "pareto.html",
+      "title": "Pareto",
+      "status": "planned",
+      "visibility": "pro",
+      "stage": "analyse",
+      "role": "Hiérarchiser les défauts, causes ou pertes",
+      "typicalStartingProblem": "Trop de problèmes à traiter, besoin de prioriser",
+      "inputsNeeded": [
+        "données fréquence",
+        "données impact"
+      ],
+      "outputsProduced": [
+        "priorités vitales",
+        "top causes / top défauts"
+      ],
+      "previousToolRecommended": "diagnostic-terrain.html",
+      "nextToolRecommended": "ishikawa.html",
+      "alternativeNextTools": [
+        "fiche-8d.html",
+        "plan-action-central-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite",
+        "offer-nc-racine"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem"
+      ]
+    },
+    {
+      "file": "ishikawa.html",
+      "title": "Ishikawa",
+      "status": "planned",
+      "visibility": "pro",
+      "stage": "analyse",
+      "role": "Explorer et structurer les causes racines",
+      "typicalStartingProblem": "Cause non comprise, problème récurrent",
+      "inputsNeeded": [
+        "problème priorisé",
+        "brainstorm causes",
+        "faits terrain"
+      ],
+      "outputsProduced": [
+        "arbre causes",
+        "hypothèses structurées"
+      ],
+      "previousToolRecommended": "pareto.html",
+      "nextToolRecommended": "fiche-8d.html",
+      "alternativeNextTools": [
+        "plan-action-central-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-nc-racine"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem"
+      ]
+    },
+    {
+      "file": "fiche-8d.html",
+      "title": "Fiche 8D",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "decision",
+      "role": "Traiter un problème récurrent jusqu’à validation",
+      "typicalStartingProblem": "Problème récurrent ou critique nécessitant méthode robuste",
+      "inputsNeeded": [
+        "problème qualifié",
+        "causes",
+        "équipe",
+        "actions candidates"
+      ],
+      "outputsProduced": [
+        "plan correctif",
+        "plan préventif",
+        "responsabilités",
+        "validation de clôture"
+      ],
+      "previousToolRecommended": "ishikawa.html",
+      "nextToolRecommended": "plan-action-central-ascalis.html",
+      "alternativeNextTools": [
+        "tableau-bord-qualite-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-nc-racine"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem"
+      ]
+    },
+    {
+      "file": "calculateur-cnq.html",
+      "title": "Calculateur CNQ",
+      "status": "existing",
+      "visibility": "free",
+      "stage": "analyse",
+      "role": "Objectiver le coût de non-qualité",
+      "typicalStartingProblem": "Problème qualité non encore chiffré",
+      "inputsNeeded": [
+        "rebuts",
+        "retouches",
+        "temps perdu",
+        "réclamations",
+        "avoirs"
+      ],
+      "outputsProduced": [
+        "coût global",
+        "poids économique",
+        "base d’arbitrage"
+      ],
+      "previousToolRecommended": "diagnostic-terrain.html",
+      "nextToolRecommended": "matrice-priorisation.html",
+      "alternativeNextTools": [
+        "plan-action-central-ascalis.html",
+        "simulateur-roi.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite",
+        "offer-performance-continue"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem",
+        "pathway-performance-pilotage"
+      ]
+    },
+    {
+      "file": "matrice-priorisation.html",
+      "title": "Matrice de priorisation",
+      "status": "existing",
+      "visibility": "free",
+      "stage": "decision",
+      "role": "Choisir quoi traiter d’abord",
+      "typicalStartingProblem": "Trop d’actions ou d’idées en concurrence",
+      "inputsNeeded": [
+        "liste de problèmes",
+        "impacts",
+        "efforts",
+        "urgences"
+      ],
+      "outputsProduced": [
+        "ordre de priorité",
+        "choix des actions"
+      ],
+      "previousToolRecommended": "calculateur-cnq.html",
+      "nextToolRecommended": "plan-action-central-ascalis.html",
+      "alternativeNextTools": [],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem"
+      ]
+    },
+    {
+      "file": "plan-action-central-ascalis.html",
+      "title": "Plan d’action central",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "action",
+      "role": "Centraliser toutes les actions et leur suivi",
+      "typicalStartingProblem": "Constats nombreux, actions dispersées, suivi faible",
+      "inputsNeeded": [
+        "écarts",
+        "décisions",
+        "priorités",
+        "pilotes",
+        "échéances",
+        "KPI liés"
+      ],
+      "outputsProduced": [
+        "registre d’actions",
+        "avancement",
+        "retards",
+        "pilotage central"
+      ],
+      "previousToolRecommended": "fiche-8d.html",
+      "nextToolRecommended": "tableau-bord-qualite-ascalis.html",
+      "alternativeNextTools": [
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite",
+        "offer-nc-racine",
+        "offer-structuration-smq",
+        "offer-automatisation-qualite",
+        "offer-performance-continue",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem",
+        "pathway-documentation-smq",
+        "pathway-performance-pilotage",
+        "pathway-digital-maturity",
+        "pathway-customer-value"
+      ]
+    },
+    {
+      "file": "tableau-bord-qualite-ascalis.html",
+      "title": "Tableau de bord qualité",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "controle",
+      "role": "Mesurer les résultats, tendances et statuts",
+      "typicalStartingProblem": "Actions lancées mais résultats peu visibles",
+      "inputsNeeded": [
+        "KPI",
+        "cibles",
+        "valeurs actuelles",
+        "statuts",
+        "tendances"
+      ],
+      "outputsProduced": [
+        "vue pilotage",
+        "indicateurs agrégés",
+        "alertes"
+      ],
+      "previousToolRecommended": "plan-action-central-ascalis.html",
+      "nextToolRecommended": "revue-processus-ascalis.html",
+      "alternativeNextTools": [
+        "revue-direction-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-nc-racine",
+        "offer-structuration-smq",
+        "offer-automatisation-qualite",
+        "offer-performance-continue",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem",
+        "pathway-performance-pilotage",
+        "pathway-digital-maturity",
+        "pathway-suppliers",
+        "pathway-customer-value"
+      ]
+    },
+    {
+      "file": "revue-processus-ascalis.html",
+      "title": "Revue de processus",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "revue",
+      "role": "Faire le point factuel sur l’efficacité d’un processus",
+      "typicalStartingProblem": "Besoin de consolider résultats, incidents, audits et actions sur un processus",
+      "inputsNeeded": [
+        "fiche processus",
+        "KPI",
+        "actions",
+        "NC",
+        "audits",
+        "retours"
+      ],
+      "outputsProduced": [
+        "bilan processus",
+        "décisions locales",
+        "nouvelles actions"
+      ],
+      "previousToolRecommended": "tableau-bord-qualite-ascalis.html",
+      "nextToolRecommended": "revue-direction-ascalis.html",
+      "alternativeNextTools": [
+        "plan-action-central-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-nc-racine",
+        "offer-structuration-smq",
+        "offer-performance-continue",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem",
+        "pathway-documentation-smq",
+        "pathway-performance-pilotage",
+        "pathway-suppliers"
+      ]
+    },
+    {
+      "file": "revue-direction-ascalis.html",
+      "title": "Revue de direction",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "revue",
+      "role": "Arbitrer au niveau système qualité global",
+      "typicalStartingProblem": "Besoin de décisions système, ressources, arbitrages direction",
+      "inputsNeeded": [
+        "synthèses de revues processus",
+        "tableau de bord",
+        "audits",
+        "satisfaction",
+        "ressources",
+        "risques"
+      ],
+      "outputsProduced": [
+        "décisions direction",
+        "orientations",
+        "arbitrages",
+        "ressources validées"
+      ],
+      "previousToolRecommended": "revue-processus-ascalis.html",
+      "nextToolRecommended": "matrice-hoshin-ascalis.html",
+      "alternativeNextTools": [
+        "plan-action-central-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-remise-conformite-documentaire",
+        "offer-structuration-smq",
+        "offer-performance-continue",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem",
+        "pathway-documentation-smq",
+        "pathway-performance-pilotage",
+        "pathway-digital-maturity",
+        "pathway-suppliers"
+      ]
+    },
+    {
+      "file": "matrice-hoshin-ascalis.html",
+      "title": "Matrice Hoshin",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "decision",
+      "role": "Déployer la stratégie en objectifs, initiatives et pilotes",
+      "typicalStartingProblem": "Besoin d’aligner vision, actions et indicateurs",
+      "inputsNeeded": [
+        "vision",
+        "enjeux",
+        "priorités",
+        "objectifs"
+      ],
+      "outputsProduced": [
+        "objectifs percée",
+        "objectifs annuels",
+        "initiatives",
+        "cohérence stratégique"
+      ],
+      "previousToolRecommended": "revue-direction-ascalis.html",
+      "nextToolRecommended": "cartographie-processus-ascalis.html",
+      "alternativeNextTools": [
+        "tableau-bord-qualite-ascalis.html",
+        "plan-action-central-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-structuration-smq",
+        "offer-performance-continue",
+        "offer-structuration-operationnelle-pme",
+        "offer-diagnostic-performance-maturite-numerique"
+      ],
+      "linkedPathways": [
+        "pathway-performance-pilotage",
+        "pathway-digital-maturity"
+      ]
+    },
+    {
+      "file": "audit-maturite-digitale-feuille-route-ascalis.html",
+      "title": "Audit maturité digitale + feuille de route",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "diagnostic",
+      "role": "Évaluer la maturité digitale et générer une roadmap",
+      "typicalStartingProblem": "Transformation digitale mal cadrée",
+      "inputsNeeded": [
+        "contexte digital",
+        "processus",
+        "outils",
+        "organisation"
+      ],
+      "outputsProduced": [
+        "score maturité",
+        "feuille de route",
+        "priorités de transformation"
+      ],
+      "previousToolRecommended": "diagnostic-dirigeant.html",
+      "nextToolRecommended": "matrice-croissance-ascalis.html",
+      "alternativeNextTools": [
+        "simulateur-roi.html",
+        "matrice-hoshin-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-performance-maturite-numerique",
+        "offer-automatisation-qualite"
+      ],
+      "linkedPathways": [
+        "pathway-digital-maturity"
+      ]
+    },
+    {
+      "file": "matrice-croissance-ascalis.html",
+      "title": "Matrice de croissance",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "decision",
+      "role": "Arbitrer les leviers par gains, risques et effort",
+      "typicalStartingProblem": "Trop d’initiatives, manque de priorisation",
+      "inputsNeeded": [
+        "leviers",
+        "gains attendus",
+        "risques",
+        "effort"
+      ],
+      "outputsProduced": [
+        "priorités d’investissement",
+        "choix des chantiers"
+      ],
+      "previousToolRecommended": "audit-maturite-digitale-feuille-route-ascalis.html",
+      "nextToolRecommended": "simulateur-roi.html",
+      "alternativeNextTools": [
+        "plan-action-central-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-performance-maturite-numerique",
+        "offer-automatisation-qualite",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-digital-maturity",
+        "pathway-customer-value"
+      ]
+    },
+    {
+      "file": "simulateur-roi.html",
+      "title": "Simulateur ROI",
+      "status": "existing",
+      "visibility": "free",
+      "stage": "decision",
+      "role": "Chiffrer le retour sur investissement d’un projet",
+      "typicalStartingProblem": "Besoin de justifier un chantier ou un investissement",
+      "inputsNeeded": [
+        "coûts",
+        "gains attendus",
+        "durée",
+        "hypothèses"
+      ],
+      "outputsProduced": [
+        "ROI",
+        "retour sur investissement",
+        "aide à la décision"
+      ],
+      "previousToolRecommended": "matrice-croissance-ascalis.html",
+      "nextToolRecommended": "plan-action-central-ascalis.html",
+      "alternativeNextTools": [
+        "matrice-hoshin-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-automatisation-qualite",
+        "offer-diagnostic-performance-maturite-numerique"
+      ],
+      "linkedPathways": [
+        "pathway-digital-maturity"
+      ]
+    },
+    {
+      "file": "selection-suivi-fournisseurs-ascalis.html",
+      "title": "Sélection, suivi et évaluation fournisseurs",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "diagnostic",
+      "role": "Qualifier et suivre les fournisseurs / sous-traitants",
+      "typicalStartingProblem": "Fournisseurs instables ou mal évalués",
+      "inputsNeeded": [
+        "critères",
+        "données fournisseurs",
+        "historique",
+        "risques"
+      ],
+      "outputsProduced": [
+        "score fournisseur",
+        "statut",
+        "plan de suivi"
+      ],
+      "previousToolRecommended": null,
+      "nextToolRecommended": "comparateur-statistique-fournisseurs-ascalis.html",
+      "alternativeNextTools": [
+        "plan-controle.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite",
+        "offer-structuration-smq",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-suppliers"
+      ]
+    },
+    {
+      "file": "comparateur-statistique-fournisseurs-ascalis.html",
+      "title": "Comparateur statistique fournisseurs",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "analyse",
+      "role": "Comparer objectivement plusieurs fournisseurs",
+      "typicalStartingProblem": "Besoin d’arbitrer entre plusieurs fournisseurs ou sous-traitants",
+      "inputsNeeded": [
+        "données qualité",
+        "délais",
+        "coûts",
+        "service"
+      ],
+      "outputsProduced": [
+        "classement",
+        "écarts",
+        "lecture statistique"
+      ],
+      "previousToolRecommended": "selection-suivi-fournisseurs-ascalis.html",
+      "nextToolRecommended": "plan-controle.html",
+      "alternativeNextTools": [
+        "tableau-bord-qualite-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite",
+        "offer-structuration-smq"
+      ],
+      "linkedPathways": [
+        "pathway-suppliers"
+      ]
+    },
+    {
+      "file": "plan-controle.html",
+      "title": "Plan de contrôle",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "controle",
+      "role": "Définir les contrôles et surveillances critiques",
+      "typicalStartingProblem": "Besoin de sécuriser un fournisseur, un process ou un risque",
+      "inputsNeeded": [
+        "risques",
+        "caractéristiques critiques",
+        "points de contrôle"
+      ],
+      "outputsProduced": [
+        "plan de surveillance",
+        "contrôles définis",
+        "niveaux de maîtrise"
+      ],
+      "previousToolRecommended": "comparateur-statistique-fournisseurs-ascalis.html",
+      "nextToolRecommended": "tableau-bord-qualite-ascalis.html",
+      "alternativeNextTools": [
+        "revue-processus-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-flash-qualite",
+        "offer-structuration-smq",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-suppliers",
+        "pathway-quality-problem"
+      ]
+    },
+    {
+      "file": "parcours-client-ascalis.html",
+      "title": "Parcours client",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "diagnostic",
+      "role": "Décrire l’expérience client et ses irritants",
+      "typicalStartingProblem": "Expérience client mal comprise, irritants diffus",
+      "inputsNeeded": [
+        "étapes du parcours",
+        "points de contact",
+        "retours clients"
+      ],
+      "outputsProduced": [
+        "carte de parcours",
+        "moments de vérité",
+        "irritants"
+      ],
+      "previousToolRecommended": null,
+      "nextToolRecommended": "diagramme-kano-ascalis.html",
+      "alternativeNextTools": [
+        "matrice-croissance-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-performance-maturite-numerique",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-customer-value"
+      ]
+    },
+    {
+      "file": "diagramme-kano-ascalis.html",
+      "title": "Diagramme de Kano",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "analyse",
+      "role": "Classer les attentes clients par nature de valeur",
+      "typicalStartingProblem": "Besoins clients mal hiérarchisés",
+      "inputsNeeded": [
+        "attentes client",
+        "réponses client",
+        "attributs de service / produit"
+      ],
+      "outputsProduced": [
+        "attentes obligatoires",
+        "attractives",
+        "proportionnelles"
+      ],
+      "previousToolRecommended": "parcours-client-ascalis.html",
+      "nextToolRecommended": "matrice-qualite.html",
+      "alternativeNextTools": [
+        "plan-action-central-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-performance-maturite-numerique",
+        "offer-performance-continue"
+      ],
+      "linkedPathways": [
+        "pathway-customer-value"
+      ]
+    },
+    {
+      "file": "matrice-qualite.html",
+      "title": "Matrice de la qualité",
+      "status": "planned",
+      "visibility": "pro",
+      "stage": "decision",
+      "role": "Traduire les attentes client en exigences internes",
+      "typicalStartingProblem": "Besoin de transformer la voix du client en exigences pilotables",
+      "inputsNeeded": [
+        "parcours client",
+        "Kano",
+        "attentes",
+        "critères internes"
+      ],
+      "outputsProduced": [
+        "priorités techniques",
+        "corrélations exigences / besoins"
+      ],
+      "previousToolRecommended": "diagramme-kano-ascalis.html",
+      "nextToolRecommended": "plan-action-central-ascalis.html",
+      "alternativeNextTools": [
+        "tableau-bord-qualite-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-diagnostic-performance-maturite-numerique",
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-customer-value"
+      ]
+    },
+    {
+      "file": "seuil-rentabilite.html",
+      "title": "Seuil de rentabilité",
+      "status": "planned",
+      "visibility": "free",
+      "stage": "decision",
+      "role": "Déterminer le point mort d’une offre ou d’un projet",
+      "typicalStartingProblem": "Décider si un projet tient économiquement",
+      "inputsNeeded": [
+        "charges fixes",
+        "charges variables",
+        "prix",
+        "volume"
+      ],
+      "outputsProduced": [
+        "point mort",
+        "volume minimum viable"
+      ],
+      "previousToolRecommended": "simulateur-roi.html",
+      "nextToolRecommended": "simulateur-prix.html",
+      "alternativeNextTools": [
+        "matrice-croissance-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-digital-maturity"
+      ]
+    },
+    {
+      "file": "simulateur-prix.html",
+      "title": "Simulateur prix",
+      "status": "planned",
+      "visibility": "free",
+      "stage": "decision",
+      "role": "Aider à cadrer prix, marge et cohérence économique",
+      "typicalStartingProblem": "Construire une offre économiquement cohérente",
+      "inputsNeeded": [
+        "coûts",
+        "marge cible",
+        "positionnement"
+      ],
+      "outputsProduced": [
+        "prix cible",
+        "marge estimée"
+      ],
+      "previousToolRecommended": "seuil-rentabilite.html",
+      "nextToolRecommended": "simulateur-roi.html",
+      "alternativeNextTools": [
+        "matrice-hoshin-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-structuration-operationnelle-pme"
+      ],
+      "linkedPathways": [
+        "pathway-digital-maturity"
+      ]
+    },
+    {
+      "file": "dmaic-navigator.html",
+      "title": "DMAIC Navigator",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "analyse",
+      "role": "Guider les projets DMAIC et les analyses statistiques",
+      "typicalStartingProblem": "Besoin de méthode et de preuve statistique",
+      "inputsNeeded": [
+        "projet",
+        "données",
+        "hypothèses",
+        "question analytique"
+      ],
+      "outputsProduced": [
+        "choix d’outil",
+        "preuve",
+        "analyse structurée"
+      ],
+      "previousToolRecommended": "diagnostic-terrain.html",
+      "nextToolRecommended": "plan-action-central-ascalis.html",
+      "alternativeNextTools": [
+        "tableau-bord-qualite-ascalis.html"
+      ],
+      "linkedOffers": [
+        "offer-nc-racine",
+        "offer-performance-continue"
+      ],
+      "linkedPathways": [
+        "pathway-quality-problem"
+      ]
+    },
+    {
+      "file": "abaque-outils.html",
+      "title": "Abaque outils",
+      "status": "existing",
+      "visibility": "pro",
+      "stage": "orientation",
+      "role": "Explorer librement tous les outils",
+      "typicalStartingProblem": "Utilisateur déjà autonome qui sait ce qu’il cherche",
+      "inputsNeeded": [
+        "intention utilisateur"
+      ],
+      "outputsProduced": [
+        "accès direct à un outil"
+      ],
+      "previousToolRecommended": null,
+      "nextToolRecommended": null,
+      "alternativeNextTools": [
+        "orchestrateur-outils.html"
+      ],
+      "linkedOffers": [],
+      "linkedPathways": []
+    }
+  ],
+  "dashboardIntegration": {
+    "dashboardMainEntries": [
+      {
+        "label": "Explorer tous les outils",
+        "target": "abaque-outils.html"
+      },
+      {
+        "label": "Suivre un parcours guidé",
+        "target": "orchestrateur-outils.html"
+      }
+    ]
+  },
+  "publicIntegration": {
+    "mainCTA": [
+      "Je décris mon problème",
+      "Voir le parcours recommandé",
+      "Voir les outils associés"
+    ],
+    "publicHub": "parcours.html"
+  },
+  "acceptanceTests": [
+    {
+      "problem": "J’ai des non-conformités récurrentes et des réclamations client",
+      "expectedPath": [
+        "diagnostic-terrain.html",
+        "pareto.html",
+        "ishikawa.html",
+        "fiche-8d.html",
+        "plan-action-central-ascalis.html",
+        "tableau-bord-qualite-ascalis.html",
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ]
+    },
+    {
+      "problem": "Ma documentation est floue et mes processus sont mal cadrés",
+      "expectedPath": [
+        "score-documentaire.html",
+        "matrice-documentaire-ascalis.html",
+        "cartographie-processus-ascalis.html",
+        "fiche-identite-processus-ascalis.html",
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ]
+    },
+    {
+      "problem": "Je veux mieux piloter ma performance et mes actions",
+      "expectedPath": [
+        "matrice-hoshin-ascalis.html",
+        "cartographie-processus-ascalis.html",
+        "fiche-identite-processus-ascalis.html",
+        "tableau-bord-qualite-ascalis.html",
+        "plan-action-central-ascalis.html",
+        "revue-processus-ascalis.html",
+        "revue-direction-ascalis.html"
+      ]
+    }
+  ]
+}
