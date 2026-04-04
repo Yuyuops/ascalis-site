@@ -1,0 +1,80 @@
+{
+  "version": "v1",
+  "storage": {
+    "frontend": "Netlify static site",
+    "functions": "Netlify Functions",
+    "database": "Supabase Postgres",
+    "auth": "Supabase Auth",
+    "security": "Supabase RLS"
+  },
+  "tenancy": {
+    "levels": ["organization", "workspace", "project"],
+    "organizationRoles": ["org_admin", "org_manager", "org_member", "org_viewer", "ascalis_admin", "ascalis_consultant"],
+    "workspaceRoles": ["workspace_admin", "workspace_editor", "workspace_viewer"]
+  },
+  "masterEntities": {
+    "profiles": {"key": "id", "scope": "user"},
+    "organizations": {"key": "id", "scope": "organization"},
+    "organization_memberships": {"key": "id", "scope": "organization"},
+    "workspaces": {"key": "id", "scope": "workspace"},
+    "workspace_memberships": {"key": "id", "scope": "workspace"},
+    "projects": {"key": "id", "scope": "project", "ecosystem": ["offer_id", "pathway_id"]},
+    "issues": {"key": "id", "scope": "project", "links": ["process_id"]},
+    "processes": {"key": "id", "scope": "project"},
+    "process_steps": {"key": "id", "scope": "project", "links": ["process_id"]},
+    "actions": {"key": "id", "scope": "project", "links": ["issue_id", "process_id", "review_id"]},
+    "kpis": {"key": "id", "scope": "project", "links": ["process_id"]},
+    "kpi_measurements": {"key": "id", "scope": "project", "links": ["kpi_id"]},
+    "audits": {"key": "id", "scope": "project", "links": ["process_id"]},
+    "audit_findings": {"key": "id", "scope": "project", "links": ["audit_id", "issue_id"]},
+    "documents": {"key": "id", "scope": "organization_or_project", "links": ["project_id", "process_id"]},
+    "suppliers": {"key": "id", "scope": "organization_or_project"},
+    "supplier_assessments": {"key": "id", "scope": "organization_or_project", "links": ["supplier_id"]},
+    "reviews": {"key": "id", "scope": "project", "links": ["process_id"]},
+    "review_decisions": {"key": "id", "scope": "project", "links": ["review_id", "action_id"]},
+    "customer_needs": {"key": "id", "scope": "project"},
+    "customer_journey_items": {"key": "id", "scope": "project", "links": ["customer_need_id"]}
+  },
+  "derivedData": {
+    "project_action_completion_rate": {"source": ["actions"], "computed": true},
+    "project_kpi_latest_values": {"source": ["kpis", "kpi_measurements"], "computed": true},
+    "supplier_overall_score": {"source": ["supplier_assessments"], "computed": true},
+    "review_open_decisions": {"source": ["reviews", "review_decisions"], "computed": true}
+  },
+  "toolBindings": {
+    "cartographie-processus-ascalis.html": {
+      "reads": ["projects", "processes"],
+      "writes": ["processes"],
+      "mode": ["autonomous", "connected"]
+    },
+    "fiche-identite-processus-ascalis.html": {
+      "reads": ["projects", "processes", "kpis", "actions", "reviews"],
+      "writes": ["processes", "kpis"],
+      "mode": ["autonomous", "connected"]
+    },
+    "plan-action-central-ascalis.html": {
+      "reads": ["projects", "actions", "issues", "processes", "reviews"],
+      "writes": ["actions"],
+      "mode": ["autonomous", "connected"]
+    },
+    "tableau-bord-qualite-ascalis.html": {
+      "reads": ["projects", "kpis", "kpi_measurements", "actions", "issues", "reviews"],
+      "writes": ["kpi_measurements"],
+      "mode": ["autonomous", "connected"]
+    },
+    "revue-processus-ascalis.html": {
+      "reads": ["projects", "processes", "kpis", "actions", "issues", "reviews", "review_decisions"],
+      "writes": ["reviews", "review_decisions", "actions"],
+      "mode": ["autonomous", "connected"]
+    },
+    "revue-direction-ascalis.html": {
+      "reads": ["projects", "processes", "kpis", "actions", "reviews", "review_decisions"],
+      "writes": ["reviews", "review_decisions", "actions"],
+      "mode": ["autonomous", "connected"]
+    }
+  },
+  "clientState": {
+    "allowedBrowserCache": ["activeOrganizationId", "activeWorkspaceId", "activeProjectId", "uiPreferences"],
+    "forbiddenAsSourceOfTruth": ["actions", "kpis", "reviews", "issues", "processes"]
+  }
+}
