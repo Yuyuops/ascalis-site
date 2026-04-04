@@ -1,0 +1,36 @@
+{
+  "process": {
+    "id": "proc_pr5_001",
+    "project_id": "proj_demo_001",
+    "code": "PR5",
+    "name": "Planifier et suivre la production",
+    "purpose": "Piloter les jalons, les livrables et les interfaces",
+    "status": "active"
+  },
+  "action": {
+    "id": "act_001",
+    "project_id": "proj_demo_001",
+    "process_id": "proc_pr5_001",
+    "title": "Mettre en place un suivi mensuel des actions par processus",
+    "status": "in_progress",
+    "priority": "high",
+    "due_date": "2026-06-30"
+  },
+  "kpi": {
+    "id": "kpi_001",
+    "project_id": "proj_demo_001",
+    "process_id": "proc_pr5_001",
+    "code": "KPI-ACT-001",
+    "name": "Taux de clôture des actions dans les délais",
+    "unit": "%",
+    "direction": "increase",
+    "target_value": 90
+  },
+  "kpi_measurement": {
+    "id": "kpi_m_001",
+    "kpi_id": "kpi_001",
+    "measured_at": "2026-04-01T08:00:00Z",
+    "value": 78,
+    "source": "tableau-bord-qualite-ascalis.html"
+  }
+}
