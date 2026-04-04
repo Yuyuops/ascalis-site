@@ -1,13 +1,39 @@
-import { ASCALIS_PARCOURS, ASCALIS_TOOLS, getOfferName, getRecommendedChain, getStage } from "./ecosystem.catalog.js";
+import {
+  getBlocksRequiredOnEveryTool,
+  getProject,
+  getSharedMetaFields,
+  getToolChain
+} from "./ascalis-ecosystem.js";
 
 const fileName = window.location.pathname.split("/").pop() || "";
-const tool = ASCALIS_TOOLS[fileName];
 
-if (tool) injectContext(tool);
+boot().catch((error) => {
+  console.error("ASCALIS context panel error:", error);
+});
 
-function injectContext(tool) {
-  const stage = getStage(tool.stage);
-  const chain = getRecommendedChain(fileName);
+async function boot() {
+  const chain = await getToolChain(fileName);
+  if (!chain?.tool) return;
+
+  const [project, sharedMetaFields, blocksRequired] = await Promise.all([
+    getProject(),
+    getSharedMetaFields(),
+    getBlocksRequiredOnEveryTool()
+  ]);
+
+  injectContext({
+    ...chain,
+    project,
+    sharedMetaFields,
+    blocksRequired
+  });
+}
+
+function injectContext({ tool, previous, next, offers, pathways, stage, project, sharedMetaFields, blocksRequired }) {
+  const stageText = stage ? `${stage.label} — étape ${stage.order}` : "Étape non définie";
+  const pathwaysText = pathways.map((pathway) => pathway.name).join(" / ");
+  const offersText = offers.map((offer) => offer.name).join(" / ");
+
   const section = document.createElement("section");
   section.className = "ascalis-context-panel";
   section.innerHTML = `
@@ -33,46 +59,52 @@ function injectContext(tool) {
       .ascalis-link strong{display:block;font-family:'Lexend',sans-serif;font-size:13px;color:#0F1A2E}
       .ascalis-link span{display:block;margin-top:6px;font-size:13px;line-height:1.5;color:#475569}
       .ascalis-empty{opacity:.6}
+      .ascalis-meta-fields{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+      .ascalis-meta-field{display:inline-flex;padding:4px 10px;border-radius:999px;background:#fff;border:1px solid #E2E8F0;font-family:'Lexend',sans-serif;font-size:11px;color:#64748B}
       @media (max-width:860px){.ascalis-grid,.ascalis-links{grid-template-columns:1fr}.ascalis-card dl{grid-template-columns:1fr}}
     </style>
     <div class="ascalis-context-head">
       <div>
         <h2>Parcours & contexte métier</h2>
-        <p>Cet outil s’inscrit dans une progression ASCALIS : problème → diagnostic → analyse → décision → action → contrôle → revue. Le but est de replacer l’outil dans son usage métier, pas de l’isoler comme un gadget autonome.</p>
+        <p>${project.name} suit un fil conducteur explicite : problème → diagnostic → analyse → décision → action → contrôle → revue. Cet outil est donc relié à une logique de décision, pas isolé comme une page autonome.</p>
       </div>
       <div class="ascalis-chip-row">
-        ${(tool.parcours || []).map((id) => `<span class="ascalis-chip">${ASCALIS_PARCOURS[id]?.title || id}</span>`).join("")}
-        ${stage ? `<span class="ascalis-chip">Étape : ${stage.label}</span>` : ""}
+        <span class="ascalis-chip">${stageText}</span>
+        ${pathways.map((pathway) => `<span class="ascalis-chip">${pathway.name}</span>`).join("")}
       </div>
     </div>
     <div class="ascalis-grid">
-      <article class="ascalis-card"><h3>Pourquoi utiliser cet outil</h3><p>${tool.why || ""}</p></article>
-      <article class="ascalis-card"><h3>Quand l’utiliser</h3><p>${tool.when || ""}</p></article>
-      <article class="ascalis-card"><h3>Entrées nécessaires</h3><ul>${(tool.inputs || []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
-      <article class="ascalis-card"><h3>Sorties produites</h3><ul>${(tool.outputs || []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
-      <article class="ascalis-card"><h3>Offres ASCALIS liées</h3><div class="ascalis-chip-row">${(tool.offers || []).map((id) => `<span class="ascalis-chip">Offre ${id} — ${getOfferName(id)}</span>`).join("")}</div><p style="margin-top:10px">${tool.problem || ""}</p></article>
+      <article class="ascalis-card"><h3>Pourquoi utiliser cet outil</h3><p>${tool.role || "Rôle non défini dans la map."}</p></article>
+      <article class="ascalis-card"><h3>Quand l’utiliser</h3><p>Quand le besoin ressemble à ceci : ${tool.typicalStartingProblem || "cas d’usage non décrit"}. Étape de référence : ${stageText.toLowerCase()}.</p></article>
+      <article class="ascalis-card"><h3>Entrées nécessaires</h3><ul>${(tool.inputsNeeded || []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
+      <article class="ascalis-card"><h3>Sorties produites</h3><ul>${(tool.outputsProduced || []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
+      <article class="ascalis-card"><h3>Offres ASCALIS liées</h3><div class="ascalis-chip-row">${offers.map((offer) => `<span class="ascalis-chip">${offer.name}</span>`).join("")}</div><p style="margin-top:10px">${offersText || "Aucune offre liée dans la map."}</p></article>
+      <article class="ascalis-card"><h3>Parcours associé</h3><div class="ascalis-chip-row">${pathways.map((pathway) => `<span class="ascalis-chip">${pathway.name}</span>`).join("")}</div><p style="margin-top:10px">${pathwaysText || "Aucun parcours lié dans la map."}</p></article>
+      <article class="ascalis-card"><h3>Problème de départ typique</h3><p>${tool.typicalStartingProblem || "Non défini."}</p></article>
       <article class="ascalis-card"><h3>Méta harmonisée</h3><dl>
-        <dt>Projet / contexte</dt><dd>À renseigner pour rattacher l’outil au besoin réel.</dd>
-        <dt>Offre liée</dt><dd>${(tool.offers || []).map((id) => `Offre ${id}`).join(", ") || "À définir"}</dd>
-        <dt>Parcours</dt><dd>${(tool.parcours || []).map((id) => ASCALIS_PARCOURS[id]?.title || id).join(" / ") || "À définir"}</dd>
-        <dt>Processus concerné</dt><dd>${tool.process || "À préciser"}</dd>
-        <dt>Problème / besoin initial</dt><dd>${tool.problem || "À formuler"}</dd>
-        <dt>Pilote</dt><dd>${tool.pilot || "À affecter"}</dd>
-        <dt>Date</dt><dd>${new Date().toLocaleDateString("fr-FR")}</dd>
+        <dt>Projet / contexte</dt><dd>${project.name}</dd>
+        <dt>Offre liée</dt><dd>${offersText || "À définir"}</dd>
+        <dt>Parcours</dt><dd>${pathwaysText || "À définir"}</dd>
+        <dt>Processus concerné</dt><dd>${tool.role || "À préciser"}</dd>
+        <dt>Problème / besoin initial</dt><dd>${tool.typicalStartingProblem || "À formuler"}</dd>
+        <dt>Pilote</dt><dd>${sharedMetaFields.includes("owner") ? "Champ owner prévu dans la map" : "À affecter"}</dd>
+        <dt>Date</dt><dd>${sharedMetaFields.includes("date") ? new Date().toLocaleDateString("fr-FR") : "À préciser"}</dd>
         <dt>Référence / ID</dt><dd>${fileName}</dd>
-      </dl></article>
+      </dl>
+      <div class="ascalis-meta-fields">${blocksRequired.map((block) => `<span class="ascalis-meta-field">${block}</span>`).join("")}</div>
+      </article>
     </div>
     <div class="ascalis-links">
-      ${renderLink("Outil précédent recommandé", chain?.previous)}
-      ${renderLink("Parcours associé", chain?.parcours?.[0] ? { file: "parcours.html", name: chain.parcours[0].title, summary: chain.parcours[0].problem } : null)}
-      ${renderLink("Outil suivant recommandé", chain?.next)}
+      ${renderLink("Outil précédent recommandé", previous)}
+      ${renderLink("Outil suivant recommandé", next)}
+      ${renderLink("Parcours public associé", pathways[0] ? { file: "parcours.html", title: pathways[0].name, description: pathways[0].entryProblems?.[0] || "Voir le parcours complet." } : null)}
     </div>`;
   document.body.appendChild(section);
 }
 
-function renderLink(label, data) {
-  if (!data) {
-    return `<div class="ascalis-link ascalis-empty"><small>${label}</small><strong>Fin de chaîne ou non défini</strong><span>Le catalogue ne propose pas encore de suite logique.</span></div>`;
+function renderLink(label, target) {
+  if (!target) {
+    return `<div class="ascalis-link ascalis-empty"><small>${label}</small><strong>Non défini</strong><span>La map n’indique pas de suite logique explicite.</span></div>`;
   }
-  return `<a class="ascalis-link" href="${data.file || "#"}"><small>${label}</small><strong>${data.name || data.file}</strong><span>${data.summary || data.problem || data.why || "Suite logique du parcours."}</span></a>`;
+  return `<a class="ascalis-link" href="${target.file}"><small>${label}</small><strong>${target.title || target.name || target.file}</strong><span>${target.description || target.typicalStartingProblem || target.role || "Suite logique du parcours."}</span></a>`;
 }
