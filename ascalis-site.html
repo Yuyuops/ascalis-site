@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCALIS — Entrée publique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#0F1A2E;--accent:#B07642;--surface:#FFFFFF;--surface-alt:#F8FAFC;--warm:#FAF9F6;--on:#020617;--on-2:#475569;--border:#E2E8F0;--fh:'Lexend',sans-serif;--fb:'Source Sans 3',sans-serif;--fd:'Instrument Serif',serif}
+*{margin:0;padding:0;box-sizing:border-box} body{font-family:var(--fb);background:var(--warm);color:var(--on);min-height:100dvh;display:flex;align-items:center;padding:24px}
+.wrap{max-width:980px;margin:0 auto;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;box-shadow:0 8px 24px rgba(0,0,0,.05)}
+.logo svg{height:26px;margin-bottom:24px} h1{font-family:var(--fd);font-weight:400;font-size:clamp(2rem,4vw,3rem);line-height:1.08;color:var(--primary);max-width:760px} p{margin-top:14px;max-width:760px;font-size:16px;line-height:1.75;color:var(--on-2)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}.card{border:1px solid var(--border);border-radius:16px;padding:20px;background:var(--surface-alt)}.card h2{font-family:var(--fh);font-size:18px;color:var(--primary);margin-bottom:8px}.card p{font-size:14px;margin-top:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border-radius:12px;font-family:var(--fh);font-size:14px;text-decoration:none}.btn.primary{background:var(--primary);color:#fff}.btn.secondary{background:#fff;border:1px solid var(--border);color:var(--on-2)}
+.note{margin-top:20px;padding:14px 16px;border-radius:12px;background:rgba(176,118,66,.08);border:1px solid rgba(176,118,66,.15);font-size:14px;color:var(--on-2)}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo"><svg viewBox="0 0 240 40" fill="none"><path d="M4 36 L14 6 L24 36" stroke="#B07642" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="32" font-family="'Lexend',sans-serif" font-size="24" font-weight="500" fill="#0F1A2E" letter-spacing="4.5">SCALIS</text></svg></div>
+  <h1>Deux entrées publiques, une même logique métier.</h1>
+  <p>Tu peux soit découvrir ASCALIS comme site vitrine classique, soit entrer directement par un besoin métier avec les parcours guidés. La deuxième option est la plus utile quand le prospect a déjà un problème concret.</p>
+  <div class="grid">
+    <article class="card">
+      <h2>Site vitrine</h2>
+      <p>Présentation générale d’ASCALIS, des offres, des outils gratuits et de l’approche.</p>
+      <div class="actions"><a class="btn primary" href="index.html">Ouvrir le site</a></div>
+    </article>
+    <article class="card">
+      <h2>Parcours guidés</h2>
+      <p>Entrée par problème, offre ou étape méthodologique pour aller directement vers le bon parcours et le bon outil de départ.</p>
+      <div class="actions"><a class="btn primary" href="parcours.html">Ouvrir les parcours</a><a class="btn secondary" href="orchestrateur-outils.html">Vue orchestrateur</a></div>
+    </article>
+  </div>
+  <div class="note">Fil conducteur ASCALIS : <strong>PROBLÈME → DIAGNOSTIC → ANALYSE → DÉCISION → ACTION → CONTRÔLE → REVUE</strong>.</div>
+</div>
+</body>
+</html>
