@@ -75,6 +75,25 @@ import { getAbaqueCategories, getAbaqueStats } from "./abaque.catalog.js";
 
 let currentFilter = "all";
 let searchQuery = "";
+let fuse = null;
+
+// Charge Fuse.js (fuzzy search) de façon lazy
+const fuseReady = new Promise((resolve) => {
+  const s = document.createElement("script");
+  s.src = "https://cdn.jsdelivr.net/npm/fuse.js@7.3.0/dist/fuse.min.js";
+  s.onload = () => {
+    const allTools = getAbaqueCategories().flatMap((cat) =>
+      cat.tools.map((t) => ({ ...t, _cat: cat.name }))
+    );
+    fuse = new Fuse(allTools, {
+      keys: ["name", "source", "note", "offers"],
+      threshold: 0.35,
+      includeScore: true
+    });
+    resolve();
+  };
+  document.head.appendChild(s);
+});
 
 const contentEl = document.getElementById("content");
 const statsEl = document.getElementById("stats-bar");
@@ -82,19 +101,22 @@ const searchEl = document.getElementById("search-input");
 const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
 
 function getFilteredCategories() {
-  const normalizedQuery = searchQuery.toLowerCase().trim();
-  return getAbaqueCategories()
+  const q = searchQuery.trim();
+  const allCategories = getAbaqueCategories();
+
+  // Recherche floue via Fuse.js
+  let matchedNames = null;
+  if (q && fuse) {
+    matchedNames = new Set(fuse.search(q).map((r) => r.item.name));
+  }
+
+  return allCategories
     .map((category) => ({
       ...category,
       tools: category.tools.filter((tool) => {
         const matchFilter = currentFilter === "all" || tool.status === currentFilter;
-        const haystack = [
-          tool.name,
-          tool.source,
-          ...(tool.offers || []).map((offer) => `offre ${offer}`),
-          tool.note || ""
-        ].join(" ").toLowerCase();
-        return matchFilter && (!normalizedQuery || haystack.includes(normalizedQuery));
+        const matchSearch = !q || (matchedNames ? matchedNames.has(tool.name) : tool.name.toLowerCase().includes(q.toLowerCase()));
+        return matchFilter && matchSearch;
       })
     }))
     .filter((category) => category.tools.length > 0);
@@ -170,7 +192,7 @@ filterButtons.forEach((button) => {
 
 searchEl.addEventListener("input", (event) => {
   searchQuery = event.target.value;
-  render();
+  fuseReady.then(render);
 });
 
 render();
