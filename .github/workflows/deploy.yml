@@ -1,0 +1,49 @@
+name: Deploy Next App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "next-app/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-next-app-pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: next-app
+        run: npm install
+
+      - name: Build static export
+        working-directory: next-app
+        run: npm run build
+
+      - name: Ensure .nojekyll in export
+        run: touch next-app/out/.nojekyll
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./next-app/out
+          publish_branch: gh-pages
+          force_orphan: true
