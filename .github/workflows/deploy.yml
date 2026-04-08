@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,13 +36,18 @@ jobs:
       - name: Build static export
         run: cd next-app && npm run build
 
-      - name: Ensure .nojekyll exists
+      - name: Add .nojekyll
         run: touch next-app/out/.nojekyll
 
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./next-app/out
-          publish_branch: gh-pages
-          force_orphan: true
+      - name: Copy build output to repo root
+        run: |
+          # GitHub Pages serves from main root — copy Next.js output there
+          cp -r next-app/out/. .
+
+      - name: Commit and push build to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .nojekyll _next/ index.html 404.html 404/ dashboard/ outils/ images/ og-image.svg robots.txt sitemap.xml legacy-redirects.json index.txt 2>/dev/null || git add -A
+          git diff --staged --quiet || git commit -m "chore: deploy Next.js build [skip ci]"
+          git push origin main
