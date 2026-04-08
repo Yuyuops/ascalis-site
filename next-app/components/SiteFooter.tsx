@@ -10,7 +10,7 @@ export function SiteFooter() {
     <footer className="bg-primary text-white/60">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-12 md:grid-cols-3 md:px-8 lg:px-10">
         <div className="space-y-4">
-          <AscalisLogo className="[&_text]:fill-white" title="ASCALIS" />
+          <AscalisLogo className="[&_text]:fill-[rgba(248,250,252,0.5)]" title="ASCALIS" />
           <p className="max-w-xs text-sm leading-7 text-white/60">
             ASCALIS transforme une bibliothèque d’outils en parcours d’aide à la décision, au pilotage et à l’amélioration continue.
           </p>
@@ -39,6 +39,9 @@ export function SiteFooter() {
             <p>France</p>
           </address>
         </div>
+      </div>
+      <div className="border-t border-white/10 px-6 py-5 text-center text-xs text-white/30 md:px-8 lg:px-10">
+        © 2026 ASCALIS — Consultant Amélioration Continue & Performance Qualité
       </div>
     </footer>
   );
