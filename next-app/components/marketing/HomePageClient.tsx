@@ -7,14 +7,12 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import {
   ArrowRight,
   Building2,
-  CheckSquare,
-  CircleDollarSign,
-  ClipboardList,
-  FileText,
+  FolderKanban,
   Gauge,
+  LayoutDashboard,
   ShieldCheck,
-  UserRound,
   Users,
+  Workflow,
   Zap,
 } from "lucide-react";
 
@@ -30,15 +28,6 @@ type Offer = {
   duration: string;
   price: string;
   badge?: string;
-};
-
-type Tool = {
-  href: string;
-  title: string;
-  description: string;
-  badge: string;
-  cta: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 };
 
 const heroMetrics = [
@@ -143,79 +132,30 @@ const sectors = [
     icon: ShieldCheck,
   },
   {
-    title: "Vous n'avez pas de temps à perdre",
+    title: "Vous devez piloter au quotidien",
     description:
-      "Pas de grand projet à 18 mois. Des résultats mesurables rapidement, sans mobiliser toute votre équipe.",
+      "Responsable qualité, méthodes, performance ou lean : vous avez besoin d’un outil clair pour suivre actions, KPI, revues et arbitrages.",
     icon: Gauge,
   },
 ] as const;
 
-const tools: Tool[] = [
+const managerUseCases = [
   {
-    href: "/outils/calculateur-cnq/",
-    title: "Calculateur coût de non-qualité",
-    description: "Combien vous coûtent vos NC chaque année ? Découvrez le montant réel.",
-    badge: "Offres 1, 3",
-    cta: "Calculer mes coûts",
-    icon: CircleDollarSign,
+    title: "Piloter les actions",
+    description: "Centraliser plans d’action, responsables, échéances, statuts et retards sans Excel dispersé.",
+    icon: FolderKanban,
   },
   {
-    href: "/outils/checklist-audit/",
-    title: "Checklist pré-audit",
-    description: "EN 9100 ou ISO 9001 : évaluez votre conformité chapitre par chapitre.",
-    badge: "Offres 1, 2, 4",
-    cta: "Vérifier ma conformité",
-    icon: CheckSquare,
+    title: "Suivre les indicateurs",
+    description: "Lire les KPI utiles, consolider les tendances et préparer les arbitrages sans perdre une demi-journée.",
+    icon: LayoutDashboard,
   },
   {
-    href: "/outils/matrice-priorisation/",
-    title: "Matrice de priorisation",
-    description: "Impact vs. effort — la matrice montre par où commencer.",
-    badge: "Offres 3, 4, 6",
-    cta: "Prioriser mes chantiers",
-    icon: Gauge,
+    title: "Préparer les revues",
+    description: "Faire le lien entre problèmes, analyses, décisions, contrôles et revues de processus ou de direction.",
+    icon: Workflow,
   },
-  {
-    href: "/outils/score-documentaire/",
-    title: "Score maturité documentaire",
-    description: "15 questions sur la santé de votre système documentaire.",
-    badge: "Offre 2",
-    cta: "Évaluer ma documentation",
-    icon: FileText,
-  },
-  {
-    href: "/outils/simulateur-roi/",
-    title: "Simulateur ROI automatisation",
-    description: "Temps et argent récupérables en automatisant vos tâches qualité.",
-    badge: "Offre 5",
-    cta: "Calculer mon ROI",
-    icon: Zap,
-  },
-  {
-    href: "/outils/seuil-rentabilite/",
-    title: "Calculateur seuil de rentabilité",
-    description: "À partir de quel chiffre d'affaires votre entreprise gagne-t-elle de l'argent ?",
-    badge: "Offre 8",
-    cta: "Calculer mon seuil",
-    icon: Gauge,
-  },
-  {
-    href: "/outils/simulateur-prix/",
-    title: "Simulateur prix de vente",
-    description: "Coûts, marge, concurrence — trouvez le prix juste pour votre offre.",
-    badge: "Offre 8",
-    cta: "Simuler mon prix",
-    icon: ClipboardList,
-  },
-  {
-    href: "/outils/diagnostic-dirigeant/",
-    title: "Auto-diagnostic dirigeant",
-    description: "Radar de profil : forces, zones de délégation, axes de développement.",
-    badge: "Offres 7, 8",
-    cta: "Évaluer mon profil",
-    icon: UserRound,
-  },
-];
+] as const;
 
 export default function HomePageClient() {
   const reduceMotion = useReducedMotion();
@@ -234,7 +174,7 @@ export default function HomePageClient() {
                 La <span className="not-italic text-accent">qualité</span> comme levier de performance industrielle
               </h1>
               <p className="max-w-2xl text-xl leading-9 text-muted-foreground">
-                J'accompagne les PME et ETI industrielles qui ont des problèmes concrets de qualité, de conformité ou de performance opérationnelle. Chaque mission part du terrain et débouche sur un résultat mesurable.
+                J'accompagne les PME et ETI industrielles qui ont des problèmes concrets de qualité, de conformité ou de performance opérationnelle. J’accompagne aussi les responsables qualité, méthodes, performance et lean qui veulent un système plus robuste pour piloter leur quotidien.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -245,7 +185,7 @@ export default function HomePageClient() {
                 </a>
               </Button>
               <Button asChild variant="ghost-copper">
-                <a href="#outils">Tester vos outils gratuits</a>
+                <Link href="/outils/">Voir la boîte à outils</Link>
               </Button>
             </div>
           </Reveal>
@@ -417,7 +357,7 @@ export default function HomePageClient() {
       </Section>
 
       <Section id="secteurs" label="Les PME et ETI industrielles qui veulent performer" variant="dark">
-        <SectionHeading tag="Pour qui" title="Les PME et ETI industrielles qui veulent performer" description="10 à 250 personnes, une production à tenir, des exigences clients qui montent. Je travaille avec des entreprises qui font des choses concrètes." inverse />
+        <SectionHeading tag="Pour qui" title="Les PME, ETI et responsables opérationnels qui doivent tenir la qualité" description="Direction, PME industrielles, mais aussi responsables qualité, méthodes, performance et lean : le besoin n’est pas théorique. Il faut arbitrer, suivre et décider vite." inverse />
         <div className="grid gap-6 lg:grid-cols-3">
           {sectors.map((sector, index) => {
             const Icon = sector.icon;
@@ -436,25 +376,54 @@ export default function HomePageClient() {
 
       <GearDivider reduceMotion={reduceMotion} backgroundClassName="bg-primary" inverted />
 
-      <Section id="outils" label="Évaluez, mesurez, priorisez" variant="dark">
-        <SectionHeading tag="Boîte à outils gratuite" title="Évaluez, mesurez, priorisez" description="10 outils interactifs pour faire le point sur votre performance qualité et votre gestion. Gratuits, sans inscription, résultats immédiats." inverse />
-        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-          {tools.map((tool, index) => {
-            const Icon = tool.icon;
-            return (
-              <Reveal key={tool.title} reduceMotion={reduceMotion} delay={index * 0.04}>
-                <Link href={tool.href} className="group block min-h-[44px] rounded-[1.5rem] border border-white/10 bg-white/5 p-6 transition-all hover:-translate-y-1 hover:border-accent/40 hover:bg-white/[0.08] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="rounded-2xl bg-white/10 p-3 text-accent-light"><Icon className="size-6" aria-hidden="true" /></div>
-                    <Badge className="border-accent/25 bg-accent/10 text-accent-light">{tool.badge}</Badge>
-                  </div>
-                  <h3 className="mt-4 font-heading text-lg text-white">{tool.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-white/55">{tool.description}</p>
-                  <span className="mt-4 inline-flex items-center gap-2 font-heading text-xs uppercase tracking-[0.14em] text-accent-light">{tool.cta}<ArrowRight className="size-3 transition-transform group-hover:translate-x-1" aria-hidden="true" /></span>
-                </Link>
-              </Reveal>
-            );
-          })}
+      <Section id="outils" label="Outils et cockpit de pilotage" variant="dark">
+        <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+          <Reveal reduceMotion={reduceMotion}>
+            <div className="max-w-xl">
+              <div className="mb-4 inline-flex items-center gap-2 font-heading text-xs uppercase tracking-[0.16em] text-accent-light">
+                <span className="h-px w-5 bg-accent-light/60" aria-hidden="true" />
+                Outils & dashboard
+              </div>
+              <h2 className="font-display text-[clamp(2rem,4vw,3.2rem)] leading-tight text-white">
+                Une boîte à outils séparée. Un pilotage quotidien plus clair.
+              </h2>
+              <p className="mt-4 text-base leading-8 text-white/60">
+                Oui, c’est mieux de sortir les 10 outils gratuits de la home. La page d’accueil doit cadrer l’offre et le problème. La boîte à outils doit vivre à part, dans un espace plus direct pour les praticiens.
+              </p>
+              <p className="mt-4 text-base leading-8 text-white/60">
+                Cette logique parle aussi aux responsables qualité, méthodes, performance et lean qui cherchent un environnement simple pour gérer actions, KPI, analyses et revues sans transformer leur quotidien en chasse au fichier.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Button asChild variant="copper">
+                  <Link href="/outils/">Voir tous les outils</Link>
+                </Button>
+                <Button asChild variant="ghost-copper">
+                  <Link href="/dashboard/">Découvrir l’espace pro</Link>
+                </Button>
+              </div>
+            </div>
+          </Reveal>
+
+          <div className="grid gap-4">
+            {managerUseCases.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <Reveal key={item.title} reduceMotion={reduceMotion} delay={index * 0.06}>
+                  <article className="rounded-[1.5rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+                    <div className="flex items-start gap-4">
+                      <div className="rounded-2xl bg-white/10 p-3 text-accent-light">
+                        <Icon className="size-6" aria-hidden="true" />
+                      </div>
+                      <div>
+                        <h3 className="font-heading text-xl text-white">{item.title}</h3>
+                        <p className="mt-2 text-sm leading-7 text-white/60">{item.description}</p>
+                      </div>
+                    </div>
+                  </article>
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
       </Section>
 

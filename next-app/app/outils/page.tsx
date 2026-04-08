@@ -9,14 +9,14 @@ import { freeTools, proTools } from "@/lib/tool-registry";
 export const metadata: Metadata = {
   title: "Outils gratuits et outils pro",
   description:
-    "Explorez les outils ASCALIS pour diagnostiquer, analyser, décider, agir et piloter la performance qualité.",
+    "Explorez les outils ASCALIS pour diagnostiquer, analyser, décider, agir et piloter la performance qualité au quotidien.",
   alternates: {
     canonical: "/outils/",
   },
   openGraph: {
     title: "Outils ASCALIS",
     description:
-      "Explorez les outils ASCALIS pour diagnostiquer, analyser, décider, agir et piloter la performance qualité.",
+      "Explorez les outils ASCALIS pour diagnostiquer, analyser, décider, agir et piloter la performance qualité au quotidien.",
     url: absoluteUrl("/outils/"),
   },
 };
@@ -31,7 +31,7 @@ export default function ToolsPage() {
             Les outils ASCALIS, organisés par usage et niveau d’accès.
           </h1>
           <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-muted-foreground">
-            Les outils gratuits sont directement explorables. Les outils pro préparent la continuité métier, les exports et les briques analytiques sans alourdir toute la vitrine.
+            Cette page s’adresse autant aux dirigeants de PME qu’aux responsables qualité, méthodes, performance et lean qui ont besoin d’outils concrets pour piloter actions, KPI, analyses et revues sans alourdir leur quotidien.
           </p>
         </div>
       </Section>
@@ -65,7 +65,7 @@ export default function ToolsPage() {
         <div className="mb-10">
           <h2 className="font-display text-4xl text-primary">Outils pro</h2>
           <p className="mt-3 max-w-3xl text-base leading-8 text-muted-foreground">
-            Les routes pro sont prêtes pour une montée en puissance progressive : lazy loading, moteur analytique conditionnel et exports lourds chargés uniquement au clic.
+            Les routes pro préparent un vrai cockpit de travail pour les responsables qualité, méthodes, performance et lean : lazy loading, moteur analytique conditionnel et exports lourds chargés uniquement au clic.
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
