@@ -82,13 +82,6 @@ const offers: Offer[] = [
   { number: "08", title: "Structuration opérationnelle PME", pitch: "Vous avez grandi vite. On structure votre pilotage pour que vous puissiez continuer à grandir — sans que tout repose sur vous.", duration: "15–30 jours", price: "12–30 k€ HT", badge: "Structuration PME" },
 ];
 
-const pathwaySteps = [
-  { step: "1", label: "Diagnostic", offers: "Offre 1 ou 7" },
-  { step: "2", label: "Correction", offers: "Offre 2, 3 ou 4" },
-  { step: "3", label: "Accélération", offers: "Offre 5" },
-  { step: "4", label: "Pérennisation", offers: "Offre 6" },
-] as const;
-
 const references = [
   {
     quote:

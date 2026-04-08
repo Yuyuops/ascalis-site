@@ -35,9 +35,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body
-        className="min-h-screen bg-background font-body text-foreground antialiased"
-      >
+      <body className="min-h-screen bg-background font-body text-foreground antialiased">
         <AscalisRootLayout>{children}</AscalisRootLayout>
       </body>
     </html>

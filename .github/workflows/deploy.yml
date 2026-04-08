@@ -34,7 +34,7 @@ jobs:
       - name: Build static export
         run: cd next-app && npm run build
 
-      - name: Ensure .nojekyll in export
+      - name: Ensure .nojekyll exists
         run: touch next-app/out/.nojekyll
 
       - name: Deploy to gh-pages
