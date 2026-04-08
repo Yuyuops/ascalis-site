@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 import { AscalisLogo } from "@/components/AscalisLogo";
@@ -10,9 +10,9 @@ import { Button } from "@/components/Button";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { href: "#outils-gratuits", label: "Outils gratuits" },
-  { href: "#offres", label: "Offres" },
-  { href: "#contact", label: "Contact" },
+  { href: "/outils/", label: "Outils gratuits" },
+  { href: "/#offres", label: "Offres" },
+  { href: "/#contact", label: "Contact" },
 ] as const;
 
 const interactiveClass =
@@ -21,6 +21,7 @@ const interactiveClass =
 export function SiteHeader() {
   const [isOpen, setIsOpen] = React.useState(false);
   const panelId = React.useId();
+  const reduceMotion = useReducedMotion();
 
   React.useEffect(() => {
     if (!isOpen) return;
@@ -62,7 +63,7 @@ export function SiteHeader() {
             </Link>
           ))}
           <Button asChild variant="copper">
-            <Link href="dashboard.html">Espace Pro</Link>
+            <Link href="/dashboard/">Espace Pro</Link>
           </Button>
         </nav>
 
@@ -88,9 +89,9 @@ export function SiteHeader() {
               type="button"
               aria-label="Fermer le panneau de navigation"
               className="fixed inset-0 z-40 bg-primary/40 md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={reduceMotion ? false : { opacity: 0 }}
+              animate={reduceMotion ? {} : { opacity: 1 }}
+              exit={reduceMotion ? {} : { opacity: 0 }}
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -99,10 +100,10 @@ export function SiteHeader() {
               aria-modal="true"
               aria-label="Menu principal mobile"
               className="fixed inset-y-0 right-0 z-50 flex w-[min(88vw,22rem)] flex-col border-l border-border bg-background px-6 py-6 shadow-[0_16px_40px_rgba(15,26,46,0.16)] md:hidden"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 320, damping: 32 }}
+              initial={reduceMotion ? false : { x: "100%" }}
+              animate={reduceMotion ? {} : { x: 0 }}
+              exit={reduceMotion ? {} : { x: "100%" }}
+              transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 320, damping: 32 }}
             >
               <div className="flex items-center justify-between gap-4">
                 <AscalisLogo />
@@ -136,7 +137,7 @@ export function SiteHeader() {
               </nav>
 
               <Button asChild variant="copper" className="w-full">
-                <Link href="dashboard.html" onClick={() => setIsOpen(false)}>
+                <Link href="/dashboard/" onClick={() => setIsOpen(false)}>
                   Espace Pro
                 </Link>
               </Button>
