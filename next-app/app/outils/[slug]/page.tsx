@@ -11,9 +11,7 @@ import { StatsEngineLoader } from "@/components/tool/StatsEngineLoader";
 import { absoluteUrl } from "@/lib/site-config";
 import { getToolBySlug, toolRegistry } from "@/lib/tool-registry";
 
-const ProToolClient = dynamic(() => import("@/components/tool/ProToolClient"), {
-  suspense: true,
-});
+const ProToolClient = dynamic(() => import("@/components/tool/ProToolClient"));
 
 export const dynamicParams = false;
 

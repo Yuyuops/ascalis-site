@@ -3,6 +3,8 @@ import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/site-config";
 import { toolRegistry } from "@/lib/tool-registry";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
     {
