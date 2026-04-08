@@ -1,20 +1,19 @@
 import * as React from "react";
 
-import {
-  Button as BaseButton,
-  type buttonVariants as baseButtonVariants,
-} from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type BaseVariant = Parameters<typeof baseButtonVariants>[0]["variant"];
+type BaseButtonProps = React.ComponentProps<typeof BaseButton>;
+type BaseVariant = NonNullable<BaseButtonProps["variant"]>;
 type AscalisVariant = BaseVariant | "copper" | "ghost-copper";
 
-type ButtonProps = React.ComponentProps<typeof BaseButton> & {
+export type ButtonProps = Omit<BaseButtonProps, "variant"> & {
   variant?: AscalisVariant;
 };
 
 export function Button({ className, variant = "default", ...props }: ButtonProps) {
-  const mappedVariant: BaseVariant = variant === "copper" ? "default" : variant === "ghost-copper" ? "ghost" : variant;
+  const mappedVariant: BaseVariant =
+    variant === "copper" ? "default" : variant === "ghost-copper" ? "ghost" : variant;
 
   const copperClasses =
     variant === "copper"

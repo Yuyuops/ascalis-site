@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, Lexend, Source_Sans_3 } from "next/font/google";
+
+import { RootLayout as AscalisRootLayout } from "@/components/RootLayout";
 import "./globals.css";
 
 const lexend = Lexend({
@@ -29,13 +31,13 @@ export const metadata: Metadata = {
   description: "Infrastructure Next.js 15 pour la future migration ASCALIS.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
         className={`${lexend.variable} ${sourceSans.variable} ${instrumentSerif.variable} min-h-screen bg-background font-body text-foreground antialiased`}
       >
-        {children}
+        <AscalisRootLayout>{children}</AscalisRootLayout>
       </body>
     </html>
   );

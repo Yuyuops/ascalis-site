@@ -1,28 +1,28 @@
 import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
 
+import { Badge as BaseBadge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-1 font-heading text-xs font-medium tracking-[0.08em] uppercase focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent",
-  {
-    variants: {
-      variant: {
-        default: "border-border bg-secondary text-foreground",
-        built: "border-emerald-200 bg-emerald-50 text-emerald-800",
-        priority: "border-orange-200 bg-orange-50 text-orange-800",
-        planned: "border-slate-200 bg-slate-100 text-slate-700",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-);
+type BaseBadgeProps = React.ComponentProps<typeof BaseBadge>;
+type BaseVariant = NonNullable<BaseBadgeProps["variant"]>;
+type AscalisBadgeVariant = BaseVariant | "built" | "priority" | "planned";
 
-export type BadgeProps = React.HTMLAttributes<HTMLSpanElement> &
-  VariantProps<typeof badgeVariants>;
+export type BadgeProps = Omit<BaseBadgeProps, "variant"> & {
+  variant?: AscalisBadgeVariant;
+};
 
-export function Badge({ className, variant, ...props }: BadgeProps) {
-  return <span className={cn(badgeVariants({ variant }), className)} {...props} />;
+export function Badge({ className, variant = "default", ...props }: BadgeProps) {
+  const mappedVariant: BaseVariant =
+    variant === "built" || variant === "priority" || variant === "planned" ? "default" : variant;
+
+  const ascalisClasses =
+    variant === "built"
+      ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+      : variant === "priority"
+        ? "border-orange-200 bg-orange-50 text-orange-800"
+        : variant === "planned"
+          ? "border-slate-200 bg-slate-100 text-slate-700"
+          : "";
+
+  return <BaseBadge variant={mappedVariant} className={cn(ascalisClasses, className)} {...props} />;
 }
