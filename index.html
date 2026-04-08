@@ -227,7 +227,7 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 /* ═══ GEAR DIVIDERS ═══ */
 .gear-div { position: relative; height: 72px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .gear-div .line { position: absolute; width: 100%; height: 1px; background: linear-gradient(90deg, transparent 0%, var(--color-border) 20%, var(--color-border) 80%, transparent 100%); }
-.gear-div svg { position: absolute; opacity: .08; }
+.gear-div svg { opacity: .08; flex-shrink: 0; }
 .gear-div .g1 { animation: gearCW 14s linear infinite; }
 .gear-div .g2 { animation: gearCCW 10s linear infinite; }
 @keyframes gearCW { to { transform: rotate(360deg); } }
@@ -497,6 +497,8 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   .section { padding: var(--space-11) var(--space-5); }
   .hero { padding: var(--space-13) var(--space-5) var(--space-9); }
   .hero::after { display: none; }
+  .hero-tag { align-items: flex-start; }
+  .hero-tag::after { display: none; }
   .nav { padding: 0 var(--space-5); }
   .hero-metrics { flex-direction: column; gap: var(--space-6); }
   .parcours-flow { flex-direction: column; }
@@ -587,8 +589,8 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 <!-- GEAR DIVIDER -->
 <div class="gear-div" aria-hidden="true">
   <div class="line"></div>
-  <svg class="g1" width="48" height="48" viewBox="0 0 48 48" style="left:calc(50% - 54px)"><path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill="#B07642"/><circle cx="24" cy="24" r="7" fill="var(--color-surface-warm)"/></svg>
-  <svg class="g2" width="36" height="36" viewBox="0 0 48 48" style="left:calc(50% + 12px)"><path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill="#1B3A4B"/><circle cx="24" cy="24" r="7" fill="var(--color-surface-warm)"/></svg>
+  <svg class="g1" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#B07642" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+  <svg class="g2" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1B3A4B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
 </div>
 
 <!-- PILIERS -->
@@ -602,7 +604,7 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 </section>
 
 <!-- GEAR DIVIDER -->
-<div class="gear-div" aria-hidden="true"><div class="line"></div><svg class="g2" width="42" height="42" viewBox="0 0 48 48" style="left:calc(50% - 50px)"><path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill="#B07642"/><circle cx="24" cy="24" r="7" fill="var(--color-surface-alt)"/></svg><svg class="g1" width="54" height="54" viewBox="0 0 48 48" style="left:calc(50% + 8px)"><path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill="#0F1A2E"/><circle cx="24" cy="24" r="7" fill="var(--color-surface-alt)"/></svg></div>
+<div class="gear-div" aria-hidden="true"><div class="line"></div><svg class="g2" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#B07642" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><svg class="g1" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#0F1A2E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></div>
 
 <!-- RESULTATS -->
 <section class="section resultats" aria-labelledby="results-heading">
@@ -631,7 +633,7 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 </section>
 
 <!-- GEAR DIVIDER -->
-<div class="gear-div" aria-hidden="true"><div class="line"></div><svg class="g1" width="44" height="44" viewBox="0 0 48 48" style="left:calc(50% - 22px)"><path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill="#B07642"/><circle cx="24" cy="24" r="7" fill="var(--color-surface-alt)"/></svg></div>
+<div class="gear-div" aria-hidden="true"><div class="line"></div><svg class="g1" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#B07642" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></div>
 
 <!-- PARCOURS -->
 <section class="section parcours" aria-labelledby="parcours-heading">
