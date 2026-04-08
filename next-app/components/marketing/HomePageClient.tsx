@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import {
+  ArrowDown,
   ArrowRight,
   Building2,
   CheckSquare,
@@ -91,13 +92,6 @@ const offers: Offer[] = [
   { number: "07", title: "Diagnostic Performance & Maturité Numérique", pitch: "En une semaine, vous voyez votre performance réelle sur un radar — et vous savez où chaque euro investi aura le plus d'impact.", duration: "3–8 jours", price: "2,5–8 k€ HT", badge: "Point d'entrée" },
   { number: "08", title: "Structuration opérationnelle PME", pitch: "Vous avez grandi vite. On structure votre pilotage pour que vous puissiez continuer à grandir — sans que tout repose sur vous.", duration: "15–30 jours", price: "12–30 k€ HT", badge: "Structuration PME" },
 ];
-
-const pathwaySteps = [
-  { step: "1", label: "Diagnostic", offers: "Offre 1 ou 7" },
-  { step: "2", label: "Correction", offers: "Offre 2, 3 ou 4" },
-  { step: "3", label: "Accélération", offers: "Offre 5" },
-  { step: "4", label: "Pérennisation", offers: "Offre 6" },
-] as const;
 
 const references = [
   {
@@ -307,52 +301,62 @@ export default function HomePageClient() {
         </div>
       </Section>
 
-      <Section id="offres" label="Huit offres, une logique terrain" variant="light">
-        <SectionHeading tag="Offres" title="Huit offres, une logique terrain" description="Chaque offre part d'une douleur identifiée et débouche sur un résultat mesurable. Elles sont modulaires et combinables." />
-        <Reveal reduceMotion={reduceMotion} className="overflow-hidden rounded-[1.75rem] border border-border bg-white shadow-[0_10px_28px_rgba(15,26,46,0.06)]">
-          <div className="hidden grid-cols-[72px_minmax(220px,1.1fr)_minmax(320px,1.6fr)_120px_120px_150px] gap-4 border-b border-border bg-surface-warm px-6 py-4 font-heading text-xs uppercase tracking-[0.14em] text-muted-foreground lg:grid">
-            <span>N°</span><span>Offre</span><span>Promesse</span><span>Durée</span><span>Prix</span><span>Repère</span>
-          </div>
-          <div className="divide-y divide-border">
-            {offers.map((offer, index) => (
-              <motion.article
-                key={offer.number}
-                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-                whileInView={reduceMotion ? {} : { opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: index * 0.03 }}
-                className="grid gap-4 px-6 py-5 lg:grid-cols-[72px_minmax(220px,1.1fr)_minmax(320px,1.6fr)_120px_120px_150px] lg:items-start"
-              >
-                <div className="font-heading text-sm font-semibold tracking-[0.14em] text-accent">{offer.number}</div>
-                <div><h3 className="font-heading text-lg text-primary">{offer.title}</h3></div>
-                <p className="text-sm leading-7 text-muted-foreground">{offer.pitch}</p>
-                <div><div className="text-xs uppercase tracking-[0.14em] text-muted-foreground lg:hidden">Durée</div><div className="font-heading text-sm text-primary">{offer.duration}</div></div>
-                <div><div className="text-xs uppercase tracking-[0.14em] text-muted-foreground lg:hidden">Prix</div><div className="font-heading text-sm text-primary">{offer.price}</div></div>
-                <div className="flex items-start lg:justify-end">{offer.badge ? <Badge variant="priority">{offer.badge}</Badge> : <span className="text-sm text-muted-foreground">—</span>}</div>
-              </motion.article>
-            ))}
-          </div>
-        </Reveal>
-      </Section>
-
-      <GearDivider reduceMotion={reduceMotion} backgroundClassName="bg-surface-alt" />
-
-      <Section label="Une logique de progression" variant="warm">
-        <SectionHeading tag="Parcours" title="Une logique de progression" description="Deux portes d'entrée, un chemin vers l'autonomie." />
-        <div className="flex flex-col items-center justify-center gap-4 lg:flex-row lg:gap-3">
-          {pathwaySteps.map((step, index) => (
-            <React.Fragment key={step.step}>
-              <Reveal reduceMotion={reduceMotion} delay={index * 0.06} className="w-full lg:flex-1">
-                <article className="rounded-[1.5rem] border border-border bg-white px-6 py-6 text-center shadow-[0_8px_24px_rgba(15,26,46,0.04)]">
-                  <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-primary font-display text-2xl text-accent-light">{step.step}</div>
-                  <h3 className="mt-4 font-heading text-lg text-primary">{step.label}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{step.offers}</p>
-                </article>
-              </Reveal>
-              {index < pathwaySteps.length - 1 ? <div className="font-display text-3xl text-accent lg:self-center" aria-hidden="true">→</div> : null}
-            </React.Fragment>
-          ))}
+      <Section id="offres" label="Huit offres, trois chemins possibles" variant="light">
+        <SectionHeading tag="Offres" title="Huit offres, trois chemins possibles" description="Chaque problème a son point d'entrée. Les offres sont modulaires — on choisit le bon départ, puis on avance." />
+        <div className="grid gap-5 lg:grid-cols-3 lg:items-start">
+          <OfferPath
+            entry="Départ Qualité & Conformité"
+            description="Problèmes terrain, audits, NC récurrentes"
+            icon={ShieldCheck}
+            tint="bg-amber-50 text-amber-700"
+            pathOffers={[offers[0], offers[1], offers[2], offers[3]]}
+            reduceMotion={reduceMotion}
+          />
+          <OfferPath
+            entry="Départ Performance & Numérique"
+            description="Maturité digitale, automatisation, impact mesurable"
+            icon={Gauge}
+            tint="bg-emerald-50 text-emerald-700"
+            badge="Point d'entrée stratégique"
+            pathOffers={[offers[6], offers[4]]}
+            reduceMotion={reduceMotion}
+          />
+          <OfferPath
+            entry="Départ Organisation"
+            description="PME en croissance, pilotage, structuration"
+            icon={Building2}
+            tint="bg-blue-50 text-blue-700"
+            badge="PME en croissance"
+            pathOffers={[offers[7]]}
+            reduceMotion={reduceMotion}
+          />
         </div>
+        <div className="my-5 flex justify-center gap-16" aria-hidden="true">
+          <ArrowDown className="size-5 text-muted-foreground/50" />
+          <ArrowDown className="size-5 text-muted-foreground/50" />
+          <ArrowDown className="size-5 text-muted-foreground/50" />
+        </div>
+        <Reveal reduceMotion={reduceMotion}>
+          <article className="rounded-[1.75rem] border-2 border-accent/25 bg-accent/5 p-7">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+              <div className="inline-flex shrink-0 rounded-2xl bg-accent p-3 text-white">
+                <Users className="size-6" aria-hidden="true" />
+              </div>
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="font-heading text-sm font-semibold tracking-[0.14em] text-accent">06</span>
+                  <span className="rounded-full bg-accent/10 px-3 py-0.5 font-heading text-xs text-accent">La suite naturelle, quel que soit votre départ</span>
+                </div>
+                <h3 className="mt-2 font-heading text-xl text-primary">{offers[5].title}</h3>
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">{offers[5].pitch}</p>
+                <div className="mt-3 flex flex-wrap gap-3">
+                  <span className="inline-flex items-center rounded-full border border-border px-3 py-0.5 font-heading text-xs text-muted-foreground">{offers[5].duration}</span>
+                  <span className="inline-flex items-center rounded-full border border-border px-3 py-0.5 font-heading text-xs text-muted-foreground">{offers[5].price}</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </Reveal>
       </Section>
 
       <Section id="about" label="Un ingénieur qualité, pas un cabinet de plus" variant="light">
@@ -523,25 +527,76 @@ function GearDivider({ reduceMotion, backgroundClassName, inverted = false }: { 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const rotate1 = useTransform(scrollYProgress, [0, 1], reduceMotion ? [0, 0] : [0, 220]);
   const rotate2 = useTransform(scrollYProgress, [0, 1], reduceMotion ? [0, 0] : [0, -260]);
-  const gearPrimary = inverted ? "#D4956A" : "#B07642";
-  const gearSecondary = inverted ? "#FAF9F6" : "#0F1A2E";
-  const centerFill = inverted ? "#0F1A2E" : "#FAF9F6";
+  const stroke1 = inverted ? "#D4956A" : "#B07642";
+  const stroke2 = inverted ? "#FAF9F6" : "#0F1A2E";
 
   return (
-    <div ref={ref} className={`relative flex h-20 items-center justify-center overflow-hidden ${backgroundClassName ?? "bg-background"}`} aria-hidden="true">
+    <div ref={ref} className={`relative flex h-20 items-center justify-center gap-2 overflow-hidden ${backgroundClassName ?? "bg-background"}`} aria-hidden="true">
       <div className={`absolute inset-x-0 h-px ${inverted ? "bg-white/10" : "bg-border"}`} />
-      <motion.svg style={{ rotate: rotate1 }} viewBox="0 0 48 48" className="absolute left-[calc(50%-54px)] size-12 opacity-15"><GearPath fill={gearPrimary} centerFill={centerFill} /></motion.svg>
-      <motion.svg style={{ rotate: rotate2 }} viewBox="0 0 48 48" className="absolute left-[calc(50%+10px)] size-10 opacity-15"><GearPath fill={gearSecondary} centerFill={centerFill} /></motion.svg>
+      <motion.svg style={{ rotate: rotate1 }} viewBox="0 0 24 24" className="size-11 shrink-0 opacity-15" fill="none" stroke={stroke1} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><GearPath /></motion.svg>
+      <motion.svg style={{ rotate: rotate2 }} viewBox="0 0 24 24" className="size-8 shrink-0 opacity-15" fill="none" stroke={stroke2} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><GearPath /></motion.svg>
     </div>
   );
 }
 
-function GearPath({ fill, centerFill }: { fill: string; centerFill: string }) {
+function GearPath() {
   return (
     <>
-      <path d="M24 6l3 4.5a12 12 0 0 1 4.2 1.7l5.3-1.2 1.5 4.5-4 3.5a12 12 0 0 1 1 4.5l4.5 3-1.5 4.5-5.3-.5a12 12 0 0 1-3.2 3.2l.5 5.3-4.5 1.5-3-4.5a12 12 0 0 1-4.5-1l-3.5 4-4.5-1.5 1.2-5.3a12 12 0 0 1-1.7-4.2L6 24l1.5-4.5 5.3 1.2a12 12 0 0 1 3.2-3.2L15.5 12l4.5-1.5z" fill={fill} />
-      <circle cx="24" cy="24" r="7" fill={centerFill} />
+      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+      <circle cx="12" cy="12" r="3" />
     </>
+  );
+}
+
+function OfferPath({ entry, description, icon: Icon, tint, badge, pathOffers, reduceMotion }: {
+  entry: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+  tint: string;
+  badge?: string;
+  pathOffers: Offer[];
+  reduceMotion: boolean | null;
+}) {
+  return (
+    <div className="flex flex-col overflow-hidden rounded-[1.75rem] border border-border bg-white shadow-[0_8px_24px_rgba(15,26,46,0.04)]">
+      <div className="border-b border-border bg-surface-alt px-5 py-5">
+        <div className="flex items-start gap-3">
+          <div className={`inline-flex shrink-0 rounded-xl p-2.5 ${tint}`}>
+            <Icon className="size-5" aria-hidden />
+          </div>
+          <div className="min-w-0">
+            {badge ? <span className="mb-1 block font-heading text-xs uppercase tracking-[0.12em] text-accent">{badge}</span> : null}
+            <h3 className="font-heading text-sm font-medium leading-5 text-primary">{entry}</h3>
+            <p className="mt-0.5 text-xs leading-5 text-muted-foreground">{description}</p>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col divide-y divide-border">
+        {pathOffers.map((offer, i) => (
+          <Reveal key={offer.number} reduceMotion={reduceMotion} delay={i * 0.05}>
+            <div className="relative px-5 py-4">
+              {i > 0 && (
+                <div className="absolute left-[2.1rem] -top-3 flex flex-col items-center" aria-hidden="true">
+                  <div className="h-3 w-px bg-border" />
+                  <div className="size-1.5 rounded-full bg-accent/40" />
+                </div>
+              )}
+              <div className="flex items-start gap-3">
+                <span className="mt-0.5 font-heading text-xs font-semibold tracking-[0.12em] text-accent">{offer.number}</span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-heading text-sm leading-5 text-primary">{offer.title}</p>
+                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted-foreground">{offer.pitch}</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <span className="inline-flex items-center rounded-full border border-border px-2 py-0.5 font-heading text-xs text-muted-foreground">{offer.duration}</span>
+                    <span className="inline-flex items-center rounded-full border border-border px-2 py-0.5 font-heading text-xs text-muted-foreground">{offer.price}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </div>
   );
 }
 

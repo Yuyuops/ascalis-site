@@ -7,21 +7,11 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/Badge";
 import { Section } from "@/components/Section";
 import { ToolExportActions } from "@/components/tool/ToolExportActions";
+import { StatsEngineLoader } from "@/components/tool/StatsEngineLoader";
 import { absoluteUrl } from "@/lib/site-config";
 import { getToolBySlug, toolRegistry } from "@/lib/tool-registry";
 
-const ProToolClient = dynamic(() => import("@/components/tool/ProToolClient"), {
-  suspense: true,
-});
-
-const StatsEngineClient = dynamic(() => import("@/components/tool/StatsEngineClient"), {
-  ssr: false,
-  loading: () => (
-    <div className="rounded-[1.5rem] border border-border bg-surface-warm p-6 text-sm text-muted-foreground">
-      Chargement du moteur analytique…
-    </div>
-  ),
-});
+const ProToolClient = dynamic(() => import("@/components/tool/ProToolClient"));
 
 export const dynamicParams = false;
 
@@ -85,7 +75,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           <div className="rounded-[1.75rem] border border-border bg-white p-7 shadow-[0_8px_24px_rgba(15,26,46,0.04)]">
             <h2 className="font-heading text-2xl text-primary">Ce que fait cet outil</h2>
             <p className="mt-4 text-sm leading-7 text-muted-foreground">
-              Cette route prépare une version Next propre, indexable et accessible de l’outil historique. Elle conserve l’intention métier, le contexte de parcours et la possibilité d’étendre ensuite l’écran réel sans casser le SEO ni le déploiement statique.
+              Cette route prépare une version Next propre, indexable et accessible de l'outil historique. Elle conserve l'intention métier, le contexte de parcours et la possibilité d'étendre ensuite l'écran réel sans casser le SEO ni le déploiement statique.
             </p>
             <div className="mt-6">
               <ToolExportActions title={tool.title} description={tool.description} fileBaseName={tool.slug} />
@@ -96,7 +86,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
             <h2 className="font-heading text-2xl text-primary">Repères</h2>
             <dl className="mt-5 grid gap-4 text-sm leading-7 text-muted-foreground">
               <div>
-                <dt className="font-heading text-xs uppercase tracking-[0.14em] text-accent">Niveau d’accès</dt>
+                <dt className="font-heading text-xs uppercase tracking-[0.14em] text-accent">Niveau d'accès</dt>
                 <dd>{tool.visibility === "free" ? "Gratuit" : "Pro"}</dd>
               </div>
               <div>
@@ -104,7 +94,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                 <dd>{tool.legacyPath}</dd>
               </div>
               <div>
-                <dt className="font-heading text-xs uppercase tracking-[0.14em] text-accent">Repère d’offre</dt>
+                <dt className="font-heading text-xs uppercase tracking-[0.14em] text-accent">Repère d'offre</dt>
                 <dd>{tool.badge}</dd>
               </div>
             </dl>
@@ -117,7 +107,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           <Suspense
             fallback={
               <div className="rounded-[1.75rem] border border-border bg-surface-warm p-6 text-sm text-muted-foreground">
-                Chargement du shell de l’outil pro…
+                Chargement du shell de l'outil pro…
               </div>
             }
           >
@@ -128,10 +118,10 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
             <div className="rounded-[1.75rem] border border-border bg-white p-7 shadow-[0_8px_24px_rgba(15,26,46,0.04)]">
               <h2 className="font-heading text-2xl text-primary">Version gratuite prête pour la migration</h2>
               <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                La version gratuite reste légère. Les exports lourds sont chargés au clic uniquement, et le moteur statistique n’est monté que sur les routes qui en ont réellement besoin.
+                La version gratuite reste légère. Les exports lourds sont chargés au clic uniquement, et le moteur statistique n'est monté que sur les routes qui en ont réellement besoin.
               </p>
             </div>
-            {tool.requiresStatsEngine ? <StatsEngineClient tool={tool} /> : null}
+            {tool.requiresStatsEngine ? <StatsEngineLoader tool={tool} /> : null}
           </div>
         )}
       </Section>

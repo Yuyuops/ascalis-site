@@ -1,4 +1,4 @@
-name: Deploy Static Site to GitHub Pages
+name: Deploy Next App to GitHub Pages
 
 on:
   push:
@@ -10,34 +10,37 @@ permissions:
   contents: write
 
 concurrency:
-  group: deploy-gh-pages
+  group: deploy-next-app-pages
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: main
 
-      - name: Prepare static files
-        run: |
-          mkdir -p _site
-          # Copy all HTML files
-          cp *.html _site/
-          # Copy JS and JSON assets
-          cp *.js _site/ 2>/dev/null || true
-          cp *.json _site/ 2>/dev/null || true
-          # Prevent Jekyll processing
-          touch _site/.nojekyll
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: next-app/package-lock.json
+
+      - name: Install dependencies
+        run: cd next-app && npm ci
+
+      - name: Build static export
+        run: cd next-app && npm run build
+
+      - name: Ensure .nojekyll exists
+        run: touch next-app/out/.nojekyll
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
+          publish_dir: ./next-app/out
           publish_branch: gh-pages
           force_orphan: true
