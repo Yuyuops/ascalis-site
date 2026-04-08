@@ -1,0 +1,8 @@
+<svg width="560" height="680" viewBox="0 0 560 680" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="560" height="680" rx="32" fill="#F8FAFC"/>
+  <rect x="32" y="32" width="496" height="616" rx="24" fill="#FAF9F6" stroke="#E2E8F0" stroke-width="2"/>
+  <circle cx="280" cy="246" r="92" stroke="#B07642" stroke-width="8" fill="none"/>
+  <path d="M160 510C160 423.961 213.726 360 280 360C346.274 360 400 423.961 400 510" stroke="#0F1A2E" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <path d="M120 594H440" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="280" y="560" text-anchor="middle" font-family="'Lexend', sans-serif" font-size="28" font-weight="500" fill="#475569">Votre photo ici</text>
+</svg>
