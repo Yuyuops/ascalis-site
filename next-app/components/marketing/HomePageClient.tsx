@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import {
   ArrowRight,
@@ -20,6 +21,7 @@ import {
 import { Badge } from "@/components/Badge";
 import { Button } from "@/components/Button";
 import { Section } from "@/components/Section";
+import { withBasePath } from "@/lib/site-config";
 
 type Offer = {
   number: string;
@@ -358,7 +360,7 @@ export default function HomePageClient() {
         <div className="grid gap-10 md:grid-cols-[300px_minmax(0,1fr)] md:items-start">
           <Reveal reduceMotion={reduceMotion} className="mx-auto w-full max-w-[300px]">
             <div className="overflow-hidden rounded-[2rem] border border-border bg-surface-alt">
-              <Image src="/images/about-placeholder.svg" alt="Votre photo ici" width={560} height={680} className="h-auto w-full" priority />
+              <Image src={withBasePath("/images/about-placeholder.svg")} alt="Votre photo ici" width={560} height={680} className="h-auto w-full" priority />
             </div>
           </Reveal>
           <Reveal reduceMotion={reduceMotion} delay={0.08} className="space-y-6">
@@ -441,7 +443,7 @@ export default function HomePageClient() {
             const Icon = tool.icon;
             return (
               <Reveal key={tool.title} reduceMotion={reduceMotion} delay={index * 0.04}>
-                <a href={tool.href} className="group block min-h-[44px] rounded-[1.5rem] border border-white/10 bg-white/5 p-6 transition-all hover:-translate-y-1 hover:border-accent/40 hover:bg-white/[0.08] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                <Link href={tool.href} className="group block min-h-[44px] rounded-[1.5rem] border border-white/10 bg-white/5 p-6 transition-all hover:-translate-y-1 hover:border-accent/40 hover:bg-white/[0.08] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent">
                   <div className="flex items-start justify-between gap-4">
                     <div className="rounded-2xl bg-white/10 p-3 text-accent-light"><Icon className="size-6" aria-hidden="true" /></div>
                     <Badge className="border-accent/25 bg-accent/10 text-accent-light">{tool.badge}</Badge>
@@ -449,7 +451,7 @@ export default function HomePageClient() {
                   <h3 className="mt-4 font-heading text-lg text-white">{tool.title}</h3>
                   <p className="mt-3 text-sm leading-7 text-white/55">{tool.description}</p>
                   <span className="mt-4 inline-flex items-center gap-2 font-heading text-xs uppercase tracking-[0.14em] text-accent-light">{tool.cta}<ArrowRight className="size-3 transition-transform group-hover:translate-x-1" aria-hidden="true" /></span>
-                </a>
+                </Link>
               </Reveal>
             );
           })}
