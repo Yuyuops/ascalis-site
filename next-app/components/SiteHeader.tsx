@@ -99,20 +99,20 @@ export function SiteHeader() {
               role="dialog"
               aria-modal="true"
               aria-label="Menu principal mobile"
-              className="fixed inset-y-0 right-0 z-50 flex w-[min(88vw,22rem)] flex-col border-l border-border bg-background px-6 py-6 shadow-[0_16px_40px_rgba(15,26,46,0.16)] md:hidden"
+              className="fixed inset-y-0 right-0 z-50 flex w-[min(88vw,22rem)] flex-col bg-[#0F1A2E] px-6 py-6 shadow-[0_16px_40px_rgba(0,0,0,0.3)] md:hidden"
               initial={reduceMotion ? false : { x: "100%" }}
               animate={reduceMotion ? {} : { x: 0 }}
               exit={reduceMotion ? {} : { x: "100%" }}
               transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 320, damping: 32 }}
             >
               <div className="flex items-center justify-between gap-4">
-                <AscalisLogo />
+                <AscalisLogo variant="light" />
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
                   className={cn(
                     interactiveClass,
-                    "inline-flex size-11 items-center justify-center border border-border bg-background text-primary",
+                    "inline-flex size-11 items-center justify-center rounded-lg border border-white/15 text-white/70 hover:text-white",
                   )}
                   aria-label="Fermer le menu"
                 >
@@ -120,7 +120,7 @@ export function SiteHeader() {
                 </button>
               </div>
 
-              <nav aria-label="Navigation mobile" className="mt-10 flex flex-1 flex-col gap-4">
+              <nav aria-label="Navigation mobile" className="mt-10 flex flex-1 flex-col gap-2">
                 {NAV_ITEMS.map((item) => (
                   <Link
                     key={item.href}
@@ -128,7 +128,7 @@ export function SiteHeader() {
                     onClick={() => setIsOpen(false)}
                     className={cn(
                       interactiveClass,
-                      "rounded-xl border border-border bg-surface-warm px-4 py-3 font-heading text-base text-primary transition-colors hover:bg-secondary",
+                      "rounded-xl border border-white/10 bg-white/5 px-4 py-4 font-heading text-base font-medium text-white transition-colors hover:bg-white/10",
                     )}
                   >
                     {item.label}
