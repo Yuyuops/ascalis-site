@@ -1,59 +1,76 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { Lock, Workflow } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ExternalLink, Lock } from "lucide-react";
+import Link from "next/link";
 
-import { ToolExportActions } from "@/components/tool/ToolExportActions";
+import { getCurrentUser } from "@/lib/auth";
+import { withBasePath } from "@/lib/site-config";
 import type { ToolDefinition } from "@/lib/tool-registry";
 
-const StatsEngineClient = dynamic(() => import("@/components/tool/StatsEngineClient"), {
-  ssr: false,
-  loading: () => (
-    <div className="rounded-[1.5rem] border border-border bg-surface-warm p-6 text-sm text-muted-foreground">
-      Chargement du moteur analytique…
-    </div>
-  ),
-});
-
 export default function ProToolClient({ tool }: { tool: ToolDefinition }) {
+  const [isAuthed, setIsAuthed] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setIsAuthed(getCurrentUser() !== null);
+  }, []);
+
+  // Avoid hydration mismatch — render nothing until we read localStorage
+  if (isAuthed === null) {
+    return (
+      <div className="rounded-[1.5rem] border border-border bg-surface-warm p-6 text-sm text-muted-foreground">
+        Vérification de l'accès…
+      </div>
+    );
+  }
+
+  // Not authenticated
+  if (!isAuthed) {
+    return (
+      <div className="rounded-[1.75rem] border border-border bg-surface-alt p-10 text-center">
+        <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary">
+          <Lock className="size-7 text-white" aria-hidden="true" />
+        </div>
+        <h2 className="mt-5 font-heading text-2xl text-primary">Accès Pro requis</h2>
+        <p className="mx-auto mt-3 max-w-sm text-sm leading-7 text-muted-foreground">
+          Cet outil est réservé à l'espace professionnel ASCALIS. Connectez-vous pour y accéder.
+        </p>
+        <Link
+          href={withBasePath("/dashboard/")}
+          className="mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-primary px-6 py-3 font-heading text-sm font-medium text-white transition hover:bg-primary/90 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          Se connecter à l'espace pro
+        </Link>
+      </div>
+    );
+  }
+
+  // Authenticated — embed the legacy HTML tool via iframe
+  const legacyUrl = withBasePath(tool.legacyPath);
+
   return (
-    <div className="space-y-6">
-      <div className="rounded-[1.75rem] border border-border bg-surface-warm p-6 shadow-[0_8px_24px_rgba(15,26,46,0.04)]">
-        <div className="flex items-start gap-4">
-          <div className="rounded-2xl bg-white p-3 text-accent shadow-sm">
-            <Workflow className="size-6" aria-hidden="true" />
-          </div>
-          <div>
-            <p className="font-heading text-xs uppercase tracking-[0.16em] text-accent">Outil pro chargé à la demande</p>
-            <h2 className="mt-2 font-heading text-2xl text-primary">Socle Next prêt pour la migration métier</h2>
-            <p className="mt-3 text-sm leading-7 text-muted-foreground">
-              Cette route prépare la future migration de l’outil pro sans embarquer tout son JavaScript sur la vitrine. Le shell métier est donc lazy-loadé et reste compatible avec un déploiement statique GitHub Pages.
-            </p>
-          </div>
-        </div>
+    <div className="overflow-hidden rounded-[1.75rem] border border-border bg-white shadow-[0_8px_24px_rgba(15,26,46,0.04)]">
+      <div className="flex items-center justify-between border-b border-border bg-surface-warm px-6 py-3">
+        <p className="font-heading text-xs uppercase tracking-[0.14em] text-accent">
+          {tool.title}
+        </p>
+        <a
+          href={legacyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-[44px] items-center gap-2 font-heading text-xs text-muted-foreground transition hover:text-primary"
+          aria-label={`Ouvrir ${tool.title} en plein écran`}
+        >
+          <ExternalLink className="size-4" aria-hidden="true" />
+          Plein écran
+        </a>
       </div>
-
-      <div className="rounded-[1.5rem] border border-border bg-white p-6">
-        <div className="flex items-start gap-4">
-          <div className="rounded-2xl bg-primary p-3 text-primary-foreground">
-            <Lock className="size-5" aria-hidden="true" />
-          </div>
-          <div>
-            <h3 className="font-heading text-xl text-primary">Accès et exploitation</h3>
-            <p className="mt-2 text-sm leading-7 text-muted-foreground">
-              L’écran public expose le contexte, le rôle de l’outil et la logique de parcours. Le comportement avancé, la persistance et les exports lourds restent isolés et chargés seulement quand la page en a réellement besoin.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <ToolExportActions
+      <iframe
+        src={legacyUrl}
         title={tool.title}
-        description={tool.description}
-        fileBaseName={tool.slug}
+        className="min-h-[80vh] w-full border-none"
+        loading="lazy"
       />
-
-      {tool.requiresStatsEngine ? <StatsEngineClient tool={tool} /> : null}
     </div>
   );
 }

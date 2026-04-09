@@ -6,10 +6,12 @@ import { cn } from "@/lib/utils";
 type AscalisLogoProps = {
   className?: string;
   title?: string;
+  variant?: "dark" | "light";
 };
 
-export function AscalisLogo({ className, title = "ASCALIS" }: AscalisLogoProps) {
+export function AscalisLogo({ className, title = "ASCALIS", variant = "dark" }: AscalisLogoProps) {
   const titleId = React.useId();
+  const textColor = variant === "light" ? "#F8FAFC" : designTokens.colors.primary;
 
   return (
     <svg
@@ -34,7 +36,7 @@ export function AscalisLogo({ className, title = "ASCALIS" }: AscalisLogoProps) 
         fontFamily="Lexend, sans-serif"
         fontSize="24px"
         fontWeight="500"
-        fill={designTokens.colors.primary}
+        fill={textColor}
         letterSpacing="4.5"
       >
         SCALIS
