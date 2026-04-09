@@ -19,13 +19,13 @@ export function SiteFooter() {
         <div className="space-y-4">
           <h2 className="font-heading text-sm uppercase tracking-[0.18em] text-white">Liens légaux</h2>
           <nav aria-label="Liens légaux" className="flex flex-col gap-3">
-            <Link href="#mentions-legales" className={footerLinkClass}>
+            <Link href="/mentions-legales/" className={footerLinkClass}>
               Mentions légales
             </Link>
-            <Link href="#politique-confidentialite" className={footerLinkClass}>
+            <Link href="/politique-confidentialite/" className={footerLinkClass}>
               Politique de confidentialité
             </Link>
-            <Link href="#conditions-utilisation" className={footerLinkClass}>
+            <Link href="/conditions-utilisation/" className={footerLinkClass}>
               Conditions d’utilisation
             </Link>
           </nav>
