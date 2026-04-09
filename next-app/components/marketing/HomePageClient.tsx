@@ -304,7 +304,7 @@ export default function HomePageClient() {
         <div className="grid gap-10 md:grid-cols-[300px_minmax(0,1fr)] md:items-start">
           <Reveal reduceMotion={reduceMotion} className="mx-auto w-full max-w-[300px]">
             <div className="overflow-hidden rounded-[2rem] border border-border bg-[#0A0A0A]">
-              <Image src={withBasePath("/images/about-yukti.png")} alt="Yukti Ranjan, Consultant ASCALIS" width={560} height={680} className="h-auto w-full" priority />
+              <Image src={withBasePath("/images/about-yukti.svg")} alt="Yukti Ranjan, Consultant ASCALIS" width={560} height={680} className="h-auto w-full" priority />
             </div>
           </Reveal>
           <Reveal reduceMotion={reduceMotion} delay={0.08} className="space-y-6">
