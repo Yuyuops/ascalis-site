@@ -1,4 +1,4 @@
-export const appBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "/ascalis-site";
+export const appBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export const siteConfig = {
   name: "ASCALIS",

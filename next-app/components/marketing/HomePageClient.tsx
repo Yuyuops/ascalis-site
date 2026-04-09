@@ -303,13 +303,13 @@ export default function HomePageClient() {
         <SectionHeading tag="Qui suis-je" title="Un ingénieur qualité, pas un cabinet de plus" />
         <div className="grid gap-10 md:grid-cols-[300px_minmax(0,1fr)] md:items-start">
           <Reveal reduceMotion={reduceMotion} className="mx-auto w-full max-w-[300px]">
-            <div className="overflow-hidden rounded-[2rem] border border-border bg-surface-alt">
-              <Image src={withBasePath("/images/about-placeholder.svg")} alt="Votre photo ici" width={560} height={680} className="h-auto w-full" priority />
+            <div className="overflow-hidden rounded-[2rem] border border-border bg-[#0A0A0A]">
+              <Image src={withBasePath("/images/about-yukti.svg")} alt="Yukti Ranjan, Consultant ASCALIS" width={560} height={680} className="h-auto w-full" priority />
             </div>
           </Reveal>
           <Reveal reduceMotion={reduceMotion} delay={0.08} className="space-y-6">
             <div>
-              <h3 className="font-display text-4xl text-primary">Votre prénom Nom</h3>
+              <h3 className="font-display text-4xl text-primary">Yukti Ranjan</h3>
               <p className="mt-2 font-heading text-sm uppercase tracking-[0.16em] text-accent">Consultant Amélioration Continue & Performance Qualité</p>
             </div>
             <p className="text-base leading-8 text-muted-foreground">Ingénieur qualité de formation, j'ai passé plus de 8 ans sur le terrain — en atelier, sur les lignes de production, au contact des opérateurs et des responsables qualité. J'interviens dans l'industrie manufacturière, le BTP et le transport & logistique.</p>
@@ -437,17 +437,54 @@ export default function HomePageClient() {
             <h2 className="font-display text-4xl text-primary md:text-5xl">Parlons de votre situation</h2>
             <p className="mt-4 text-base leading-8 text-muted-foreground">Un échange de 30 minutes pour comprendre votre contexte, identifier les leviers et voir si on peut travailler ensemble.</p>
           </div>
-          <form className="mt-8 grid gap-4 text-left md:grid-cols-2" aria-label="Formulaire de contact">
-            <Field label="Nom" id="f-name"><input type="text" id="f-name" placeholder="Votre nom" autoComplete="name" required className={inputClass} /></Field>
-            <Field label="Entreprise" id="f-company"><input type="text" id="f-company" placeholder="Nom de l'entreprise" autoComplete="organization" className={inputClass} /></Field>
-            <Field label="Email" id="f-email"><input type="email" id="f-email" placeholder="votre@email.com" autoComplete="email" required className={inputClass} /></Field>
-            <Field label="Secteur" id="f-sector"><select id="f-sector" className={inputClass} defaultValue=""><option value="">Sélectionner</option><option>Aéronautique</option><option>BTP / Construction</option><option>Transport & Logistique</option><option>Autre</option></select></Field>
-            <Field label="Votre problématique en quelques mots" id="f-message" className="md:col-span-2"><textarea id="f-message" placeholder="Ex: On a un audit EN 9100 dans 4 mois et on ne sait pas où on en est..." className={`${inputClass} min-h-28 resize-y`} /></Field>
-            <div className="md:col-span-2"><Button type="submit" variant="copper" className="w-full justify-center">Demander un échange gratuit</Button></div>
-          </form>
+          <ContactForm />
         </Reveal>
       </Section>
     </>
+  );
+}
+
+const inputClass = "w-full rounded-xl border border-border bg-white px-4 py-3 font-body text-sm text-on-surface placeholder:text-muted-foreground/60 transition-colors focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent";
+
+function ContactForm() {
+  const [status, setStatus] = React.useState<"idle" | "sending" | "success" | "error">("idle");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("sending");
+    const formId = process.env.NEXT_PUBLIC_FORMSPREE_ID;
+    if (!formId) { setStatus("error"); return; }
+    try {
+      const res = await fetch(`https://formspree.io/f/${formId}`, {
+        method: "POST",
+        body: new FormData(e.currentTarget),
+        headers: { Accept: "application/json" },
+      });
+      setStatus(res.ok ? "success" : "error");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "success") {
+    return (
+      <div className="mt-8 rounded-2xl bg-emerald-50 border border-emerald-200 p-8 text-center">
+        <p className="font-heading text-base font-semibold text-emerald-700">Message envoyé</p>
+        <p className="mt-2 text-sm text-emerald-600">Je vous recontacte sous 24h pour convenir d'un échange.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="mt-8 grid gap-4 text-left md:grid-cols-2" aria-label="Formulaire de contact">
+      <Field label="Nom" id="f-name"><input type="text" id="f-name" name="name" placeholder="Votre nom" autoComplete="name" required className={inputClass} /></Field>
+      <Field label="Entreprise" id="f-company"><input type="text" id="f-company" name="company" placeholder="Nom de l'entreprise" autoComplete="organization" className={inputClass} /></Field>
+      <Field label="Email" id="f-email"><input type="email" id="f-email" name="email" placeholder="votre@email.com" autoComplete="email" required className={inputClass} /></Field>
+      <Field label="Secteur" id="f-sector"><select id="f-sector" name="sector" className={inputClass} defaultValue=""><option value="">Sélectionner</option><option>Aéronautique</option><option>BTP / Construction</option><option>Transport & Logistique</option><option>Autre</option></select></Field>
+      <Field label="Votre problématique en quelques mots" id="f-message" className="md:col-span-2"><textarea id="f-message" name="message" placeholder="Ex: On a un audit EN 9100 dans 4 mois et on ne sait pas où on en est..." className={`${inputClass} min-h-28 resize-y`} /></Field>
+      {status === "error" && <p className="md:col-span-2 text-sm text-red-600" role="alert">Une erreur est survenue. Réessayez ou écrivez à contact@ascalis.fr</p>}
+      <div className="md:col-span-2"><Button type="submit" variant="copper" className="w-full justify-center" disabled={status === "sending"}>{status === "sending" ? "Envoi en cours…" : "Demander un échange gratuit"}</Button></div>
+    </form>
   );
 }
 
@@ -568,5 +605,3 @@ function OfferPath({ entry, description, icon: Icon, tint, badge, pathOffers, re
     </div>
   );
 }
-
-const inputClass = "w-full rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground outline-none transition focus:border-accent focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent";
