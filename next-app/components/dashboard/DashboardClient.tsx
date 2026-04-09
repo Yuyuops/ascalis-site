@@ -22,7 +22,9 @@ import {
 } from "lucide-react";
 
 import { AscalisLogo } from "@/components/AscalisLogo";
+import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 import { getCurrentUser, login, logout, type ProUser } from "@/lib/auth";
+import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
 import { withBasePath } from "@/lib/site-config";
 import { toolRegistry, freeTools, proTools, type ToolDefinition } from "@/lib/tool-registry";
 import type { ToolStage } from "@/lib/tool-registry";
@@ -49,19 +51,17 @@ function LoginScreen({ onLogin }: { onLogin: (user: ProUser) => void }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setTimeout(() => {
-      const user = login(email, password);
-      if (user) {
-        onLogin(user);
-      } else {
-        setError("Identifiants incorrects.");
-        setLoading(false);
-      }
-    }, 300);
+    const user = await login(email, password);
+    if (user) {
+      onLogin(user);
+    } else {
+      setError("Identifiants incorrects.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -112,10 +112,7 @@ function LoginScreen({ onLogin }: { onLogin: (user: ProUser) => void }) {
           </button>
         </form>
 
-        <p className="mt-6 text-xs text-slate-400">
-          Demo admin : admin@ascalis.fr / ascalis2026
-        </p>
-        <Link href={withBasePath("/")} className="mt-3 inline-flex items-center gap-1 font-heading text-xs text-[#D4956A] hover:text-[#B07642]">
+        <Link href={withBasePath("/")} className="mt-6 inline-flex items-center gap-1 font-heading text-xs text-[#D4956A] hover:text-[#B07642]">
           <Home className="size-3" aria-hidden="true" />
           Retour au site
         </Link>
@@ -377,16 +374,26 @@ export default function DashboardClient() {
   const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setUser(getCurrentUser());
-    setReady(true);
+    const supabase = getSupabaseBrowserClient();
+
+    getCurrentUser().then((u) => {
+      setUser(u);
+      setReady(true);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
+      if (!session) setUser(null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   function handleLogin(u: ProUser) {
     setUser(u);
   }
 
-  function handleLogout() {
-    logout();
+  async function handleLogout() {
+    await logout();
     setUser(null);
   }
 

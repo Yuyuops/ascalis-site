@@ -1,40 +1,40 @@
-export const STORAGE_KEY = "ascalis_pro_session";
+import { getSupabaseBrowserClient } from './supabase-browser'
 
-export type UserRole = "admin" | "client";
+export type UserRole = "admin" | "client"
 
 export interface ProUser {
-  email: string;
-  name: string;
-  role: UserRole;
-  initials: string;
+  email: string
+  name: string
+  role: UserRole
+  initials: string
 }
 
-const ACCOUNTS = [
-  { email: "admin@ascalis.fr", password: "ascalis2026", name: "Admin ASCALIS", role: "admin" as UserRole, initials: "AA" },
-  { email: "client@demo.fr", password: "demo2026", name: "Client Demo", role: "client" as UserRole, initials: "CD" },
-];
-
-export function login(email: string, password: string): ProUser | null {
-  const account = ACCOUNTS.find(
-    (a) => a.email.toLowerCase() === email.toLowerCase() && a.password === password,
-  );
-  if (!account) return null;
-  const user: ProUser = { email: account.email, name: account.name, role: account.role, initials: account.initials };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-  return user;
-}
-
-export function logout(): void {
-  localStorage.removeItem(STORAGE_KEY);
-}
-
-export function getCurrentUser(): ProUser | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as ProUser;
-  } catch {
-    return null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function userFromSupabase(supabaseUser: any): ProUser | null {
+  if (!supabaseUser) return null
+  const meta = supabaseUser.user_metadata ?? {}
+  return {
+    email: supabaseUser.email ?? '',
+    name: meta.name ?? supabaseUser.email ?? '',
+    role: (meta.role as UserRole) ?? 'client',
+    initials: meta.initials ?? (supabaseUser.email?.[0]?.toUpperCase() ?? '?'),
   }
+}
+
+export async function login(email: string, password: string): Promise<ProUser | null> {
+  const supabase = getSupabaseBrowserClient()
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+  if (error || !data.user) return null
+  return userFromSupabase(data.user)
+}
+
+export async function logout(): Promise<void> {
+  const supabase = getSupabaseBrowserClient()
+  await supabase.auth.signOut()
+}
+
+export async function getCurrentUser(): Promise<ProUser | null> {
+  const supabase = getSupabaseBrowserClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  return userFromSupabase(user)
 }
