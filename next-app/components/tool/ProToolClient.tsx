@@ -3,49 +3,62 @@
 import { useEffect, useState } from "react";
 import { ExternalLink, Lock } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 import { getCurrentUser } from "@/lib/auth";
 import { withBasePath } from "@/lib/site-config";
 import type { ToolDefinition } from "@/lib/tool-registry";
 
+// Native React tools loaded lazily — keeps the default bundle small
+const PlanActionTool = dynamic(
+  () => import("@/components/tools/PlanActionTool"),
+  { ssr: false, loading: () => <ToolLoadingShell /> }
+);
+
 export default function ProToolClient({ tool }: { tool: ToolDefinition }) {
-  const [isAuthed, setIsAuthed] = useState<boolean | null>(null);
+  // null = loading, false = unauthenticated, true = authenticated
+  const [authed, setAuthed] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setIsAuthed(getCurrentUser() !== null);
+    getCurrentUser().then((u) => setAuthed(u !== null));
   }, []);
 
-  // Avoid hydration mismatch — render nothing until we read localStorage
-  if (isAuthed === null) {
-    return (
-      <div className="rounded-[1.5rem] border border-border bg-surface-warm p-6 text-sm text-muted-foreground">
-        Vérification de l'accès…
-      </div>
-    );
+  if (authed === null) {
+    return <ToolLoadingShell />;
   }
 
-  // Not authenticated
-  if (!isAuthed) {
+  if (!authed) {
     return (
       <div className="rounded-[1.75rem] border border-border bg-surface-alt p-10 text-center">
         <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary">
           <Lock className="size-7 text-white" aria-hidden="true" />
         </div>
-        <h2 className="mt-5 font-heading text-2xl text-primary">Accès Pro requis</h2>
+        <h2 className="mt-5 font-heading text-2xl text-primary">
+          Accès Pro requis
+        </h2>
         <p className="mx-auto mt-3 max-w-sm text-sm leading-7 text-muted-foreground">
-          Cet outil est réservé à l'espace professionnel ASCALIS. Connectez-vous pour y accéder.
+          Cet outil est réservé à l&apos;espace professionnel ASCALIS.
+          Connectez-vous pour y accéder.
         </p>
         <Link
           href={withBasePath("/dashboard/")}
           className="mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-primary px-6 py-3 font-heading text-sm font-medium text-white transition hover:bg-primary/90 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          Se connecter à l'espace pro
+          Se connecter à l&apos;espace pro
         </Link>
       </div>
     );
   }
 
-  // Authenticated — embed the legacy HTML tool via iframe
+  // ── Native React component ─────────────────────────────────────────────────
+  if (tool.native) {
+    if (tool.slug === "plan-action-central-ascalis") {
+      return <PlanActionTool />;
+    }
+    // Future native tools go here
+  }
+
+  // ── Legacy iframe fallback ─────────────────────────────────────────────────
   const legacyUrl = withBasePath(tool.legacyPath);
 
   return (
@@ -72,5 +85,11 @@ export default function ProToolClient({ tool }: { tool: ToolDefinition }) {
         loading="lazy"
       />
     </div>
+  );
+}
+
+function ToolLoadingShell() {
+  return (
+    <div className="h-64 animate-pulse rounded-[1.75rem] border border-border bg-surface-alt" />
   );
 }
