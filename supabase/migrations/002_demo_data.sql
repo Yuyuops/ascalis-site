@@ -32,7 +32,7 @@ BEGIN
     ws_id, a.title, a.source, admin_id,
     (SELECT id FROM public.processes WHERE workspace_id = ws_id AND code = a.proc LIMIT 1),
     a.effect,
-    (CURRENT_DATE + a.offset)::date,
+    (CURRENT_DATE + a.delta)::date,
     a.status, a.priority, a.progress, admin_id
   FROM (VALUES
     ('Mise à jour du plan de surveillance fournisseur',  'Audit interne', 'PROC-001', 'Réduire les NC à réception',        -15, 'in_progress', 'high',     60),
@@ -45,7 +45,7 @@ BEGIN
     ('Requalification fournisseur aciers spéciaux',      'Audit fourn.',  'PROC-001', 'Maintien approbation EN9100',      30,  'open',        'high',      0),
     ('Clôture 8D fournisseur ref. F-2026-041',           'NC fournisseur','PROC-001', 'Validation efficacité action',     -5,  'open',        'critical',  20),
     ('Mise à jour FMEA ligne assemblage B',              'Retour terrain','PROC-002', 'Prévention défauts série',         -10, 'in_progress', 'high',      45)
-  ) AS a(title, source, proc, effect, offset, status, priority, progress);
+  ) AS a(title, source, proc, effect, delta, status, priority, progress);
 
   -- ── KPIs ─────────────────────────────────────────────────
   INSERT INTO public.kpis
@@ -69,7 +69,7 @@ BEGIN
     ws_id,
     (SELECT id FROM public.processes WHERE workspace_id = ws_id AND code = r.proc LIMIT 1),
     r.period,
-    (CURRENT_DATE + r.offset)::date,
+    (CURRENT_DATE + r.delta)::date,
     admin_id,
     r.status,
     r.conclusion
@@ -79,7 +79,7 @@ BEGIN
     ('PROC-003', '2026-Q2',  -2, 'in_progress', 'En cours — points ouverts sur étalonnage'),
     ('PROC-004', '2026-Q2',  18, 'planned',     NULL),
     ('PROC-005', '2026-Q1', -25, 'done',        'Actions identifiées, délais respectés')
-  ) AS r(proc, period, offset, status, conclusion);
+  ) AS r(proc, period, delta, status, conclusion);
 
   RAISE NOTICE 'Données de démonstration insérées dans workspace %', ws_id;
 END $$;
