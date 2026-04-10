@@ -18,6 +18,8 @@ export type ToolDefinition = {
   route: `/outils/${string}/`;
   requiresStatsEngine: boolean;
   badge: string;
+  /** true = render native React component instead of legacy iframe */
+  native?: boolean;
 };
 
 export const toolRegistry: ToolDefinition[] = [
@@ -207,6 +209,7 @@ export const toolRegistry: ToolDefinition[] = [
     route: "/outils/plan-action-central-ascalis/",
     requiresStatsEngine: false,
     badge: "Offres 1, 3, 4, 5, 6, 8",
+    native: true,
   },
   {
     slug: "tableau-bord-qualite-ascalis",
