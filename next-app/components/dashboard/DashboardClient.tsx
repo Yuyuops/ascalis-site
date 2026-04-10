@@ -2,9 +2,12 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 import {
+  AlertTriangle,
   BarChart2,
   BookOpen,
+  Calendar,
   CheckSquare,
   ChevronRight,
   ExternalLink,
@@ -17,12 +20,13 @@ import {
   Search,
   Shield,
   Target,
+  TrendingUp,
   X,
   Zap,
 } from "lucide-react";
 
 import { AscalisLogo } from "@/components/AscalisLogo";
-import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
+import { getCockpitSummary, getOverdueActions, getRedKpis, type CockpitSummary, type ActionAlert, type KpiAlert } from "@/lib/cockpit";
 import { getCurrentUser, login, logout, type ProUser } from "@/lib/auth";
 import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
 import { withBasePath } from "@/lib/site-config";
@@ -259,26 +263,137 @@ function SidebarLink({
 
 // ─── Stats cards ──────────────────────────────────────────────────────────────
 
-function StatsGrid({ user }: { user: ProUser }) {
-  const stats = [
-    { value: toolRegistry.length.toString(), label: "Outils disponibles", trend: null },
-    { value: proTools.length.toString(), label: "Outils pro", trend: null },
-    { value: freeTools.length.toString(), label: "Outils gratuits", trend: null },
-    { value: user.role === "admin" ? "Complet" : "Limité", label: "Niveau d'accès", trend: user.role },
-  ];
+// ─── Cockpit grid ─────────────────────────────────────────────────────────────
+
+function CockpitGrid() {
+  const [summary, setSummary] = useState<CockpitSummary | null>(null);
+  const [overdueActions, setOverdueActions] = useState<ActionAlert[]>([]);
+  const [redKpis, setRedKpis] = useState<KpiAlert[]>([]);
+
+  useEffect(() => {
+    getCockpitSummary().then(async (s) => {
+      setSummary(s);
+      if (s.workspaceId) {
+        const [actions, kpis] = await Promise.all([
+          getOverdueActions(s.workspaceId),
+          getRedKpis(s.workspaceId),
+        ]);
+        setOverdueActions(actions);
+        setRedKpis(kpis);
+      }
+    });
+  }, []);
+
+  if (!summary) {
+    return (
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {[0,1,2,3].map(i => (
+          <div key={i} className="h-24 animate-pulse rounded-xl bg-slate-100" />
+        ))}
+      </div>
+    );
+  }
+
+  const maturity = summary.maturityScore;
+  const maturityColor = maturity >= 80 ? "text-emerald-600" : maturity >= 60 ? "text-amber-600" : "text-red-600";
+  const maturityBg   = maturity >= 80 ? "bg-emerald-50"   : maturity >= 60 ? "bg-amber-50"   : "bg-red-50";
+
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-      {stats.map((s) => (
-        <div key={s.label} className="rounded-xl border border-slate-100 bg-white p-5">
-          <p className="font-display text-3xl leading-none text-[#0F1A2E]">{s.value}</p>
-          <p className="mt-1 text-xs text-slate-400">{s.label}</p>
-          {s.trend && (
-            <span className={`mt-2 inline-flex items-center rounded-full px-2 py-0.5 font-heading text-[10px] ${s.trend === "admin" ? "bg-emerald-50 text-emerald-600" : "bg-amber-50 text-amber-600"}`}>
-              {s.trend === "admin" ? "Administrateur" : "Client"}
-            </span>
+    <div className="space-y-4">
+      {/* Cartes KPI */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {/* Actions en retard */}
+        <div className={`rounded-xl border p-5 ${summary.actionsOverdue > 0 ? "border-red-200 bg-red-50" : "border-slate-100 bg-white"}`}>
+          <div className="flex items-center justify-between">
+            <AlertTriangle className={`size-4 ${summary.actionsOverdue > 0 ? "text-red-500" : "text-slate-300"}`} aria-hidden="true" />
+            {summary.actionsOverdue > 0 && <span className="rounded-full bg-red-500 px-1.5 py-0.5 font-heading text-[10px] text-white">RETARD</span>}
+          </div>
+          <p className={`mt-2 font-display text-3xl leading-none ${summary.actionsOverdue > 0 ? "text-red-600" : "text-[#0F1A2E]"}`}>{summary.actionsOverdue}</p>
+          <p className="mt-1 text-xs text-slate-400">Actions en retard</p>
+          <p className="mt-1 font-heading text-[10px] text-slate-300">{summary.actionsOpen} ouvertes au total</p>
+        </div>
+
+        {/* KPIs hors cible */}
+        <div className={`rounded-xl border p-5 ${summary.kpisRed > 0 ? "border-red-200 bg-red-50" : summary.kpisOrange > 0 ? "border-amber-200 bg-amber-50" : "border-slate-100 bg-white"}`}>
+          <div className="flex items-center justify-between">
+            <BarChart2 className={`size-4 ${summary.kpisRed > 0 ? "text-red-500" : summary.kpisOrange > 0 ? "text-amber-500" : "text-slate-300"}`} aria-hidden="true" />
+            {(summary.kpisRed > 0 || summary.kpisOrange > 0) && (
+              <span className={`rounded-full px-1.5 py-0.5 font-heading text-[10px] text-white ${summary.kpisRed > 0 ? "bg-red-500" : "bg-amber-500"}`}>ALERTE</span>
+            )}
+          </div>
+          <p className={`mt-2 font-display text-3xl leading-none ${summary.kpisRed > 0 ? "text-red-600" : summary.kpisOrange > 0 ? "text-amber-600" : "text-[#0F1A2E]"}`}>
+            {summary.kpisRed + summary.kpisOrange}
+          </p>
+          <p className="mt-1 text-xs text-slate-400">KPIs hors cible</p>
+          <p className="mt-1 font-heading text-[10px] text-slate-300">{summary.kpisTotal} indicateurs suivis</p>
+        </div>
+
+        {/* Revues à préparer */}
+        <div className={`rounded-xl border p-5 ${summary.reviewsDue > 0 ? "border-amber-200 bg-amber-50" : "border-slate-100 bg-white"}`}>
+          <div className="flex items-center justify-between">
+            <Calendar className={`size-4 ${summary.reviewsDue > 0 ? "text-amber-500" : "text-slate-300"}`} aria-hidden="true" />
+            {summary.reviewsDue > 0 && <span className="rounded-full bg-amber-500 px-1.5 py-0.5 font-heading text-[10px] text-white">À PRÉPARER</span>}
+          </div>
+          <p className={`mt-2 font-display text-3xl leading-none ${summary.reviewsDue > 0 ? "text-amber-600" : "text-[#0F1A2E]"}`}>{summary.reviewsDue}</p>
+          <p className="mt-1 text-xs text-slate-400">Revues dans 30 jours</p>
+        </div>
+
+        {/* Score de maturité */}
+        <div className={`rounded-xl border p-5 ${maturityBg} border-transparent`}>
+          <div className="flex items-center justify-between">
+            <TrendingUp className={`size-4 ${maturityColor}`} aria-hidden="true" />
+            <span className={`rounded-full px-1.5 py-0.5 font-heading text-[10px] ${maturityBg} ${maturityColor}`}>MATURITÉ</span>
+          </div>
+          <p className={`mt-2 font-display text-3xl leading-none ${maturityColor}`}>{maturity}%</p>
+          <p className="mt-1 text-xs text-slate-400">Score système qualité</p>
+          <div className="mt-2 h-1.5 w-full rounded-full bg-white/60">
+            <div className={`h-1.5 rounded-full transition-all ${maturity >= 80 ? "bg-emerald-500" : maturity >= 60 ? "bg-amber-500" : "bg-red-500"}`} style={{ width: `${maturity}%` }} />
+          </div>
+        </div>
+      </div>
+
+      {/* Alertes détaillées */}
+      {(overdueActions.length > 0 || redKpis.length > 0) && (
+        <div className="grid gap-4 lg:grid-cols-2">
+          {overdueActions.length > 0 && (
+            <div className="rounded-xl border border-red-100 bg-white p-5">
+              <h4 className="mb-3 flex items-center gap-2 font-heading text-xs font-semibold uppercase tracking-[0.1em] text-red-600">
+                <AlertTriangle className="size-3.5" aria-hidden="true" /> Actions en retard
+              </h4>
+              <ul className="space-y-2">
+                {overdueActions.map(a => (
+                  <li key={a.id} className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm text-[#0F1A2E]">{a.title}</p>
+                      <p className="text-xs text-slate-400">{a.process_name ?? "—"} · échéance {a.due_date}</p>
+                    </div>
+                    <span className={`shrink-0 rounded-full px-2 py-0.5 font-heading text-[9px] font-semibold uppercase ${a.priority === "critical" ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700"}`}>{a.priority}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {redKpis.length > 0 && (
+            <div className="rounded-xl border border-red-100 bg-white p-5">
+              <h4 className="mb-3 flex items-center gap-2 font-heading text-xs font-semibold uppercase tracking-[0.1em] text-red-600">
+                <BarChart2 className="size-3.5" aria-hidden="true" /> KPIs hors cible
+              </h4>
+              <ul className="space-y-2">
+                {redKpis.map(k => (
+                  <li key={k.id} className="flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm text-[#0F1A2E]">{k.name}</p>
+                      <p className="text-xs text-slate-400">{k.kpi_group ?? "—"} · {k.current_value ?? "—"}{k.unit ? ` ${k.unit}` : ""}</p>
+                    </div>
+                    <span className={`shrink-0 rounded-full px-2 py-0.5 font-heading text-[9px] font-semibold uppercase ${k.status === "red" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"}`}>{k.status}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
-      ))}
+      )}
     </div>
   );
 }
@@ -316,13 +431,15 @@ function ToolCard({ tool }: { tool: ToolDefinition }) {
 // ─── Overview section ─────────────────────────────────────────────────────────
 
 function OverviewSection({ user }: { user: ProUser }) {
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Bonjour" : hour < 18 ? "Bon après-midi" : "Bonsoir";
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="font-display text-3xl text-[#0F1A2E]">Bonjour, {user.name.split(" ")[0]}</h2>
-        <p className="mt-1 text-sm text-slate-400">Voici votre espace pro ASCALIS.</p>
+        <h2 className="font-display text-3xl text-[#0F1A2E]">{greeting}, {user.name.split(" ")[0]}</h2>
+        <p className="mt-1 text-sm text-slate-400">Voici l'état de votre système qualité.</p>
       </div>
-      <StatsGrid user={user} />
+      <CockpitGrid />
       <div>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-heading text-sm font-semibold uppercase tracking-[0.12em] text-slate-400">Tous les outils</h3>
