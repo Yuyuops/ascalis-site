@@ -21,12 +21,14 @@ import {
   Shield,
   Target,
   TrendingUp,
+  Upload,
   X,
   Zap,
 } from "lucide-react";
 
 import { AscalisLogo } from "@/components/AscalisLogo";
 import { getCockpitSummary, getOverdueActions, getRedKpis, type CockpitSummary, type ActionAlert, type KpiAlert } from "@/lib/cockpit";
+import { ImportWizard } from "@/components/dashboard/ImportWizard";
 import { getCurrentUser, login, logout, type ProUser } from "@/lib/auth";
 import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
 import { withBasePath } from "@/lib/site-config";
@@ -430,7 +432,7 @@ function ToolCard({ tool }: { tool: ToolDefinition }) {
 
 // ─── Overview section ─────────────────────────────────────────────────────────
 
-function OverviewSection({ user }: { user: ProUser }) {
+function OverviewSection({ user, cockpitKey }: { user: ProUser; cockpitKey: number }) {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Bonjour" : hour < 18 ? "Bon après-midi" : "Bonsoir";
   return (
@@ -439,7 +441,7 @@ function OverviewSection({ user }: { user: ProUser }) {
         <h2 className="font-display text-3xl text-[#0F1A2E]">{greeting}, {user.name.split(" ")[0]}</h2>
         <p className="mt-1 text-sm text-slate-400">Voici l'état de votre système qualité.</p>
       </div>
-      <CockpitGrid />
+      <CockpitGrid key={cockpitKey} />
       <div>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-heading text-sm font-semibold uppercase tracking-[0.12em] text-slate-400">Tous les outils</h3>
@@ -488,6 +490,8 @@ export default function DashboardClient() {
   const [ready, setReady] = useState(false);
   const [activeStage, setActiveStage] = useState<ToolStage | "overview">("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+  const [cockpitKey, setCockpitKey] = useState(0);
   const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -565,6 +569,13 @@ export default function DashboardClient() {
             <h1 className="font-heading text-base font-semibold text-[#0F1A2E]">{topbarTitle}</h1>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setImportOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#B07642] px-3 py-1.5 font-heading text-xs font-medium text-white transition hover:bg-[#8A5B30]"
+            >
+              <Upload className="size-3.5" aria-hidden="true" />
+              Importer
+            </button>
             <a
               href={withBasePath("/")}
               className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 font-heading text-xs text-slate-500 transition hover:border-[#B07642]/40 hover:text-[#B07642]"
@@ -575,10 +586,18 @@ export default function DashboardClient() {
           </div>
         </header>
 
+        {/* Import wizard */}
+        {importOpen && (
+          <ImportWizard
+            onClose={() => setImportOpen(false)}
+            onSuccess={() => { setImportOpen(false); setCockpitKey(k => k + 1); }}
+          />
+        )}
+
         {/* Content */}
         <main ref={mainRef} className="flex-1 overflow-y-auto p-6 lg:p-8">
           {activeStage === "overview" ? (
-            <OverviewSection user={user} />
+            <OverviewSection user={user} cockpitKey={cockpitKey} />
           ) : (
             <StageSection stage={activeStage} />
           )}
