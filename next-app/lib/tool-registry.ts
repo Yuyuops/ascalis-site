@@ -198,6 +198,7 @@ export const toolRegistry: ToolDefinition[] = [
     route: "/outils/fiche-8d/",
     requiresStatsEngine: false,
     badge: "Offre 3",
+    native: true,
   },
   {
     slug: "plan-action-central-ascalis",
@@ -289,6 +290,7 @@ export const toolRegistry: ToolDefinition[] = [
     route: "/outils/selection-suivi-fournisseurs-ascalis/",
     requiresStatsEngine: false,
     badge: "Offres 1, 4, 8",
+    native: true,
   },
   {
     slug: "comparateur-statistique-fournisseurs-ascalis",
@@ -311,6 +313,7 @@ export const toolRegistry: ToolDefinition[] = [
     route: "/outils/plan-controle/",
     requiresStatsEngine: false,
     badge: "Offres 1, 4, 8",
+    native: true,
   },
   {
     slug: "parcours-client-ascalis",
