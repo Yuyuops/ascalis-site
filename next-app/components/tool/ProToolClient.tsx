@@ -14,6 +14,14 @@ const PlanActionTool = dynamic(
   () => import("@/components/tools/PlanActionTool"),
   { ssr: false, loading: () => <ToolLoadingShell /> }
 );
+const KpiTool = dynamic(
+  () => import("@/components/tools/KpiTool"),
+  { ssr: false, loading: () => <ToolLoadingShell /> }
+);
+const ProcessReviewTool = dynamic(
+  () => import("@/components/tools/ProcessReviewTool"),
+  { ssr: false, loading: () => <ToolLoadingShell /> }
+);
 
 export default function ProToolClient({ tool }: { tool: ToolDefinition }) {
   // null = loading, false = unauthenticated, true = authenticated
@@ -52,10 +60,9 @@ export default function ProToolClient({ tool }: { tool: ToolDefinition }) {
 
   // ── Native React component ─────────────────────────────────────────────────
   if (tool.native) {
-    if (tool.slug === "plan-action-central-ascalis") {
-      return <PlanActionTool />;
-    }
-    // Future native tools go here
+    if (tool.slug === "plan-action-central-ascalis")  return <PlanActionTool />;
+    if (tool.slug === "tableau-bord-qualite-ascalis") return <KpiTool />;
+    if (tool.slug === "revue-processus-ascalis")      return <ProcessReviewTool />;
   }
 
   // ── Legacy iframe fallback ─────────────────────────────────────────────────
