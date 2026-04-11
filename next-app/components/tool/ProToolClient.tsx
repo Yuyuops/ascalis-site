@@ -22,6 +22,18 @@ const ProcessReviewTool = dynamic(
   () => import("@/components/tools/ProcessReviewTool"),
   { ssr: false, loading: () => <ToolLoadingShell /> }
 );
+const Fiche8dTool = dynamic(
+  () => import("@/components/tools/Fiche8dTool"),
+  { ssr: false, loading: () => <ToolLoadingShell /> }
+);
+const PlanControlTool = dynamic(
+  () => import("@/components/tools/PlanControlTool"),
+  { ssr: false, loading: () => <ToolLoadingShell /> }
+);
+const SupplierTool = dynamic(
+  () => import("@/components/tools/SupplierTool"),
+  { ssr: false, loading: () => <ToolLoadingShell /> }
+);
 
 export default function ProToolClient({ tool }: { tool: ToolDefinition }) {
   // null = loading, false = unauthenticated, true = authenticated
@@ -60,9 +72,12 @@ export default function ProToolClient({ tool }: { tool: ToolDefinition }) {
 
   // ── Native React component ─────────────────────────────────────────────────
   if (tool.native) {
-    if (tool.slug === "plan-action-central-ascalis")  return <PlanActionTool />;
-    if (tool.slug === "tableau-bord-qualite-ascalis") return <KpiTool />;
-    if (tool.slug === "revue-processus-ascalis")      return <ProcessReviewTool />;
+    if (tool.slug === "plan-action-central-ascalis")          return <PlanActionTool />;
+    if (tool.slug === "tableau-bord-qualite-ascalis")        return <KpiTool />;
+    if (tool.slug === "revue-processus-ascalis")             return <ProcessReviewTool />;
+    if (tool.slug === "fiche-8d")                            return <Fiche8dTool />;
+    if (tool.slug === "plan-controle")                       return <PlanControlTool />;
+    if (tool.slug === "selection-suivi-fournisseurs-ascalis") return <SupplierTool />;
   }
 
   // ── Legacy iframe fallback ─────────────────────────────────────────────────
