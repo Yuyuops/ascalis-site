@@ -121,6 +121,7 @@ export const toolRegistry: ToolDefinition[] = [
     route: "/outils/diagnostic-terrain/",
     requiresStatsEngine: false,
     badge: "Offres 1, 3",
+    native: true,
   },
   {
     slug: "grille-audit",
@@ -132,6 +133,7 @@ export const toolRegistry: ToolDefinition[] = [
     route: "/outils/grille-audit/",
     requiresStatsEngine: false,
     badge: "Offres 1, 4",
+    native: true,
   },
   {
     slug: "matrice-documentaire-ascalis",
@@ -165,6 +167,7 @@ export const toolRegistry: ToolDefinition[] = [
     route: "/outils/fiche-identite-processus-ascalis/",
     requiresStatsEngine: false,
     badge: "Offres 2, 4, 8",
+    native: true,
   },
   {
     slug: "pareto",

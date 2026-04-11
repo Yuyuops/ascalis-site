@@ -34,6 +34,18 @@ const SupplierTool = dynamic(
   () => import("@/components/tools/SupplierTool"),
   { ssr: false, loading: () => <ToolLoadingShell /> }
 );
+const GrilleAuditTool = dynamic(
+  () => import("@/components/tools/GrilleAuditTool"),
+  { ssr: false, loading: () => <ToolLoadingShell /> }
+);
+const DiagnosticTerrainTool = dynamic(
+  () => import("@/components/tools/DiagnosticTerrainTool"),
+  { ssr: false, loading: () => <ToolLoadingShell /> }
+);
+const FicheIdentiteProcessusTool = dynamic(
+  () => import("@/components/tools/FicheIdentiteProcessusTool"),
+  { ssr: false, loading: () => <ToolLoadingShell /> }
+);
 
 export default function ProToolClient({ tool }: { tool: ToolDefinition }) {
   // null = loading, false = unauthenticated, true = authenticated
@@ -78,6 +90,9 @@ export default function ProToolClient({ tool }: { tool: ToolDefinition }) {
     if (tool.slug === "fiche-8d")                            return <Fiche8dTool />;
     if (tool.slug === "plan-controle")                       return <PlanControlTool />;
     if (tool.slug === "selection-suivi-fournisseurs-ascalis") return <SupplierTool />;
+    if (tool.slug === "grille-audit")                          return <GrilleAuditTool />;
+    if (tool.slug === "diagnostic-terrain")                    return <DiagnosticTerrainTool />;
+    if (tool.slug === "fiche-identite-processus-ascalis")      return <FicheIdentiteProcessusTool />;
   }
 
   // ── Legacy iframe fallback ─────────────────────────────────────────────────
