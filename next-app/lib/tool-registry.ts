@@ -221,6 +221,7 @@ export const toolRegistry: ToolDefinition[] = [
     route: "/outils/tableau-bord-qualite-ascalis/",
     requiresStatsEngine: true,
     badge: "Offres 3, 4, 5, 6, 8",
+    native: true,
   },
   {
     slug: "revue-processus-ascalis",
@@ -232,6 +233,7 @@ export const toolRegistry: ToolDefinition[] = [
     route: "/outils/revue-processus-ascalis/",
     requiresStatsEngine: false,
     badge: "Offres 3, 4, 6, 8",
+    native: true,
   },
   {
     slug: "revue-direction-ascalis",
